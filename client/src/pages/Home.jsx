@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 function Home() {
+  const { addToCart } = useCart();
   return (
     <>
 
@@ -222,9 +224,24 @@ function Home() {
                   ₹120
                 </span>
 
-                <button className="add-cart-btn">
-                  Add to Cart
-                </button>
+               <button
+  className="add-cart-btn"
+  onClick={() =>
+    addToCart({
+      id: 1,
+      name: "Classic Ratlami Sev",
+      category: "RATLAMI SPECIAL",
+      description:
+        "Authentic spicy Ratlami Sev with traditional flavours.",
+      price: 120,
+      weight: "500g",
+      emoji: "🌶️",
+    })
+  }
+>
+  Add to Cart
+</button>
+
 
               </div>
 
@@ -259,9 +276,23 @@ function Home() {
                   ₹150
                 </span>
 
-                <button className="add-cart-btn">
-                  Add to Cart
-                </button>
+               <button
+  className="add-cart-btn"
+  onClick={() =>
+    addToCart({
+      id: 2,
+      name: "Masala Mixture",
+      category: "NAMKEEN",
+      description:
+        "Crunchy mixture packed with delicious Indian spices.",
+      price: 150,
+      weight: "500g",
+      emoji: "🥨",
+    })
+  }
+>
+  Add to Cart
+</button>
 
               </div>
 
@@ -296,9 +327,23 @@ function Home() {
                   ₹180
                 </span>
 
-                <button className="add-cart-btn">
-                  Add to Cart
-                </button>
+                <button
+  className="add-cart-btn"
+  onClick={() =>
+    addToCart({
+      id: 3,
+      name: "Spicy Peanut Mix",
+      category: "CRUNCHY SNACKS",
+      description:
+        "Roasted peanuts with a perfect blend of spices.",
+      price: 180,
+      weight: "500g",
+      emoji: "🥜",
+    })
+  }
+>
+  Add to Cart
+</button>
 
               </div>
 
@@ -333,9 +378,23 @@ function Home() {
                   ₹250
                 </span>
 
-                <button className="add-cart-btn">
-                  Add to Cart
-                </button>
+                <button
+  className="add-cart-btn"
+  onClick={() =>
+    addToCart({
+      id: 4,
+      name: "Traditional Mithai",
+      category: "SWEETS",
+      description:
+        "Delicious traditional sweets made with love.",
+      price: 250,
+      weight: "500g",
+      emoji: "🍬",
+    })
+  }
+>
+  Add to Cart
+</button>
 
               </div>
 

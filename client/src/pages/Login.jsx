@@ -54,6 +54,12 @@ function Login() {
 
       const data = await response.json();
 
+      if (response.ok) {
+  localStorage.setItem("token", data.token);
+
+  console.log("JWT Token saved:", data.token);
+}
+
       // IF LOGIN FAILED
       if (!response.ok) {
         setError(data.message || "Login failed.");
@@ -64,6 +70,7 @@ function Login() {
       setSuccess(data.message);
 
       console.log("Logged in user:", data.user);
+      console.log("JWT Token:", data.token);
 
       // Clear form
       setEmail("");

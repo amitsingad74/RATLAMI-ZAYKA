@@ -1,7 +1,9 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
+const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
@@ -132,16 +134,35 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // LOGIN SUCCESS
-    res.status(200).json({
-      message: "Login successful! 🎉",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-      },
-    });
+  // ===============================
+// GENERATE JWT TOKEN
+// ===============================
+
+const token = jwt.sign(
+  {
+    id: user._id,
+    email: user.email,
+  },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: "7d",
+  }
+);
+
+
+// LOGIN SUCCESS
+res.status(200).json({
+  message: "Login successful! 🎉",
+
+  token,
+
+  user: {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+  },
+});
 
   } catch (error) {
 
@@ -157,5 +178,35 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// ===============================
+// GET CURRENT USER PROFILE
+// GET /api/auth/profile
+// ===============================
+
+router.get("/profile", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found.",
+      });
+    }
+
+    res.status(200).json({
+      message: "Profile fetched successfully!",
+      user,
+    });
+
+  } catch (error) {
+
+    console.error("Profile Error:", error.message);
+
+    res.status(500).json({
+      message: "Server error.",
+    });
+
+  }
+});
 
 module.exports = router;
