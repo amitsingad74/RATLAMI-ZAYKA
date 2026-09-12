@@ -1,12 +1,68 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import "./App.css";
-import Navbar from "./components/Navbar";
 
+import Navbar from "./components/Navbar";
+import Wishlist from "./pages/Wishlist";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import Checkout from "./pages/Checkout";
+import Orders from "./pages/Orders";
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer-container">
+
+        {/* LOGO */}
+        <div className="footer-logo">
+          <div className="footer-brand">
+            RATLAMI<br />
+            <span>ZAYKA</span>
+          </div>
+        </div>
+
+
+        {/* LINKS */}
+        <div className="footer-links">
+          <Link to="/">Home</Link>
+          <span>|</span>
+
+          <Link to="/products">Products</Link>
+          <span>|</span>
+
+          <a href="#categories">Categories</a>
+          <span>|</span>
+
+          <a href="#about">About Us</a>
+          <span>|</span>
+
+          <a href="#contact">Contact</a>
+        </div>
+
+
+        {/* RIGHT SIDE */}
+        <div className="footer-right">
+
+          <div className="footer-social">
+            <a href="#facebook">●</a>
+            <a href="#instagram">◎</a>
+            <a href="#youtube">▶</a>
+          </div>
+
+          <p>
+            © 2026 RATLAMI ZAYKA. All rights reserved.
+          </p>
+
+        </div>
+
+      </div>
+    </footer>
+  );
+}
+
 
 function App() {
   return (
@@ -19,7 +75,14 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/orders" element={<Orders />} />
       </Routes>
+
+      {/* FOOTER */}
+      <Footer />
     </>
   );
 }

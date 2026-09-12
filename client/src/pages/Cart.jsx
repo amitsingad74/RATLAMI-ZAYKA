@@ -1,238 +1,403 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
+
 function Cart() {
+
+  // ================= NAVIGATION =================
+
+  const navigate = useNavigate();
+
+
+  // ================= CART CONTEXT =================
+
   const {
-    cart,
-    increaseQuantity,
-    decreaseQuantity,
+
+    cartItems,
+
     removeFromCart,
+
+    increaseQuantity,
+
+    decreaseQuantity,
+
+    clearCart,
+
     cartTotal,
+
   } = useCart();
 
-  return (
-    <div className="cart-page">
 
-      <div className="cart-header">
+  // ===============================
+  // EMPTY CART
+  // ===============================
 
-        <p className="section-tag">
-          YOUR SHOPPING BAG
-        </p>
+  if (cartItems.length === 0) {
 
-        <h1>
-          My <span>Cart</span> 🛒
-        </h1>
+    return (
 
-        <p>
-          Review your delicious selections before checkout.
-        </p>
-
-      </div>
-
-
-      {cart.length === 0 ? (
-
-        /* EMPTY CART */
+      <div className="cart-page">
 
         <div className="empty-cart">
 
-          <div className="empty-cart-icon">
-            🛒
-          </div>
+          <h1>
+            🛒 Your Cart is Empty
+          </h1>
 
-          <h2>Your Cart is Empty</h2>
 
           <p>
             Looks like you haven't added any delicious
-            Ratlami products yet!
+            products yet!
           </p>
+
 
           <Link
             to="/products"
             className="continue-shopping-btn"
           >
-            EXPLORE PRODUCTS →
+
+            Explore Products
+
           </Link>
+
 
         </div>
 
-      ) : (
+      </div>
 
-        /* CART WITH PRODUCTS */
+    );
 
-        <div className="cart-container">
-
-
-          {/* CART ITEMS */}
-
-          <div className="cart-items">
-
-            <h2>
-              Cart Items ({cart.length})
-            </h2>
+  }
 
 
-            {cart.map((item) => (
+  // ===============================
+  // CART WITH PRODUCTS
+  // ===============================
 
-              <div
-                className="cart-item"
-                key={item.id}
-              >
+  return (
 
-                {/* PRODUCT IMAGE */}
-
-                <div className="cart-item-image">
-
-                  <span>
-                    {item.emoji}
-                  </span>
-
-                </div>
+    <div className="cart-page">
 
 
-                {/* PRODUCT DETAILS */}
+      {/* ================= HEADER ================= */}
 
-                <div className="cart-item-info">
+      <div className="cart-header">
 
-                  <p className="product-category">
-                    {item.category}
-                  </p>
 
-                  <h3>
-                    {item.name}
-                  </h3>
+        <p className="section-tag">
 
-                  <p>
-                    {item.weight}
-                  </p>
+          YOUR SHOPPING CART
 
-                  <span className="cart-item-price">
-                    ₹{item.price}
-                  </span>
+        </p>
 
-                </div>
+
+        <h1>
+
+          Shopping <span>Cart</span>
+
+        </h1>
+
+
+      </div>
+
+
+
+      {/* ================= CART CONTENT ================= */}
+
+      <div className="cart-container">
+
+
+        {/* ================= CART ITEMS ================= */}
+
+        <div className="cart-items">
+
+
+          <h2>
+
+            Cart Items ({cartItems.length})
+
+          </h2>
+
+
+
+          {cartItems.map((item) => (
+
+
+            <div
+              className="cart-item"
+              key={item.id}
+            >
+
+
+              {/* ================= PRODUCT IMAGE ================= */}
+
+              <div className="cart-item-image">
+
+                <span>
+
+                  {item.emoji}
+
+                </span>
+
+              </div>
+
+
+
+              {/* ================= PRODUCT DETAILS ================= */}
+
+              <div className="cart-item-details">
+
+
+                <p className="cart-category">
+
+                  {item.category}
+
+                </p>
+
+
+                <h3>
+
+                  {item.name}
+
+                </h3>
+
+
+                <p>
+
+                  {item.weight}
+
+                </p>
+
+
+                <span className="cart-price">
+
+                  ₹{item.price}
+
+                </span>
+
+
+              </div>
+
+
+
+              {/* ================= QUANTITY ================= */}
+
+              <div className="quantity-controls">
+
+
+                {/* DECREASE */}
+
+                <button
+                  onClick={() =>
+                    decreaseQuantity(item.id)
+                  }
+                >
+
+                  −
+
+                </button>
+
 
 
                 {/* QUANTITY */}
 
-                <div className="quantity-control">
+                <span>
 
-                  <button
-                    onClick={() =>
-                      decreaseQuantity(item.id)
-                    }
-                  >
-                    −
-                  </button>
+                  {item.quantity}
 
-                  <span>
-                    {item.quantity}
-                  </span>
-
-                  <button
-                    onClick={() =>
-                      increaseQuantity(item.id)
-                    }
-                  >
-                    +
-                  </button>
-
-                </div>
+                </span>
 
 
-                {/* ITEM TOTAL */}
 
-                <div className="item-total">
-
-                  ₹{item.price * item.quantity}
-
-                </div>
-
-
-                {/* REMOVE */}
+                {/* INCREASE */}
 
                 <button
-                  className="remove-btn"
                   onClick={() =>
-                    removeFromCart(item.id)
+                    increaseQuantity(item.id)
                   }
                 >
-                  🗑️
+
+                  +
+
                 </button>
+
 
               </div>
 
-            ))}
-
-          </div>
 
 
-          {/* ORDER SUMMARY */}
+              {/* ================= ITEM TOTAL ================= */}
 
-          <div className="order-summary">
+              <div className="cart-item-total">
 
-            <h2>
-              Order Summary
-            </h2>
+                ₹{item.price * item.quantity}
+
+              </div>
 
 
-            <div className="summary-row">
 
-              <span>Subtotal</span>
+              {/* ================= REMOVE ================= */}
 
-              <span>
-                ₹{cartTotal}
-              </span>
+              <button
+                className="remove-item-btn"
+                onClick={() =>
+                  removeFromCart(item.id)
+                }
+                title="Remove Item"
+              >
+
+                🗑️
+
+              </button>
+
 
             </div>
 
 
-            <div className="summary-row">
+          ))}
 
-              <span>Delivery</span>
-
-              <span className="free-delivery">
-                FREE
-              </span>
-
-            </div>
-
-
-            <div className="summary-total">
-
-              <span>Total</span>
-
-              <span>
-                ₹{cartTotal}
-              </span>
-
-            </div>
-
-
-            <button className="checkout-btn">
-
-              PROCEED TO CHECKOUT →
-
-            </button>
-
-
-            <Link
-              to="/products"
-              className="continue-shopping"
-            >
-
-              ← Continue Shopping
-
-            </Link>
-
-          </div>
 
         </div>
 
-      )}
+
+
+        {/* ================= ORDER SUMMARY ================= */}
+
+        <div className="cart-summary">
+
+
+          <h2>
+
+            Order Summary
+
+          </h2>
+
+
+
+          {/* ================= SUBTOTAL ================= */}
+
+          <div className="summary-row">
+
+
+            <span>
+
+              Subtotal
+
+            </span>
+
+
+            <span>
+
+              ₹{cartTotal}
+
+            </span>
+
+
+          </div>
+
+
+
+          {/* ================= DELIVERY ================= */}
+
+          <div className="summary-row">
+
+
+            <span>
+
+              Delivery
+
+            </span>
+
+
+            <span>
+
+              FREE
+
+            </span>
+
+
+          </div>
+
+
+
+          <hr />
+
+
+
+          {/* ================= TOTAL ================= */}
+
+          <div className="summary-total">
+
+
+            <span>
+
+              Total
+
+            </span>
+
+
+            <strong>
+
+              ₹{cartTotal}
+
+            </strong>
+
+
+          </div>
+
+
+
+          {/* ================= CHECKOUT ================= */}
+
+          <button
+            className="checkout-btn"
+            onClick={() =>
+              navigate("/checkout")
+            }
+          >
+
+            Proceed to Checkout →
+
+          </button>
+
+
+
+          {/* ================= CONTINUE SHOPPING ================= */}
+
+          <Link
+            to="/products"
+            className="continue-shopping"
+          >
+
+            ← Continue Shopping
+
+          </Link>
+
+
+
+          {/* ================= CLEAR CART ================= */}
+
+          <button
+            className="clear-cart-btn"
+            onClick={clearCart}
+          >
+
+            Clear Cart
+
+          </button>
+
+
+        </div>
+
+
+      </div>
+
 
     </div>
+
   );
+
 }
+
 
 export default Cart;

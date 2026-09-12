@@ -82,7 +82,7 @@ function Register() {
     }
 
     // EMAIL VALIDATION
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(formData.email)) {
       setError("Please enter a valid email address.");

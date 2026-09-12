@@ -1,105 +1,241 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);
 
-  // ADD PRODUCT TO CART
+  // ===============================
+  // LOAD CART FROM LOCALSTORAGE
+  // ===============================
+
+  const [cartItems, setCartItems] = useState(() => {
+
+    const savedCart = localStorage.getItem("cart");
+
+    return savedCart ? JSON.parse(savedCart) : [];
+
+  });
+
+
+  // ===============================
+  // SAVE CART TO LOCALSTORAGE
+  // ===============================
+
+  useEffect(() => {
+
+    localStorage.setItem(
+      "cart",
+      JSON.stringify(cartItems)
+    );
+
+  }, [cartItems]);
+
+
+  // ===============================
+  // ADD TO CART
+  // ===============================
+
   const addToCart = (product) => {
-    setCart((currentCart) => {
-      const existingProduct = currentCart.find(
+
+    setCartItems((previousItems) => {
+
+      // Check if product already exists
+      const existingProduct = previousItems.find(
         (item) => item.id === product.id
       );
 
-      // Product already exists → increase quantity
+
+      // If product exists → increase quantity
       if (existingProduct) {
-        return currentCart.map((item) =>
+
+        return previousItems.map((item) =>
+
           item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
 
-      // New product → add with quantity 1
-      return [
-        ...currentCart,
-        {
-          ...product,
-          quantity: 1,
-        },
-      ];
-    });
-  };
-
-  // INCREASE QUANTITY
-  const increaseQuantity = (id) => {
-    setCart((currentCart) =>
-      currentCart.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              quantity: item.quantity + 1,
-            }
-          : item
-      )
-    );
-  };
-
-  // DECREASE QUANTITY
-  const decreaseQuantity = (id) => {
-    setCart((currentCart) =>
-      currentCart
-        .map((item) =>
-          item.id === id
             ? {
                 ...item,
-                quantity: item.quantity - 1,
+                quantity: item.quantity + 1
               }
+
             : item
+
+        );
+
+      }
+
+
+      // Add new product
+      return [
+
+        ...previousItems,
+
+        {
+          ...product,
+          quantity: 1
+        }
+
+      ];
+
+    });
+
+  };
+
+
+  // ===============================
+  // REMOVE FROM CART
+  // ===============================
+
+  const removeFromCart = (productId) => {
+
+    setCartItems((previousItems) =>
+
+      previousItems.filter(
+        (item) => item.id !== productId
+      )
+
+    );
+
+  };
+
+
+  // ===============================
+  // INCREASE QUANTITY
+  // ===============================
+
+  const increaseQuantity = (productId) => {
+
+    setCartItems((previousItems) =>
+
+      previousItems.map((item) =>
+
+        item.id === productId
+
+          ? {
+              ...item,
+              quantity: item.quantity + 1
+            }
+
+          : item
+
+      )
+
+    );
+
+  };
+
+
+  // ===============================
+  // DECREASE QUANTITY
+  // ===============================
+
+  const decreaseQuantity = (productId) => {
+
+    setCartItems((previousItems) =>
+
+      previousItems
+        .map((item) =>
+
+          item.id === productId
+
+            ? {
+                ...item,
+                quantity: item.quantity - 1
+              }
+
+            : item
+
         )
-        .filter((item) => item.quantity > 0)
+        .filter(
+          (item) => item.quantity > 0
+        )
+
     );
+
   };
 
-  // REMOVE PRODUCT
-  const removeFromCart = (id) => {
-    setCart((currentCart) =>
-      currentCart.filter((item) => item.id !== id)
-    );
+
+  // ===============================
+  // CLEAR CART
+  // ===============================
+
+  const clearCart = () => {
+
+    setCartItems([]);
+
   };
 
-  // TOTAL NUMBER OF ITEMS
-  const cartCount = cart.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
 
-  // TOTAL PRICE
-  const cartTotal = cart.reduce(
+  // ===============================
+  // CART COUNT
+  // ===============================
+
+  const cartCount = cartItems.reduce(
+
     (total, item) =>
-      total + item.price * item.quantity,
+
+      total + item.quantity,
+
     0
+
   );
+
+
+  // ===============================
+  // CART TOTAL
+  // ===============================
+
+  const cartTotal = cartItems.reduce(
+
+    (total, item) =>
+
+      total + item.price * item.quantity,
+
+    0
+
+  );
+
 
   return (
+
     <CartContext.Provider
+
       value={{
-        cart,
+
+        cartItems,
+
         addToCart,
-        increaseQuantity,
-        decreaseQuantity,
+
         removeFromCart,
+
+        increaseQuantity,
+
+        decreaseQuantity,
+
+        clearCart,
+
         cartCount,
-        cartTotal,
+
+        cartTotal
+
       }}
+
     >
+
       {children}
+
     </CartContext.Provider>
+
   );
+
 }
 
+
+// ===============================
 // CUSTOM HOOK
+// ===============================
+
 export function useCart() {
+
   return useContext(CartContext);
+
 }

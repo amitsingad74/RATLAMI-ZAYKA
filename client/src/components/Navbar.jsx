@@ -1,98 +1,301 @@
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  useNavigate,
+  useLocation
+} from "react-router-dom";
+
+import { useState } from "react";
+
 import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
+
+import logo from "../assets/logo.png";
+
 
 function Navbar() {
+
+  // ================= CART =================
+
   const { cartCount } = useCart();
+
+
+  // ================= WISHLIST =================
+
+  const { wishlistCount } = useWishlist();
+
+
+  // ================= NAVIGATION =================
 
   const navigate = useNavigate();
 
-  // Check if user is logged in
+  useLocation();
+
+
+  // ================= SEARCH STATE =================
+
+  const [search, setSearch] = useState("");
+
+
+  // ================= CHECK LOGIN =================
+
   const token = localStorage.getItem("token");
 
-  // Logout function
+
+  // ================= SEARCH FUNCTION =================
+
+  const handleSearch = (e) => {
+
+    e.preventDefault();
+
+    const trimmedSearch = search.trim();
+
+
+    if (trimmedSearch) {
+
+      navigate(
+        `/products?search=${encodeURIComponent(
+          trimmedSearch
+        )}`
+      );
+
+    } else {
+
+      navigate("/products");
+
+    }
+
+  };
+
+
+  // ================= LOGOUT =================
+
   const handleLogout = () => {
-    // Remove JWT token
+
+    // Remove JWT Token
     localStorage.removeItem("token");
+
+    // Remove User Information
+    localStorage.removeItem("user");
+
 
     alert("Logged out successfully! 👋");
 
-    // Redirect to login page
+
+    // Redirect to Login Page
     navigate("/login");
 
-    // Refresh page so Navbar updates
-    window.location.reload();
   };
 
+
   return (
+
     <nav className="navbar">
 
-      {/* LOGO */}
+
+      {/* ================= LOGO ================= */}
+
       <div className="logo">
-        🌶️ RATLAMI <span>ZAYKA</span>
-      </div>
-
-
-      {/* NAVIGATION LINKS */}
-      <div className="nav-links">
 
         <Link to="/">
-          Home
-        </Link>
 
-        <Link to="/products">
-          Products
-        </Link>
+          <img
+            src={logo}
+            alt="Ratlami Zayka"
+          />
 
-        <Link to="/#categories">
-          Categories
-        </Link>
-
-        <Link to="/#about">
-          About Us
         </Link>
 
       </div>
 
 
-      {/* NAV ICONS */}
-      <div className="nav-icons">
+      {/* ================= NAVIGATION LINKS ================= */}
 
-        {/* Search */}
-        <span className="search-icon">
-          🔍
-        </span>
+      <div className="nav-links">
 
 
-        {/* Cart */}
-        <Link to="/cart" className="cart-icon">
-          🛒
+        {/* HOME */}
+
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive
+              ? "nav-link active"
+              : "nav-link"
+          }
+        >
+          Home
+        </NavLink>
+
+
+        {/* PRODUCTS */}
+
+        <NavLink
+          to="/products"
+          className={({ isActive }) =>
+            isActive
+              ? "nav-link active"
+              : "nav-link"
+          }
+        >
+          Products
+        </NavLink>
+
+
+        {/* CATEGORIES */}
+
+        <a
+          href="/#categories"
+          className="nav-link"
+        >
+          Categories
+        </a>
+
+
+        {/* ABOUT US */}
+
+        <a
+          href="/#about"
+          className="nav-link"
+        >
+          About Us
+        </a>
+
+
+      </div>
+
+
+      {/* ================= NAVBAR ACTIONS ================= */}
+
+      <div className="nav-actions">
+
+
+        {/* ================= SEARCH ================= */}
+
+        <form
+          className="search-box"
+          onSubmit={handleSearch}
+        >
+
+          <input
+            type="text"
+            placeholder="Search for sweets, namkeen..."
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+          />
+
+
+          <button
+            type="submit"
+            className="search-btn"
+          >
+            🔍
+          </button>
+
+        </form>
+
+
+        {/* ================= WISHLIST ================= */}
+
+        <Link
+          to="/wishlist"
+          className="wishlist-navbar"
+          title="Wishlist"
+        >
+
+          <span className="wishlist-icon">
+            ❤️
+          </span>
+
+
+          {wishlistCount > 0 && (
+
+            <span className="wishlist-count">
+              {wishlistCount}
+            </span>
+
+          )}
+
+        </Link>
+
+
+        {/* ================= CART ================= */}
+
+        <Link
+          to="/cart"
+          className="cart-button"
+          title="Cart"
+        >
+
+          <span className="cart-icon">
+            🛒
+          </span>
+
 
           {cartCount > 0 && (
+
             <span className="cart-count">
               {cartCount}
             </span>
+
           )}
+
         </Link>
 
 
-        {/* Login / Logout */}
+        {/* ================= LOGIN / PROFILE / LOGOUT ================= */}
+
         {token ? (
-          <button
-            onClick={handleLogout}
-            className="logout-btn"
-          >
-            Logout
-          </button>
+
+          <>
+
+            {/* PROFILE */}
+
+            <Link
+              to="/profile"
+              className="profile-button"
+              title="My Profile"
+            >
+              👤
+            </Link>
+
+
+            {/* LOGOUT */}
+
+            <button
+              onClick={handleLogout}
+              className="logout-btn"
+            >
+              Logout
+            </button>
+
+          </>
+
         ) : (
-          <Link to="/login">
+
+          /* LOGIN */
+
+          <Link
+            to="/login"
+            className="profile-button"
+            title="Login"
+          >
             👤
           </Link>
+
         )}
+
 
       </div>
 
+
     </nav>
+
   );
+
 }
+
 
 export default Navbar;

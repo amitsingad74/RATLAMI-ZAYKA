@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,7 +17,10 @@ function Login() {
     setError("");
     setSuccess("");
 
+    // ===============================
     // FRONTEND VALIDATION
+    // ===============================
+
     if (!email || !password) {
       setError("Please enter email and password.");
       return;
@@ -29,6 +34,7 @@ function Login() {
       return;
     }
 
+    // PASSWORD VALIDATION
     if (password.length < 6) {
       setError("Password must be at least 6 characters.");
       return;
@@ -37,14 +43,19 @@ function Login() {
     try {
       setLoading(true);
 
+      // ===============================
       // SEND LOGIN DATA TO BACKEND
+      // ===============================
+
       const response = await fetch(
         "http://localhost:5000/api/auth/login",
         {
           method: "POST",
+
           headers: {
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify({
             email,
             password,
@@ -54,29 +65,46 @@ function Login() {
 
       const data = await response.json();
 
-      if (response.ok) {
-  localStorage.setItem("token", data.token);
+      // ===============================
+      // LOGIN FAILED
+      // ===============================
 
-  console.log("JWT Token saved:", data.token);
-}
-
-      // IF LOGIN FAILED
       if (!response.ok) {
         setError(data.message || "Login failed.");
         return;
       }
 
+      // ===============================
       // LOGIN SUCCESS
-      setSuccess(data.message);
+      // ===============================
+
+      // Save JWT Token
+      localStorage.setItem("token", data.token);
+
+      // Save User Information
+      localStorage.setItem(
+        "user",
+        JSON.stringify(data.user)
+      );
 
       console.log("Logged in user:", data.user);
-      console.log("JWT Token:", data.token);
 
-      // Clear form
+      // Show Success Message
+      setSuccess(
+        data.message || "Login successful!"
+      );
+
+      // Clear Form
       setEmail("");
       setPassword("");
 
+      // Redirect to Home
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+
     } catch (error) {
+
       console.error("Login Error:", error);
 
       setError(
@@ -84,12 +112,15 @@ function Login() {
       );
 
     } finally {
+
       setLoading(false);
+
     }
   };
 
   return (
     <div className="auth-page">
+
       <div className="auth-container">
 
         {/* LEFT SIDE */}
@@ -185,6 +216,7 @@ function Login() {
               </div>
 
 
+              {/* OPTIONS */}
               <div className="form-options">
 
                 <label className="remember-me">
@@ -203,17 +235,21 @@ function Login() {
               </div>
 
 
+              {/* LOGIN BUTTON */}
               <button
                 type="submit"
                 className="auth-btn"
                 disabled={loading}
               >
-                {loading ? "LOGGING IN..." : "LOGIN →"}
+                {loading
+                  ? "LOGGING IN..."
+                  : "LOGIN →"}
               </button>
 
             </form>
 
 
+            {/* REGISTER LINK */}
             <p className="auth-switch">
 
               Don't have an account?
@@ -229,6 +265,7 @@ function Login() {
         </div>
 
       </div>
+
     </div>
   );
 }
