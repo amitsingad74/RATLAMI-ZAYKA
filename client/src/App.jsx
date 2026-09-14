@@ -11,6 +11,10 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import ProductDetails from "./pages/ProductDetails";
+
 function Footer() {
   return (
     <footer className="footer">
@@ -70,17 +74,82 @@ function App() {
       <Navbar />
 
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/orders" element={<Orders />} />
-      </Routes>
 
+  <Route
+    path="/"
+    element={<Home />}
+  />
+
+  <Route
+    path="/products"
+    element={<Products />}
+  />
+
+  <Route
+    path="/cart"
+    element={<Cart />}
+  />
+
+  <Route
+    path="/login"
+    element={<Login />}
+  />
+
+  <Route
+    path="/register"
+    element={<Register />}
+  />
+
+
+  {/* WISHLIST */}
+
+  <Route
+    path="/wishlist"
+    element={<Wishlist />}
+  />
+
+
+  {/* PROTECTED PROFILE */}
+
+  <Route
+    path="/profile"
+    element={
+      <ProtectedRoute>
+        <Profile />
+      </ProtectedRoute>
+    }
+  />
+
+
+  {/* PROTECTED ORDERS */}
+
+  <Route
+    path="/orders"
+    element={
+      <ProtectedRoute>
+        <Orders />
+      </ProtectedRoute>
+    }
+  />
+
+
+  {/* PROTECTED CHECKOUT */}
+
+  <Route
+    path="/checkout"
+    element={
+      <ProtectedRoute>
+        <Checkout />
+      </ProtectedRoute>
+    }
+  />
+
+  <Route
+  path="/products/:id"
+  element={<ProductDetails />}
+/>
+
+</Routes>
       {/* FOOTER */}
       <Footer />
     </>

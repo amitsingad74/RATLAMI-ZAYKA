@@ -37,6 +37,12 @@ function Navbar() {
   const [search, setSearch] = useState("");
 
 
+  // ================= PROFILE DROPDOWN =================
+
+  const [showDropdown, setShowDropdown] =
+    useState(false);
+
+
   // ================= CHECK LOGIN =================
 
   const token = localStorage.getItem("token");
@@ -73,16 +79,27 @@ function Navbar() {
   const handleLogout = () => {
 
     // Remove JWT Token
+
     localStorage.removeItem("token");
 
+
     // Remove User Information
+
     localStorage.removeItem("user");
 
+
+    // Close Dropdown
+
+    setShowDropdown(false);
+
+
+    // Success Message
 
     alert("Logged out successfully! 👋");
 
 
-    // Redirect to Login Page
+    // Redirect to Login
+
     navigate("/login");
 
   };
@@ -237,7 +254,9 @@ function Navbar() {
           {cartCount > 0 && (
 
             <span className="cart-count">
+
               {cartCount}
+
             </span>
 
           )}
@@ -245,44 +264,104 @@ function Navbar() {
         </Link>
 
 
-        {/* ================= LOGIN / PROFILE / LOGOUT ================= */}
+        {/* ================= PROFILE ================= */}
 
         {token ? (
 
-          <>
-
-            {/* PROFILE */}
-
-            <Link
-              to="/profile"
-              className="profile-button"
-              title="My Profile"
-            >
-              👤
-            </Link>
+          <div className="profile-dropdown-container">
 
 
-            {/* LOGOUT */}
+            {/* PROFILE BUTTON */}
 
             <button
-              onClick={handleLogout}
-              className="logout-btn"
+              className="profile-menu-btn"
+              onClick={() =>
+                setShowDropdown(!showDropdown)
+              }
             >
-              Logout
+
+              👤
+
+              <span className="dropdown-arrow">
+
+                ▼
+
+              </span>
+
             </button>
 
-          </>
+
+            {/* DROPDOWN MENU */}
+
+            {showDropdown && (
+
+              <div className="profile-dropdown">
+
+
+                {/* MY PROFILE */}
+
+                <Link
+                  to="/profile"
+                  className="dropdown-item"
+                  onClick={() =>
+                    setShowDropdown(false)
+                  }
+                >
+
+                  👤 My Profile
+
+                </Link>
+
+
+                {/* MY ORDERS */}
+
+                <Link
+                  to="/orders"
+                  className="dropdown-item"
+                  onClick={() =>
+                    setShowDropdown(false)
+                  }
+                >
+
+                  📦 My Orders
+
+                </Link>
+
+
+                {/* DIVIDER */}
+
+                <div className="dropdown-divider"></div>
+
+
+                {/* LOGOUT */}
+
+                <button
+                  className="dropdown-item logout-item"
+                  onClick={handleLogout}
+                >
+
+                  🚪 Logout
+
+                </button>
+
+
+              </div>
+
+            )}
+
+
+          </div>
 
         ) : (
-
-          /* LOGIN */
 
           <Link
             to="/login"
             className="profile-button"
             title="Login"
           >
+
             👤
+
           </Link>
 
         )}

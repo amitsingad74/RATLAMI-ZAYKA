@@ -3,13 +3,41 @@ import { useState } from "react";
 
 function Orders() {
 
+
+  // ================= GET LOGGED IN USER =================
+
+  const loggedInUser = JSON.parse(
+    localStorage.getItem("user")
+  );
+
+
+  // ================= USER ORDER KEY =================
+
+  const orderKey = loggedInUser
+
+    ? `orders_${loggedInUser.email}`
+
+    : null;
+
+
   // ================= LOAD ORDERS =================
 
   const [orders, setOrders] = useState(() => {
 
+
+    if (!orderKey) {
+
+      return [];
+
+    }
+
+
     return JSON.parse(
-      localStorage.getItem("orders")
+
+      localStorage.getItem(orderKey)
+
     ) || [];
+
 
   });
 
@@ -18,24 +46,83 @@ function Orders() {
 
   const deleteOrder = (orderId) => {
 
+
     const updatedOrders =
+
       orders.filter(
-        (order) => order.id !== orderId
+
+        (order) =>
+          order.id !== orderId
+
       );
 
+
+    // UPDATE STATE
 
     setOrders(updatedOrders);
 
 
+    // UPDATE LOCAL STORAGE
+
     localStorage.setItem(
 
-      "orders",
+      orderKey,
 
       JSON.stringify(updatedOrders)
 
     );
 
+
   };
+
+
+  // ================= NOT LOGGED IN =================
+
+  if (!loggedInUser) {
+
+    return (
+
+      <div className="orders-page">
+
+
+        <div className="empty-orders">
+
+
+          <h1>
+
+            🔒 Please Login
+
+          </h1>
+
+
+          <p>
+
+            Please login to view your orders.
+
+          </p>
+
+
+          <Link
+
+            to="/login"
+
+            className="explore-products-btn"
+
+          >
+
+            Login
+
+          </Link>
+
+
+        </div>
+
+
+      </div>
+
+    );
+
+  }
 
 
   // ================= EMPTY ORDERS =================
@@ -49,19 +136,27 @@ function Orders() {
 
         <div className="empty-orders">
 
+
           <h1>
+
             📦 No Orders Yet
+
           </h1>
 
 
           <p>
+
             You haven't placed any orders yet.
+
           </p>
 
 
           <Link
+
             to="/products"
+
             className="explore-products-btn"
+
           >
 
             Explore Products
@@ -70,6 +165,7 @@ function Orders() {
 
 
         </div>
+
 
       </div>
 
@@ -88,6 +184,7 @@ function Orders() {
       {/* ================= HEADER ================= */}
 
       <div className="orders-header">
+
 
         <p className="section-tag">
 
@@ -128,8 +225,11 @@ function Orders() {
         {orders.map((order) => (
 
           <div
+
             className="order-card"
+
             key={order.id}
+
           >
 
 
@@ -139,6 +239,7 @@ function Orders() {
 
 
               <div>
+
 
                 <h2>
 
@@ -153,6 +254,7 @@ function Orders() {
 
                 </p>
 
+
               </div>
 
 
@@ -166,7 +268,6 @@ function Orders() {
             </div>
 
 
-
             {/* ================= ORDER ITEMS ================= */}
 
             <div className="order-items">
@@ -175,8 +276,11 @@ function Orders() {
               {order.items.map((item) => (
 
                 <div
+
                   className="order-item"
+
                   key={item.id}
+
                 >
 
 
@@ -191,6 +295,7 @@ function Orders() {
 
 
                     <div>
+
 
                       <h3>
 
@@ -227,13 +332,13 @@ function Orders() {
             </div>
 
 
-
             {/* ================= ORDER FOOTER ================= */}
 
             <div className="order-card-footer">
 
 
               <div>
+
 
                 <span>
 
@@ -248,8 +353,8 @@ function Orders() {
 
                 </h2>
 
-              </div>
 
+              </div>
 
 
               <button

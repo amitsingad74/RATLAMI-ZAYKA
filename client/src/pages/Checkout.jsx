@@ -41,167 +41,181 @@ function Checkout() {
 
   // ================= PLACE ORDER =================
 
-  const handlePlaceOrder = (e) => {
+ const handlePlaceOrder = (e) => {
 
-    e.preventDefault();
+  e.preventDefault();
 
-    setError("");
+  setError("");
 
 
-    // ================= CHECK LOGIN =================
+  // ================= CHECK LOGIN =================
 
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
+  const loggedInUser = JSON.parse(
+    localStorage.getItem("user")
+  );
 
-    if (!token) {
 
-      alert("Please login before placing an order.");
+  if (!token || !loggedInUser) {
 
-      navigate("/login");
+    alert("Please login before placing an order.");
 
-      return;
+    navigate("/login");
 
-    }
+    return;
 
+  }
 
-    // ================= CHECK EMPTY CART =================
 
-    if (cartItems.length === 0) {
+  // ================= CHECK EMPTY CART =================
 
-      setError("Your cart is empty.");
+  if (cartItems.length === 0) {
 
-      return;
+    setError("Your cart is empty.");
 
-    }
+    return;
 
+  }
 
-    // ================= FORM VALIDATION =================
 
-    if (
+  // ================= FORM VALIDATION =================
 
-      !name.trim() ||
+  if (
 
-      !phone.trim() ||
+    !name.trim() ||
 
-      !address.trim() ||
+    !phone.trim() ||
 
-      !city.trim() ||
+    !address.trim() ||
 
-      !pincode.trim()
+    !city.trim() ||
 
-    ) {
+    !pincode.trim()
 
-      setError(
-        "Please fill all delivery details."
-      );
+  ) {
 
-      return;
-
-    }
-
-
-    // ================= PHONE VALIDATION =================
-
-    if (!/^\d{10}$/.test(phone)) {
-
-      setError(
-        "Please enter a valid 10 digit phone number."
-      );
-
-      return;
-
-    }
-
-
-    // ================= PINCODE VALIDATION =================
-
-    if (!/^\d{6}$/.test(pincode)) {
-
-      setError(
-        "Please enter a valid 6 digit pincode."
-      );
-
-      return;
-
-    }
-
-
-    // ================= CREATE ORDER =================
-
-    const newOrder = {
-
-      id: Date.now(),
-
-      orderDate: new Date().toLocaleString(),
-
-      items: [...cartItems],
-
-      total: cartTotal,
-
-      status: "Order Placed",
-
-
-      customer: {
-
-        name: name.trim(),
-
-        phone: phone,
-
-        address: address.trim(),
-
-        city: city.trim(),
-
-        pincode: pincode
-
-      }
-
-    };
-
-
-    // ================= GET OLD ORDERS =================
-
-    const savedOrders =
-
-      JSON.parse(
-        localStorage.getItem("orders")
-      ) || [];
-
-
-    // ================= SAVE ORDER =================
-
-    localStorage.setItem(
-
-      "orders",
-
-      JSON.stringify([
-
-        newOrder,
-
-        ...savedOrders
-
-      ])
-
+    setError(
+      "Please fill all delivery details."
     );
 
+    return;
 
-    // ================= CLEAR CART =================
-
-    clearCart();
+  }
 
 
-    // ================= SUCCESS =================
+  // ================= PHONE VALIDATION =================
 
-    alert(
-      "🎉 Order placed successfully!"
+  if (!/^\d{10}$/.test(phone)) {
+
+    setError(
+      "Please enter a valid 10 digit phone number."
     );
 
+    return;
 
-    // ================= GO TO ORDERS =================
+  }
 
-    navigate("/orders");
+
+  // ================= PINCODE VALIDATION =================
+
+  if (!/^\d{6}$/.test(pincode)) {
+
+    setError(
+      "Please enter a valid 6 digit pincode."
+    );
+
+    return;
+
+  }
+
+
+  // ================= CREATE ORDER =================
+
+  const newOrder = {
+
+    id: Date.now(),
+
+    orderDate: new Date().toLocaleString(),
+
+    items: [...cartItems],
+
+    total: cartTotal,
+
+    status: "Order Placed",
+
+
+    // USER WHO PLACED ORDER
+
+    userEmail: loggedInUser.email,
+
+
+    customer: {
+
+      name: name.trim(),
+
+      phone: phone,
+
+      address: address.trim(),
+
+      city: city.trim(),
+
+      pincode: pincode
+
+    }
 
   };
 
+
+  // ================= USER-SPECIFIC ORDER KEY =================
+
+  const orderKey =
+    `orders_${loggedInUser.email}`;
+
+
+  // ================= GET OLD ORDERS =================
+
+  const savedOrders =
+
+    JSON.parse(
+      localStorage.getItem(orderKey)
+    ) || [];
+
+
+  // ================= SAVE ORDER =================
+
+  localStorage.setItem(
+
+    orderKey,
+
+    JSON.stringify([
+
+      newOrder,
+
+      ...savedOrders
+
+    ])
+
+  );
+
+
+  // ================= CLEAR CART =================
+
+  clearCart();
+
+
+  // ================= SUCCESS =================
+
+  alert(
+    "🎉 Order placed successfully!"
+  );
+
+
+  // ================= GO TO ORDERS =================
+
+  navigate("/orders");
+
+};
 
   // ================= EMPTY CART =================
 

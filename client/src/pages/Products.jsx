@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-
-import {
-  useSearchParams
-} from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
@@ -17,6 +14,7 @@ const products = [
     price: 120,
     weight: "250g",
     emoji: "🌶️",
+    image: "/images/ratlamiSev.png",
     description:
       "Authentic spicy Ratlami Sev with traditional flavours.",
   },
@@ -103,22 +101,14 @@ const products = [
 
 function Products() {
 
-
-  // ================= URL SEARCH PARAMS =================
-
   const [searchParams] = useSearchParams();
 
-
-  // Get search text from Navbar
   const urlSearch =
     searchParams.get("search") || "";
 
 
-  // ================= STATE =================
-
   const [search, setSearch] =
     useState(urlSearch);
-
 
   const [selectedCategory, setSelectedCategory] =
     useState("All");
@@ -127,12 +117,10 @@ function Products() {
   const { addToCart } = useCart();
 
   const {
-  toggleWishlist,
-  isInWishlist
-} = useWishlist();
+    toggleWishlist,
+    isInWishlist
+  } = useWishlist();
 
-
-  // Update search when URL changes
 
   useEffect(() => {
 
@@ -141,49 +129,32 @@ function Products() {
   }, [urlSearch]);
 
 
-  // ================= CATEGORIES =================
-
   const categories = [
-
     "All",
     "Ratlami Sev",
     "Namkeen",
     "Sweets",
     "Gift Hampers",
-
   ];
 
-
-  // ================= FILTER PRODUCTS =================
 
   const filteredProducts = products.filter(
     (product) => {
 
-
-      // Search by name
       const matchesSearch =
         product.name
           .toLowerCase()
-          .includes(
-            search.toLowerCase()
-          );
+          .includes(search.toLowerCase());
 
-
-      // Category filter
 
       const matchesCategory =
-
         selectedCategory === "All" ||
-
         product.category === selectedCategory;
 
 
       return (
-
         matchesSearch &&
-
         matchesCategory
-
       );
 
     }
@@ -199,200 +170,180 @@ function Products() {
 
       <section className="products-hero">
 
-
         <p className="section-tag">
-
           AUTHENTIC TASTE OF RATLAM
-
         </p>
-
 
         <h1>
-
           Explore Our <span>Products</span>
-
         </h1>
 
-
         <div className="gold-divider">
-
           ✦
-
         </div>
 
-
         <p>
-
           Discover the authentic taste of Ratlam with our
           delicious range of sev, namkeen, sweets and more.
-
         </p>
-
 
       </section>
 
 
-      {/* ================= SEARCH AND FILTER ================= */}
+
+      {/* ================= SEARCH ================= */}
 
       <section className="products-controls">
 
-
-        {/* PRODUCT SEARCH */}
-
         <div className="search-box">
 
-
           <span>
-
             🔍
-
           </span>
 
-
           <input
-
             type="text"
-
             placeholder="Search delicious products..."
-
             value={search}
-
             onChange={(e) =>
-
               setSearch(e.target.value)
-
             }
-
           />
-
 
         </div>
 
 
-        {/* CATEGORY FILTERS */}
+        {/* ================= CATEGORY ================= */}
 
         <div className="category-filters">
 
-
           {categories.map((category) => (
 
-
             <button
-
               key={category}
-
               className={
-
                 selectedCategory === category
-
                   ? "filter-btn active"
-
                   : "filter-btn"
-
               }
-
-
               onClick={() =>
-
                 setSelectedCategory(category)
-
               }
-
             >
-
               {category}
-
             </button>
-
 
           ))}
 
-
         </div>
-
 
       </section>
 
 
-      {/* ================= PRODUCT COUNT ================= */}
+
+      {/* ================= COUNT ================= */}
 
       <div className="product-count">
-
 
         <p>
 
           Showing{" "}
 
           <strong>
-
             {filteredProducts.length}
-
           </strong>
 
           {" "}products
 
         </p>
 
-
       </div>
 
 
-      {/* ================= PRODUCTS GRID ================= */}
+
+      {/* ================= PRODUCT GRID ================= */}
 
       <section className="products-grid">
 
-
         {filteredProducts.length > 0 ? (
-
 
           filteredProducts.map((product) => (
 
-
             <div
-
               className="shop-product-card"
-
               key={product.id}
-
             >
 
 
-              {/* PRODUCT IMAGE */}
+              {/* ================= IMAGE ================= */}
 
-             <div className="shop-product-image">
-
-  {/* WISHLIST BUTTON */}
-
-  <button
-    className={
-      isInWishlist(product.id)
-        ? "wishlist-btn active"
-        : "wishlist-btn"
-    }
-    onClick={() => toggleWishlist(product)}
-  >
-    {isInWishlist(product.id)
-      ? "❤️"
-      : "🤍"}
-  </button>
+              <div className="shop-product-image">
 
 
-  <span>
-    {product.emoji}
-  </span>
+                {/* WISHLIST */}
+
+                <button
+                  className={
+                    isInWishlist(product.id)
+                      ? "wishlist-btn active"
+                      : "wishlist-btn"
+                  }
+                  onClick={() =>
+                    toggleWishlist(product)
+                  }
+                >
+
+                  {isInWishlist(product.id)
+                    ? "❤️"
+                    : "🤍"}
+
+                </button>
 
 
-  <div className="product-weight">
-    {product.weight}
-  </div>
+                {/* PRODUCT IMAGE */}
 
-</div>
+                <Link
+                  to={`/products/${product.id}`}
+                  className="product-image-link"
+                >
+
+                  {product.image ? (
+
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="product-card-image"
+                    />
+
+                  ) : (
+
+                    <span className="product-emoji">
+
+                      {product.emoji}
+
+                    </span>
+
+                  )}
+
+                </Link>
 
 
-              {/* PRODUCT INFORMATION */}
+                {/* WEIGHT */}
+
+                <div className="product-weight">
+
+                  {product.weight}
+
+                </div>
+
+
+              </div>
+
+
+
+              {/* ================= PRODUCT INFO ================= */}
 
               <div className="shop-product-info">
-
 
                 <p className="product-category">
 
@@ -417,7 +368,6 @@ function Products() {
 
                 <div className="shop-product-bottom">
 
-
                   <span className="shop-price">
 
                     ₹{product.price}
@@ -426,60 +376,40 @@ function Products() {
 
 
                   <button
-
                     className="shop-add-cart-btn"
-
                     onClick={() =>
-
                       addToCart(product)
-
                     }
-
                   >
 
                     Add to Cart 🛒
 
                   </button>
 
-
                 </div>
-
 
               </div>
 
 
             </div>
 
-
           ))
 
         ) : (
 
-
-          /* NO PRODUCTS */
-
           <div className="no-products">
 
-
             <h2>
-
               No Products Found
-
             </h2>
 
-
             <p>
-
               Try searching for something else.
-
             </p>
-
 
           </div>
 
-
         )}
-
 
       </section>
 
