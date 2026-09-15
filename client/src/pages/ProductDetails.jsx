@@ -1,302 +1,190 @@
-import { useParams, Link } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 
-
-const products = [
-
-  {
-    id: 1,
-    name: "Classic Ratlami Sev",
-    category: "Ratlami Sev",
-    price: 120,
-    weight: "250g",
-    emoji: "🌶️",
-    image: "/images/ratlamiSev.png",
-    description:
-      "Authentic spicy Ratlami Sev with traditional flavours.",
-  },
-
-  {
-    id: 2,
-    name: "Masala Mixture",
-    category: "Namkeen",
-    price: 150,
-    weight: "250g",
-    emoji: "🥨",
-    description:
-      "Crunchy mixture packed with delicious Indian spices.",
-  },
-
-  {
-    id: 3,
-    name: "Spicy Peanut Mix",
-    category: "Namkeen",
-    price: 180,
-    weight: "250g",
-    emoji: "🥜",
-    description:
-      "Roasted peanuts with a perfect blend of spices.",
-  },
-
-  {
-    id: 4,
-    name: "Traditional Mithai",
-    category: "Sweets",
-    price: 250,
-    weight: "500g",
-    emoji: "🍬",
-    description:
-      "Delicious traditional sweets made with love.",
-  },
-
-  {
-    id: 5,
-    name: "Garlic Sev",
-    category: "Ratlami Sev",
-    price: 140,
-    weight: "250g",
-    emoji: "🧄",
-    description:
-      "Crispy sev with a delicious garlic flavour.",
-  },
-
-  {
-    id: 6,
-    name: "Khatta Meetha Mix",
-    category: "Namkeen",
-    price: 160,
-    weight: "250g",
-    emoji: "🥨",
-    description:
-      "A perfect balance of sweet, spicy and tangy flavours.",
-  },
-
-  {
-    id: 7,
-    name: "Dry Fruit Sweet Box",
-    category: "Sweets",
-    price: 450,
-    weight: "500g",
-    emoji: "🎁",
-    description:
-      "Premium traditional sweets with delicious dry fruits.",
-  },
-
-  {
-    id: 8,
-    name: "Special Gift Hamper",
-    category: "Gift Hampers",
-    price: 799,
-    weight: "1kg",
-    emoji: "🎁",
-    description:
-      "A special collection of authentic Ratlami products.",
-  },
-
-];
-
-
 function ProductDetails() {
-
   const { id } = useParams();
 
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } =
+    useWishlist();
 
-  const {
-    toggleWishlist,
-    isInWishlist
-  } = useWishlist();
+  // ===============================
+  // FETCH PRODUCT FROM MONGODB
+  // ===============================
 
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-  const product = products.find(
-    (item) => item.id === Number(id)
-  );
+        const response = await fetch(
+          `http://localhost:5000/api/products/${id}`
+        );
 
+        if (!response.ok) {
+          throw new Error("Product not found");
+        }
 
-  // ================= PRODUCT NOT FOUND =================
+        const data = await response.json();
 
-  if (!product) {
+        setProduct(data);
+      } catch (error) {
+        console.error("Error fetching product:", error);
 
+        setError("Unable to load product.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  // ===============================
+  // LOADING
+  // ===============================
+
+  if (loading) {
     return (
-
-      <div className="product-not-found">
-
-        <h1>
-          Product Not Found
-        </h1>
-
-        <Link to="/products">
-          ← Back to Products
-        </Link>
-
+      <div className="product-details-page">
+        <div className="products-loading">
+          <h2>Loading Product... 🌶️</h2>
+        </div>
       </div>
-
     );
-
   }
 
+  // ===============================
+  // ERROR
+  // ===============================
+
+  if (error || !product) {
+    return (
+      <div className="product-details-page">
+        <div className="products-error">
+          <h2>Product Not Found 😕</h2>
+
+          <p>{error}</p>
+
+          <Link to="/products" className="back-products">
+            ← Back to Products
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // ===============================
+  // WISHLIST
+  // ===============================
+
+  const handleWishlist = () => {
+    if (isInWishlist(product._id)) {
+      removeFromWishlist(product._id);
+    } else {
+      addToWishlist(product);
+    }
+  };
 
   return (
-
     <div className="product-details-page">
 
+      {/* ===============================
+          BACK BUTTON
+      =============================== */}
 
-      {/* ================= BACK ================= */}
-
-      <Link
-        to="/products"
-        className="back-products"
-      >
+      <Link to="/products" className="back-products">
         ← Back to Products
       </Link>
 
 
-
-      {/* ================= MAIN CONTAINER ================= */}
+      {/* ===============================
+          PRODUCT DETAILS
+      =============================== */}
 
       <div className="product-details-container">
 
-
-        {/* ================= PRODUCT IMAGE ================= */}
+        {/* PRODUCT IMAGE */}
 
         <div className="product-details-image">
-
-
-          {/* WISHLIST BUTTON */}
-
-          <button
-            type="button"
-            className={
-              isInWishlist(product.id)
-                ? "wishlist-btn active"
-                : "wishlist-btn"
-            }
-            onClick={() =>
-              toggleWishlist(product)
-            }
-            title="Add to Wishlist"
-          >
-
-            {isInWishlist(product.id)
-              ? "❤️"
-              : "🤍"}
-
-          </button>
-
-
-
-          {/* ================= IMAGE WRAPPER ================= */}
 
           <div className="product-details-image-wrapper">
 
             {product.image ? (
-
               <img
                 src={product.image}
                 alt={product.name}
                 className="product-details-img"
               />
-
             ) : (
-
               <span className="product-details-emoji">
                 {product.emoji}
               </span>
-
             )}
 
           </div>
 
-
         </div>
 
 
-
-        {/* ================= PRODUCT INFORMATION ================= */}
+        {/* PRODUCT INFORMATION */}
 
         <div className="product-details-info">
 
-
-          <p className="product-category">
+          <span className="product-details-category">
             {product.category}
-          </p>
+          </span>
 
+          <h1>{product.name}</h1>
 
-          <h1>
-            {product.name}
-          </h1>
+          <div className="product-details-price">
+            ₹{product.price}
+          </div>
 
+          <div className="product-details-weight">
+            Weight: {product.weight}
+          </div>
 
           <p className="product-details-description">
             {product.description}
           </p>
 
 
-          <div className="product-details-price">
-            ₹{product.price}
-          </div>
-
-
-          <p className="product-details-weight">
-            Net Weight: {product.weight}
-          </p>
-
-
-
-          {/* ================= BUTTONS ================= */}
+          {/* BUTTONS */}
 
           <div className="product-details-buttons">
 
-
-            {/* ADD TO CART */}
-
             <button
-              type="button"
               className="product-details-cart-btn"
-              onClick={() =>
-                addToCart(product)
-              }
+              onClick={() => addToCart(product)}
             >
-
               Add to Cart 🛒
-
             </button>
-
-
-
-            {/* WISHLIST */}
 
             <button
-              type="button"
               className="product-details-wishlist-btn"
-              onClick={() =>
-                toggleWishlist(product)
-              }
+              onClick={handleWishlist}
             >
-
-              {isInWishlist(product.id)
+              {isInWishlist(product._id)
                 ? "❤️ Remove from Wishlist"
-                : "🤍 Add to Wishlist"}
-
+                : "♡ Add to Wishlist"}
             </button>
-
 
           </div>
 
-
         </div>
-
 
       </div>
 
-
     </div>
-
   );
-
 }
-
 
 export default ProductDetails;

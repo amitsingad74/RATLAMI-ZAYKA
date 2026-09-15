@@ -1,122 +1,134 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Orders() {
 
-
-  // ================= GET LOGGED IN USER =================
+  // ===============================
+  // GET LOGGED IN USER
+  // ===============================
 
   const loggedInUser = JSON.parse(
     localStorage.getItem("user")
   );
 
-
-  // ================= USER ORDER KEY =================
-
-  const orderKey = loggedInUser
-
-    ? `orders_${loggedInUser.email}`
-
-    : null;
+  const token = localStorage.getItem("token");
 
 
-  // ================= LOAD ORDERS =================
+  // ===============================
+  // STATES
+  // ===============================
 
-  const [orders, setOrders] = useState(() => {
+  const [orders, setOrders] = useState([]);
 
+  const [loading, setLoading] = useState(true);
 
-    if (!orderKey) {
-
-      return [];
-
-    }
-
-
-    return JSON.parse(
-
-      localStorage.getItem(orderKey)
-
-    ) || [];
+  const [error, setError] = useState("");
 
 
-  });
+  // ===============================
+  // FETCH ORDERS FROM MONGODB
+  // ===============================
+
+  useEffect(() => {
+
+    const fetchOrders = async () => {
+
+      if (!token) {
+
+        setLoading(false);
+
+        return;
+
+      }
 
 
-  // ================= DELETE ORDER =================
+      try {
 
-  const deleteOrder = (orderId) => {
+        setLoading(true);
 
-
-    const updatedOrders =
-
-      orders.filter(
-
-        (order) =>
-          order.id !== orderId
-
-      );
+        setError("");
 
 
-    // UPDATE STATE
+        const response = await fetch(
+          "http://localhost:5000/api/orders/my-orders",
+          {
+            method: "GET",
 
-    setOrders(updatedOrders);
-
-
-    // UPDATE LOCAL STORAGE
-
-    localStorage.setItem(
-
-      orderKey,
-
-      JSON.stringify(updatedOrders)
-
-    );
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
 
-  };
+        const data = await response.json();
 
 
-  // ================= NOT LOGGED IN =================
+        if (!response.ok) {
 
-  if (!loggedInUser) {
+          throw new Error(
+            data.message || "Failed to fetch orders."
+          );
+
+        }
+
+
+        setOrders(data);
+
+      } catch (error) {
+
+        console.error(
+          "Fetch Orders Error:",
+          error
+        );
+
+        setError(
+          error.message ||
+          "Unable to load orders."
+        );
+
+      } finally {
+
+        setLoading(false);
+
+      }
+
+    };
+
+
+    fetchOrders();
+
+  }, [token]);
+
+
+  // ===============================
+  // NOT LOGGED IN
+  // ===============================
+
+  if (!loggedInUser || !token) {
 
     return (
 
       <div className="orders-page">
 
-
         <div className="empty-orders">
 
-
           <h1>
-
             🔒 Please Login
-
           </h1>
 
-
           <p>
-
             Please login to view your orders.
-
           </p>
 
-
           <Link
-
             to="/login"
-
             className="explore-products-btn"
-
           >
-
             Login
-
           </Link>
 
-
         </div>
-
 
       </div>
 
@@ -125,7 +137,74 @@ function Orders() {
   }
 
 
-  // ================= EMPTY ORDERS =================
+  // ===============================
+  // LOADING
+  // ===============================
+
+  if (loading) {
+
+    return (
+
+      <div className="orders-page">
+
+        <div className="empty-orders">
+
+          <h1>
+            Loading Orders... 📦
+          </h1>
+
+          <p>
+            Please wait while we load your orders.
+          </p>
+
+        </div>
+
+      </div>
+
+    );
+
+  }
+
+
+  // ===============================
+  // ERROR
+  // ===============================
+
+  if (error) {
+
+    return (
+
+      <div className="orders-page">
+
+        <div className="empty-orders">
+
+          <h1>
+            Something went wrong 😕
+          </h1>
+
+          <p>
+            {error}
+          </p>
+
+          <Link
+            to="/products"
+            className="explore-products-btn"
+          >
+            Back to Products
+          </Link>
+
+        </div>
+
+      </div>
+
+    );
+
+  }
+
+
+  // ===============================
+  // EMPTY ORDERS
+  // ===============================
 
   if (orders.length === 0) {
 
@@ -133,39 +212,24 @@ function Orders() {
 
       <div className="orders-page">
 
-
         <div className="empty-orders">
 
-
           <h1>
-
             📦 No Orders Yet
-
           </h1>
 
-
           <p>
-
             You haven't placed any orders yet.
-
           </p>
 
-
           <Link
-
             to="/products"
-
             className="explore-products-btn"
-
           >
-
             Explore Products
-
           </Link>
 
-
         </div>
-
 
       </div>
 
@@ -174,203 +238,159 @@ function Orders() {
   }
 
 
-  // ================= ORDERS PAGE =================
+  // ===============================
+  // ORDERS PAGE
+  // ===============================
 
   return (
 
     <div className="orders-page">
 
 
-      {/* ================= HEADER ================= */}
+      {/* ===============================
+          HEADER
+      =============================== */}
 
       <div className="orders-header">
 
-
         <p className="section-tag">
-
           YOUR PURCHASE HISTORY
-
         </p>
-
 
         <h1>
-
           My <span>Orders</span>
-
         </h1>
 
-
         <div className="gold-divider">
-
           ✦
-
         </div>
 
-
         <p>
-
           View all your delicious Ratlami Zayka orders.
-
         </p>
-
 
       </div>
 
 
-      {/* ================= ORDERS LIST ================= */}
+      {/* ===============================
+          ORDERS LIST
+      =============================== */}
 
       <div className="orders-container">
-
 
         {orders.map((order) => (
 
           <div
-
             className="order-card"
-
-            key={order.id}
-
+            key={order._id}
           >
 
 
-            {/* ================= ORDER HEADER ================= */}
+            {/* ===============================
+                ORDER HEADER
+            =============================== */}
 
             <div className="order-card-header">
 
-
               <div>
 
-
                 <h2>
-
-                  Order #{order.id}
-
+                  Order #{order._id.slice(-6)}
                 </h2>
 
-
                 <p>
-
-                  📅 {order.orderDate}
-
+                  📅{" "}
+                  {new Date(
+                    order.createdAt
+                  ).toLocaleString()}
                 </p>
-
 
               </div>
 
-
               <span className="order-status">
-
                 {order.status}
-
               </span>
-
 
             </div>
 
 
-            {/* ================= ORDER ITEMS ================= */}
+            {/* ===============================
+                ORDER ITEMS
+            =============================== */}
 
             <div className="order-items">
 
-
-              {order.items.map((item) => (
+              {order.items.map((item, index) => (
 
                 <div
-
                   className="order-item"
-
-                  key={item.id}
-
+                  key={
+                    item.product?._id ||
+                    `${order._id}-${index}`
+                  }
                 >
-
 
                   <div className="order-item-left">
 
-
                     <span className="order-item-emoji">
 
-                      {item.emoji}
+                      {item.product?.emoji ||
+                        "🌶️"}
 
                     </span>
 
-
                     <div>
 
-
                       <h3>
-
                         {item.name}
-
                       </h3>
 
-
                       <p>
-
                         Quantity: {item.quantity}
-
                       </p>
-
 
                     </div>
 
-
                   </div>
 
-
                   <strong>
-
                     ₹{item.price * item.quantity}
-
                   </strong>
-
 
                 </div>
 
               ))}
 
-
             </div>
 
 
-            {/* ================= ORDER FOOTER ================= */}
+            {/* ===============================
+                ORDER FOOTER
+            =============================== */}
 
             <div className="order-card-footer">
 
-
               <div>
 
-
                 <span>
-
                   Total Amount
-
                 </span>
 
-
                 <h2>
-
                   ₹{order.total}
-
                 </h2>
-
 
               </div>
 
 
-              <button
+              {/* 
+                Delete button removed for now.
+                Orders are stored in MongoDB.
+              */}
 
-                className="delete-order-btn"
-
-                onClick={() =>
-                  deleteOrder(order.id)
-                }
-
-              >
-
-                🗑️ Delete
-
-              </button>
-
+              <span className="order-status">
+                {order.status}
+              </span>
 
             </div>
 
@@ -379,9 +399,7 @@ function Orders() {
 
         ))}
 
-
       </div>
-
 
     </div>
 

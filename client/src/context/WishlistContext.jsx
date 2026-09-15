@@ -35,29 +35,16 @@ export function WishlistProvider({ children }) {
 
 
   // ===============================
-  // ADD / REMOVE WISHLIST
+  // ADD WISHLIST
   // ===============================
 
-  const toggleWishlist = (product) => {
+  const addToWishlist = (product) => {
 
-    const exists = wishlist.find(
-      (item) => item.id === product.id
+    const exists = wishlist.some(
+      (item) => item._id === product._id
     );
 
-
-    if (exists) {
-
-      // REMOVE PRODUCT
-
-      setWishlist(
-        wishlist.filter(
-          (item) => item.id !== product.id
-        )
-      );
-
-    } else {
-
-      // ADD PRODUCT
+    if (!exists) {
 
       setWishlist([
         ...wishlist,
@@ -70,29 +57,48 @@ export function WishlistProvider({ children }) {
 
 
   // ===============================
-  // CHECK WISHLIST
-  // ===============================
-
-  const isInWishlist = (id) => {
-
-    return wishlist.some(
-      (item) => item.id === id
-    );
-
-  };
-
-
-  // ===============================
-  // REMOVE FROM WISHLIST
+  // REMOVE WISHLIST
   // ===============================
 
   const removeFromWishlist = (id) => {
 
     setWishlist(
       wishlist.filter(
-        (item) => item.id !== id
+        (item) => item._id !== id
       )
     );
+
+  };
+
+
+  // ===============================
+  // CHECK WISHLIST
+  // ===============================
+
+  const isInWishlist = (id) => {
+
+    return wishlist.some(
+      (item) => item._id === id
+    );
+
+  };
+
+
+  // ===============================
+  // TOGGLE WISHLIST
+  // ===============================
+
+  const toggleWishlist = (product) => {
+
+    if (isInWishlist(product._id)) {
+
+      removeFromWishlist(product._id);
+
+    } else {
+
+      addToWishlist(product);
+
+    }
 
   };
 
@@ -110,9 +116,11 @@ export function WishlistProvider({ children }) {
       value={{
         wishlist,
         wishlistCount,
-        toggleWishlist,
+
+        addToWishlist,
+        removeFromWishlist,
         isInWishlist,
-        removeFromWishlist
+        toggleWishlist
       }}
     >
 

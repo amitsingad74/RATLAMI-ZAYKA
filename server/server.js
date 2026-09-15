@@ -25,6 +25,8 @@ dns.setServers([
 // ===============================
 
 const authRoutes = require("./routes/authRoutes");
+const productRoutes = require("./routes/productRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 
 // ===============================
@@ -56,6 +58,19 @@ app.get("/", (req, res) => {
 // ===============================
 
 app.use("/api/auth", authRoutes);
+
+
+// ===============================
+// PRODUCT ROUTES
+// ===============================
+
+app.use("/api/products", productRoutes);
+
+// ===============================
+// ORDER ROUTES
+// ===============================
+
+app.use("/api/orders", orderRoutes);
 
 
 // ===============================

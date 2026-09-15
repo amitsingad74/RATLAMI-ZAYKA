@@ -2,693 +2,393 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
-
 function Checkout() {
-
   const navigate = useNavigate();
 
-
-  // ================= CART =================
-
   const {
-
     cartItems,
-
     cartTotal,
-
-    clearCart
-
+    clearCart,
   } = useCart();
 
-
-  // ================= FORM DATA =================
-
   const [name, setName] = useState("");
-
   const [phone, setPhone] = useState("");
-
   const [address, setAddress] = useState("");
-
   const [city, setCity] = useState("");
-
   const [pincode, setPincode] = useState("");
 
-
-  // ================= ERROR =================
-
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
 
-  // ================= PLACE ORDER =================
-
- const handlePlaceOrder = (e) => {
-
-  e.preventDefault();
-
-  setError("");
-
-
-  // ================= CHECK LOGIN =================
+  // ===============================
+  // CHECK LOGIN
+  // ===============================
 
   const token = localStorage.getItem("token");
 
-  const loggedInUser = JSON.parse(
-    localStorage.getItem("user")
-  );
+  if (!token) {
+    return (
+      <div className="checkout-page">
+        <div className="checkout-login-message">
 
+          <h2>Please Login First 🔐</h2>
 
-  if (!token || !loggedInUser) {
+          <p>
+            You need to login before placing an order.
+          </p>
 
-    alert("Please login before placing an order.");
+          <button
+            onClick={() => navigate("/login")}
+            className="checkout-btn"
+          >
+            Go to Login
+          </button>
 
-    navigate("/login");
-
-    return;
-
+        </div>
+      </div>
+    );
   }
 
 
-  // ================= CHECK EMPTY CART =================
+  // ===============================
+  // EMPTY CART
+  // ===============================
 
   if (cartItems.length === 0) {
+    return (
+      <div className="checkout-page">
+        <div className="checkout-login-message">
 
-    setError("Your cart is empty.");
+          <h2>Your Cart is Empty 🛒</h2>
 
-    return;
+          <p>
+            Add some delicious products before checkout.
+          </p>
 
-  }
+          <button
+            onClick={() => navigate("/products")}
+            className="checkout-btn"
+          >
+            Browse Products
+          </button>
 
-
-  // ================= FORM VALIDATION =================
-
-  if (
-
-    !name.trim() ||
-
-    !phone.trim() ||
-
-    !address.trim() ||
-
-    !city.trim() ||
-
-    !pincode.trim()
-
-  ) {
-
-    setError(
-      "Please fill all delivery details."
+        </div>
+      </div>
     );
-
-    return;
-
   }
 
 
-  // ================= PHONE VALIDATION =================
+  // ===============================
+  // PLACE ORDER
+  // ===============================
 
-  if (!/^\d{10}$/.test(phone)) {
+  const handlePlaceOrder = async (e) => {
 
-    setError(
-      "Please enter a valid 10 digit phone number."
-    );
+    e.preventDefault();
 
-    return;
-
-  }
+    setError("");
 
 
-  // ================= PINCODE VALIDATION =================
+    // ===============================
+    // VALIDATION
+    // ===============================
 
-  if (!/^\d{6}$/.test(pincode)) {
-
-    setError(
-      "Please enter a valid 6 digit pincode."
-    );
-
-    return;
-
-  }
-
-
-  // ================= CREATE ORDER =================
-
-  const newOrder = {
-
-    id: Date.now(),
-
-    orderDate: new Date().toLocaleString(),
-
-    items: [...cartItems],
-
-    total: cartTotal,
-
-    status: "Order Placed",
+    if (
+      !name.trim() ||
+      !phone.trim() ||
+      !address.trim() ||
+      !city.trim() ||
+      !pincode.trim()
+    ) {
+      setError("Please fill all fields.");
+      return;
+    }
 
 
-    // USER WHO PLACED ORDER
+    if (!/^\d{10}$/.test(phone)) {
+      setError("Please enter a valid 10-digit phone number.");
+      return;
+    }
 
-    userEmail: loggedInUser.email,
+
+    if (!/^\d{6}$/.test(pincode)) {
+      setError("Please enter a valid 6-digit pincode.");
+      return;
+    }
 
 
-    customer: {
+    try {
 
-      name: name.trim(),
+      setLoading(true);
 
-      phone: phone,
 
-      address: address.trim(),
+      // ===============================
+      // ORDER DATA
+      // ===============================
 
-      city: city.trim(),
+      const orderData = {
 
-      pincode: pincode
+        items: cartItems,
+
+        total: cartTotal,
+
+        customer: {
+          name: name.trim(),
+          phone: phone.trim(),
+          address: address.trim(),
+          city: city.trim(),
+          pincode: pincode.trim(),
+        },
+
+      };
+
+
+      // ===============================
+      // SEND ORDER TO BACKEND
+      // ===============================
+
+      const response = await fetch(
+        "http://localhost:5000/api/orders",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+
+          body: JSON.stringify(orderData),
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.message || "Failed to place order."
+        );
+
+      }
+
+
+      // ===============================
+      // CLEAR CART
+      // ===============================
+
+      clearCart();
+
+
+      // ===============================
+      // SUCCESS
+      // ===============================
+
+      alert("Order placed successfully! 🎉");
+
+
+      navigate("/orders");
+
+    } catch (error) {
+
+      console.error("Place Order Error:", error);
+
+      setError(
+        error.message ||
+        "Something went wrong while placing your order."
+      );
+
+    } finally {
+
+      setLoading(false);
 
     }
 
   };
 
 
-  // ================= USER-SPECIFIC ORDER KEY =================
-
-  const orderKey =
-    `orders_${loggedInUser.email}`;
-
-
-  // ================= GET OLD ORDERS =================
-
-  const savedOrders =
-
-    JSON.parse(
-      localStorage.getItem(orderKey)
-    ) || [];
-
-
-  // ================= SAVE ORDER =================
-
-  localStorage.setItem(
-
-    orderKey,
-
-    JSON.stringify([
-
-      newOrder,
-
-      ...savedOrders
-
-    ])
-
-  );
-
-
-  // ================= CLEAR CART =================
-
-  clearCart();
-
-
-  // ================= SUCCESS =================
-
-  alert(
-    "🎉 Order placed successfully!"
-  );
-
-
-  // ================= GO TO ORDERS =================
-
-  navigate("/orders");
-
-};
-
-  // ================= EMPTY CART =================
-
-  if (!cartItems || cartItems.length === 0) {
-
-    return (
-
-      <div className="checkout-page">
-
-        <div className="empty-checkout">
-
-          <h1>
-            Your Cart is Empty 🛒
-          </h1>
-
-
-          <p>
-            Add some delicious Ratlami products first!
-          </p>
-
-
-          <button
-
-            onClick={() =>
-              navigate("/products")
-            }
-
-          >
-
-            Explore Products
-
-          </button>
-
-
-        </div>
-
-      </div>
-
-    );
-
-  }
-
-
-  // ================= PAGE =================
-
   return (
 
     <div className="checkout-page">
 
-
-      {/* ================= HEADER ================= */}
-
-      <section className="checkout-header">
-
-
-        <p className="section-tag">
-
-          COMPLETE YOUR ORDER
-
-        </p>
-
-
-        <h1>
-
-          Checkout <span>Details</span>
-
-        </h1>
-
-
-        <div className="gold-divider">
-
-          ✦
-
-        </div>
-
-
-        <p>
-
-          Fill in your delivery details and
-          place your order.
-
-        </p>
-
-
-      </section>
-
-
-
-      {/* ================= CHECKOUT CONTENT ================= */}
-
       <div className="checkout-container">
 
+        {/* ===============================
+            CHECKOUT FORM
+        =============================== */}
 
-        {/* ================= DELIVERY FORM ================= */}
+        <div className="checkout-form-section">
 
-        <form
+          <h1>Checkout 🛒</h1>
 
-          className="checkout-form"
+          <p className="checkout-subtitle">
+            Enter your delivery details
+          </p>
 
-          onSubmit={handlePlaceOrder}
-
-        >
-
-
-          <h2>
-
-            🚚 Delivery Information
-
-          </h2>
-
-
-
-          {/* ================= ERROR ================= */}
 
           {error && (
-
             <div className="checkout-error">
-
-              ⚠️ {error}
-
+              {error}
             </div>
-
           )}
 
 
+          <form onSubmit={handlePlaceOrder}>
 
-          {/* ================= NAME ================= */}
+            {/* NAME */}
 
-          <div className="checkout-group">
+            <div className="checkout-field">
 
+              <label>Full Name</label>
 
-            <label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your full name"
+              />
 
-              Full Name
+            </div>
 
-            </label>
 
+            {/* PHONE */}
 
-            <input
+            <div className="checkout-field">
 
-              type="text"
+              <label>Phone Number</label>
 
-              placeholder="Enter your full name"
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="10-digit phone number"
+                maxLength="10"
+              />
 
-              value={name}
+            </div>
 
-              onChange={(e) =>
-                setName(e.target.value)
-              }
 
-            />
+            {/* ADDRESS */}
 
+            <div className="checkout-field">
 
-          </div>
+              <label>Address</label>
 
+              <textarea
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Enter your complete address"
+                rows="4"
+              />
 
+            </div>
 
-          {/* ================= PHONE ================= */}
 
-          <div className="checkout-group">
+            {/* CITY */}
 
+            <div className="checkout-field">
 
-            <label>
+              <label>City</label>
 
-              Phone Number
+              <input
+                type="text"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="Enter your city"
+              />
 
-            </label>
+            </div>
 
 
-            <input
+            {/* PINCODE */}
 
-              type="tel"
+            <div className="checkout-field">
 
-              placeholder="Enter 10 digit phone number"
+              <label>Pincode</label>
 
-              value={phone}
+              <input
+                type="text"
+                value={pincode}
+                onChange={(e) => setPincode(e.target.value)}
+                placeholder="6-digit pincode"
+                maxLength="6"
+              />
 
-              maxLength="10"
+            </div>
 
-              onChange={(e) =>
 
-                setPhone(
-                  e.target.value.replace(/\D/g, "")
-                )
+            {/* PLACE ORDER */}
 
-              }
+            <button
+              type="submit"
+              className="checkout-btn"
+              disabled={loading}
+            >
 
-            />
+              {loading
+                ? "Placing Order..."
+                : "Place Order 🎉"}
 
+            </button>
 
-          </div>
-
-
-
-          {/* ================= ADDRESS ================= */}
-
-          <div className="checkout-group">
-
-
-            <label>
-
-              Delivery Address
-
-            </label>
-
-
-            <textarea
-
-              placeholder="House number, street, area..."
-
-              value={address}
-
-              onChange={(e) =>
-                setAddress(e.target.value)
-              }
-
-            />
-
-
-          </div>
-
-
-
-          {/* ================= CITY ================= */}
-
-          <div className="checkout-group">
-
-
-            <label>
-
-              City
-
-            </label>
-
-
-            <input
-
-              type="text"
-
-              placeholder="Enter your city"
-
-              value={city}
-
-              onChange={(e) =>
-                setCity(e.target.value)
-              }
-
-            />
-
-
-          </div>
-
-
-
-          {/* ================= PINCODE ================= */}
-
-          <div className="checkout-group">
-
-
-            <label>
-
-              Pincode
-
-            </label>
-
-
-            <input
-
-              type="text"
-
-              placeholder="Enter 6 digit pincode"
-
-              value={pincode}
-
-              maxLength="6"
-
-              onChange={(e) =>
-
-                setPincode(
-                  e.target.value.replace(/\D/g, "")
-                )
-
-              }
-
-            />
-
-
-          </div>
-
-
-
-          {/* ================= PLACE ORDER ================= */}
-
-          <button
-
-            type="submit"
-
-            className="place-order-btn"
-
-          >
-
-            Place Order →
-
-          </button>
-
-
-        </form>
-
-
-
-        {/* ================= ORDER SUMMARY ================= */}
-
-        <div className="checkout-summary">
-
-
-          <h2>
-
-            📦 Order Summary
-
-          </h2>
-
-
-
-          <div className="checkout-items">
-
-
-            {cartItems.map((item) => (
-
-              <div
-
-                className="checkout-item"
-
-                key={item.id}
-
-              >
-
-
-                <div className="checkout-item-left">
-
-
-                  <span className="checkout-item-emoji">
-
-                    {item.emoji}
-
-                  </span>
-
-
-                  <div>
-
-
-                    <h4>
-
-                      {item.name}
-
-                    </h4>
-
-
-                    <p>
-
-                      Quantity: {item.quantity}
-
-                    </p>
-
-
-                  </div>
-
-
-                </div>
-
-
-                <strong>
-
-                  ₹{item.price * item.quantity}
-
-                </strong>
-
-
-              </div>
-
-            ))}
-
-
-          </div>
-
-
-
-          <div className="checkout-summary-line"></div>
-
-
-
-          {/* SUBTOTAL */}
-
-          <div className="checkout-total-row">
-
-
-            <span>
-
-              Subtotal
-
-            </span>
-
-
-            <strong>
-
-              ₹{cartTotal}
-
-            </strong>
-
-
-          </div>
-
-
-
-          {/* DELIVERY */}
-
-          <div className="checkout-total-row">
-
-
-            <span>
-
-              Delivery
-
-            </span>
-
-
-            <strong>
-
-              FREE
-
-            </strong>
-
-
-          </div>
-
-
-
-          <div className="checkout-summary-line"></div>
-
-
-
-          {/* TOTAL */}
-
-          <div className="checkout-grand-total">
-
-
-            <span>
-
-              Total
-
-            </span>
-
-
-            <strong>
-
-              ₹{cartTotal}
-
-            </strong>
-
-
-          </div>
-
+          </form>
 
         </div>
 
 
-      </div>
+        {/* ===============================
+            ORDER SUMMARY
+        =============================== */}
 
+        <div className="checkout-summary">
+
+          <h2>Order Summary</h2>
+
+          {cartItems.map((item) => (
+
+            <div
+              className="checkout-item"
+              key={item._id}
+            >
+
+              <div>
+
+                <h4>{item.name}</h4>
+
+                <p>
+                  ₹{item.price} × {item.quantity}
+                </p>
+
+              </div>
+
+              <strong>
+                ₹{item.price * item.quantity}
+              </strong>
+
+            </div>
+
+          ))}
+
+
+          <div className="checkout-total">
+
+            <span>Total</span>
+
+            <strong>
+              ₹{cartTotal}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
 
   );
-
 }
-
 
 export default Checkout;
