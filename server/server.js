@@ -28,6 +28,20 @@ const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 
+const adminProductRoutes =
+  require("./routes/adminProductRoutes");
+
+  const adminOrderRoutes =
+  require("./routes/adminOrderRoutes");
+
+  const adminStatsRoutes =
+  require("./routes/adminStatsRoutes");
+
+  const adminUserRoutes =
+  require("./routes/adminUserRoutes");
+
+  const adminAnalyticsRoutes =
+  require("./routes/adminAnalyticsRoutes");
 
 // ===============================
 // CREATE EXPRESS APP
@@ -72,7 +86,34 @@ app.use("/api/products", productRoutes);
 
 app.use("/api/orders", orderRoutes);
 
+// ===============================
+// ADMIN PRODUCT ROUTES
+// ===============================
 
+app.use(
+  "/api/admin/products",
+  adminProductRoutes
+);
+
+app.use(
+  "/api/admin/orders",
+  adminOrderRoutes
+);
+
+app.use(
+  "/api/admin/stats",
+  adminStatsRoutes
+);
+
+app.use(
+  "/api/admin/users",
+  adminUserRoutes
+);
+
+app.use(
+  "/api/admin/analytics",
+  adminAnalyticsRoutes
+);
 // ===============================
 // PORT
 // ===============================

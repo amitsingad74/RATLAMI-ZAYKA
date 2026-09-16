@@ -14,6 +14,10 @@ import Orders from "./pages/Orders";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import ProductDetails from "./pages/ProductDetails";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminOrders from "./pages/AdminOrders";
+import AdminUsers from "./pages/AdminUsers";
+import AdminOrderDetails from "./pages/AdminOrderDetails";
 
 function Footer() {
   return (
@@ -148,6 +152,28 @@ function App() {
   path="/products/:id"
   element={<ProductDetails />}
 />
+
+<Route
+  path="/admin"
+  element={<AdminDashboard />}
+/>
+
+<Route
+  path="/admin/orders"
+  element={<AdminOrders />}
+/>
+
+<Route
+  path="/admin/orders/:id"
+  element={<AdminOrderDetails />}
+/>
+
+<Route
+  path="/admin/users"
+  element={<AdminUsers />}
+/>
+
+
 
 </Routes>
       {/* FOOTER */}

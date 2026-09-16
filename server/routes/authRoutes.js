@@ -62,17 +62,19 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
-    // SAVE USER IN MONGODB
+    // SAVE USER
     await newUser.save();
 
     // SUCCESS RESPONSE
     res.status(201).json({
       message: "User registered successfully! 🎉",
+
       user: {
         id: newUser._id,
         name: newUser.name,
         email: newUser.email,
         phone: newUser.phone,
+        role: newUser.role,
       },
     });
 
@@ -108,7 +110,7 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    // FIND USER BY EMAIL
+    // FIND USER
     const user = await User.findOne({
       email: email.toLowerCase(),
     });
@@ -134,35 +136,45 @@ router.post("/login", async (req, res) => {
       });
     }
 
-  // ===============================
-// GENERATE JWT TOKEN
-// ===============================
 
-const token = jwt.sign(
-  {
-    id: user._id,
-    email: user.email,
-  },
-  process.env.JWT_SECRET,
-  {
-    expiresIn: "7d",
-  }
-);
+    // ===============================
+    // GENERATE JWT TOKEN
+    // ===============================
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+      },
+
+      process.env.JWT_SECRET,
+
+      {
+        expiresIn: "7d",
+      }
+    );
 
 
-// LOGIN SUCCESS
-res.status(200).json({
-  message: "Login successful! 🎉",
+    // ===============================
+    // LOGIN SUCCESS
+    // ===============================
 
-  token,
+    res.status(200).json({
 
-  user: {
-    id: user._id,
-    name: user.name,
-    email: user.email,
-    phone: user.phone,
-  },
-});
+      message: "Login successful! 🎉",
+
+      token,
+
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+      },
+
+    });
 
   } catch (error) {
 
@@ -178,35 +190,53 @@ res.status(200).json({
   }
 });
 
+
 // ===============================
 // GET CURRENT USER PROFILE
 // GET /api/auth/profile
 // ===============================
 
-router.get("/profile", authMiddleware, async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("-password");
+router.get(
+  "/profile",
+  authMiddleware,
+  async (req, res) => {
 
-    if (!user) {
-      return res.status(404).json({
-        message: "User not found.",
+    try {
+
+      const user = await User.findById(
+        req.user.id
+      ).select("-password");
+
+      if (!user) {
+        return res.status(404).json({
+          message: "User not found.",
+        });
+      }
+
+      res.status(200).json({
+
+        message:
+          "Profile fetched successfully!",
+
+        user,
+
       });
+
+    } catch (error) {
+
+      console.error(
+        "Profile Error:",
+        error.message
+      );
+
+      res.status(500).json({
+        message: "Server error.",
+      });
+
     }
 
-    res.status(200).json({
-      message: "Profile fetched successfully!",
-      user,
-    });
-
-  } catch (error) {
-
-    console.error("Profile Error:", error.message);
-
-    res.status(500).json({
-      message: "Server error.",
-    });
-
   }
-});
+);
+
 
 module.exports = router;
