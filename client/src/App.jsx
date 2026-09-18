@@ -18,7 +18,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminOrders from "./pages/AdminOrders";
 import AdminUsers from "./pages/AdminUsers";
 import AdminOrderDetails from "./pages/AdminOrderDetails";
-
+import OrderDetails from "./pages/OrderDetails";
 function Footer() {
   return (
     <footer className="footer">
@@ -136,6 +136,16 @@ function App() {
     }
   />
 
+{/* PROTECTED ORDER DETAILS */}
+
+<Route
+  path="/orders/:id"
+  element={
+    <ProtectedRoute>
+      <OrderDetails />
+    </ProtectedRoute>
+  }
+/>
 
   {/* PROTECTED CHECKOUT */}
 

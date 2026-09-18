@@ -11,7 +11,8 @@ function Products() {
   const [error, setError] = useState("");
 
   const { addToCart } = useCart();
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { addToWishlist, removeFromWishlist, isInWishlist } =
+    useWishlist();
 
   const searchQuery = searchParams.get("search") || "";
 
@@ -92,6 +93,18 @@ function Products() {
   };
 
   // ===============================
+  // ADD TO CART
+  // ===============================
+
+  const handleAddToCart = (product) => {
+    const message = addToCart(product);
+
+    if (message) {
+      alert(message);
+    }
+  };
+
+  // ===============================
   // LOADING
   // ===============================
 
@@ -122,7 +135,6 @@ function Products() {
 
   return (
     <div className="products-page">
-
       {/* ===============================
           PAGE HEADER
       =============================== */}
@@ -136,7 +148,6 @@ function Products() {
           </p>
         )}
       </div>
-
 
       {/* ===============================
           CATEGORY FILTER
@@ -158,7 +169,6 @@ function Products() {
         ))}
       </div>
 
-
       {/* ===============================
           PRODUCTS GRID
       =============================== */}
@@ -170,94 +180,110 @@ function Products() {
         </div>
       ) : (
         <div className="products-grid">
+          {filteredProducts.map((product) => {
+            const stock = Number(product.stock ?? 0);
 
-          {filteredProducts.map((product) => (
-            <div className="product-card" key={product._id}>
-
-              {/* PRODUCT IMAGE */}
-
-              <Link
-                to={`/products/${product._id}`}
-                className="product-image-link"
-              >
-                <div className="product-image">
-
-                  {product.image ? (
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="product-real-image"
-                    />
-                  ) : (
-                    <span className="product-emoji">
-                      {product.emoji}
-                    </span>
-                  )}
-
-                </div>
-              </Link>
-
-
-              {/* PRODUCT INFO */}
-
-              <div className="product-info">
-
-                <span className="product-category">
-                  {product.category}
-                </span>
+            return (
+              <div className="product-card" key={product._id}>
+                {/* PRODUCT IMAGE */}
 
                 <Link
                   to={`/products/${product._id}`}
-                  className="product-name-link"
+                  className="product-image-link"
                 >
-                  <h3>{product.name}</h3>
+                  <div className="product-image">
+                    {product.image ? (
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="product-real-image"
+                      />
+                    ) : (
+                      <span className="product-emoji">
+                        {product.emoji}
+                      </span>
+                    )}
+                  </div>
                 </Link>
 
-                <p className="product-description">
-                  {product.description}
-                </p>
+                {/* PRODUCT INFO */}
 
-                <div className="product-bottom">
+                <div className="product-info">
+                  <span className="product-category">
+                    {product.category}
+                  </span>
 
-                  <div>
-                    <span className="product-price">
-                      ₹{product.price}
-                    </span>
+                  <Link
+                    to={`/products/${product._id}`}
+                    className="product-name-link"
+                  >
+                    <h3>{product.name}</h3>
+                  </Link>
 
-                    <span className="product-weight">
-                      / {product.weight}
-                    </span>
+                  <p className="product-description">
+                    {product.description}
+                  </p>
+
+                  <div className="product-bottom">
+                    <div>
+                      <span className="product-price">
+                        ₹{product.price}
+                      </span>
+
+                      <span className="product-weight">
+                        / {product.weight}
+                      </span>
+                    </div>
+
+                    {/* WISHLIST */}
+
+                    <button
+                      className="wishlist-btn"
+                      onClick={() => handleWishlist(product)}
+                    >
+                      {isInWishlist(product._id) ? "❤️" : "♡"}
+                    </button>
                   </div>
 
-                  {/* WISHLIST */}
+                  {/* ===============================
+                      STOCK STATUS
+                  =============================== */}
+
+                  <div
+                    className={
+                      stock === 0
+                        ? "product-stock out-of-stock"
+                        : stock <= 10
+                        ? "product-stock low-stock"
+                        : "product-stock in-stock"
+                    }
+                  >
+                    {stock === 0
+                      ? "❌ Out of Stock"
+                      : stock <= 10
+                      ? `⚠️ Only ${stock} left`
+                      : `📦 In Stock (${stock})`}
+                  </div>
+
+                  {/* ===============================
+                      ADD TO CART
+                  =============================== */}
 
                   <button
-                    className="wishlist-btn"
-                    onClick={() => handleWishlist(product)}
+                    className="add-to-cart-btn"
+                    onClick={() => handleAddToCart(product)}
+                    disabled={stock === 0}
                   >
-                    {isInWishlist(product._id) ? "❤️" : "♡"}
+                    {stock === 0
+                      ? "Out of Stock"
+                      : "Add to Cart 🛒"}
                   </button>
-
                 </div>
-
-
-                {/* ADD TO CART */}
-
-                <button
-                  className="add-to-cart-btn"
-                  onClick={() => addToCart(product)}
-                >
-                  Add to Cart 🛒
-                </button>
-
               </div>
-
-            </div>
-          ))}
-
+            );
+          })}
         </div>
       )}
-
     </div>
   );
 }

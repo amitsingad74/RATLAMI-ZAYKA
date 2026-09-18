@@ -5,6 +5,10 @@ const adminMiddleware = require("../middleware/adminMiddleware");
 
 const router = express.Router();
 
+// =========================================
+// GET ADMIN ANALYTICS
+// =========================================
+
 router.get("/", adminMiddleware, async (req, res) => {
   try {
     // =========================================
@@ -24,15 +28,17 @@ router.get("/", adminMiddleware, async (req, res) => {
     if (range === "7days") {
       startDate = new Date();
       startDate.setDate(
-        startDate.getDate() - 7
+        startDate.getDate() - 6
       );
+      startDate.setHours(0, 0, 0, 0);
     }
 
     if (range === "30days") {
       startDate = new Date();
       startDate.setDate(
-        startDate.getDate() - 30
+        startDate.getDate() - 29
       );
+      startDate.setHours(0, 0, 0, 0);
     }
 
     // =========================================
@@ -43,7 +49,7 @@ router.get("/", adminMiddleware, async (req, res) => {
       await Product.countDocuments();
 
     // =========================================
-    // GET ORDERS
+    // ORDER QUERY
     // =========================================
 
     const query = {};
@@ -59,7 +65,7 @@ router.get("/", adminMiddleware, async (req, res) => {
       query,
       "total status createdAt items"
     ).sort({
-      createdAt: -1,
+      createdAt: 1,
     });
 
     // =========================================
@@ -69,14 +75,46 @@ router.get("/", adminMiddleware, async (req, res) => {
     const totalOrders = orders.length;
 
     // =========================================
-    // TOTAL REVENUE
+    // REVENUE
+    // =========================================
+    // Cancelled orders are excluded because
+    // cancelled orders are refunded.
     // =========================================
 
-    const totalRevenue = orders.reduce(
-      (sum, order) =>
-        sum + (Number(order.total) || 0),
-      0
-    );
+    const validRevenueOrders =
+      orders.filter(
+        (order) =>
+          order.status !== "Cancelled"
+      );
+
+    const totalRevenue =
+      validRevenueOrders.reduce(
+        (sum, order) =>
+          sum +
+          (Number(order.total) || 0),
+        0
+      );
+
+    // =========================================
+    // ACTIVE ORDERS
+    // =========================================
+
+    const activeOrders =
+      orders.filter(
+        (order) =>
+          order.status !== "Delivered" &&
+          order.status !== "Cancelled"
+      ).length;
+
+    // =========================================
+    // DELIVERED ORDERS
+    // =========================================
+
+    const deliveredOrders =
+      orders.filter(
+        (order) =>
+          order.status === "Delivered"
+      ).length;
 
     // =========================================
     // ORDER STATUS
@@ -103,39 +141,79 @@ router.get("/", adminMiddleware, async (req, res) => {
     });
 
     // =========================================
-    // ACTIVE ORDERS
+    // REVENUE CHART
     // =========================================
 
-    const activeOrders = orders.filter(
-      (order) =>
-        order.status !== "Delivered" &&
-        order.status !== "Cancelled"
-    ).length;
+    const revenueData = {};
 
-    // =========================================
-    // MONTHLY REVENUE
-    // =========================================
+    validRevenueOrders.forEach(
+      (order) => {
+        const date = new Date(
+          order.createdAt
+        );
 
-    const monthlyRevenue = {};
+        let label;
 
-    orders.forEach((order) => {
-      const date = new Date(order.createdAt);
+        // -------------------------------
+        // TODAY → HOURLY
+        // -------------------------------
 
-      const month = date.toLocaleString(
-        "en-IN",
-        {
-          month: "short",
-          year: "numeric",
+        if (range === "today") {
+          const hour =
+            date.getHours();
+
+          const period =
+            hour >= 12
+              ? "PM"
+              : "AM";
+
+          const displayHour =
+            hour % 12 || 12;
+
+          label = `${displayHour} ${period}`;
         }
-      );
 
-      if (!monthlyRevenue[month]) {
-        monthlyRevenue[month] = 0;
+        // -------------------------------
+        // 7 DAYS / 30 DAYS → DAILY
+        // -------------------------------
+
+        else if (
+          range === "7days" ||
+          range === "30days"
+        ) {
+          label =
+            date.toLocaleDateString(
+              "en-IN",
+              {
+                day: "numeric",
+                month: "short",
+              }
+            );
+        }
+
+        // -------------------------------
+        // ALL TIME → MONTHLY
+        // -------------------------------
+
+        else {
+          label =
+            date.toLocaleDateString(
+              "en-IN",
+              {
+                month: "short",
+                year: "numeric",
+              }
+            );
+        }
+
+        if (!revenueData[label]) {
+          revenueData[label] = 0;
+        }
+
+        revenueData[label] +=
+          Number(order.total) || 0;
       }
-
-      monthlyRevenue[month] +=
-        Number(order.total) || 0;
-    });
+    );
 
     // =========================================
     // TOP SELLING PRODUCTS
@@ -143,40 +221,61 @@ router.get("/", adminMiddleware, async (req, res) => {
 
     const productSales = {};
 
-    orders.forEach((order) => {
-      if (!order.items) return;
+    validRevenueOrders.forEach(
+      (order) => {
+        if (!order.items) return;
 
-      order.items.forEach((item) => {
-        const productName =
-          item.name || "Unknown Product";
+        order.items.forEach(
+          (item) => {
+            const productName =
+              item.name ||
+              "Unknown Product";
 
-        const quantity =
-          Number(item.quantity) || 0;
+            const quantity =
+              Number(
+                item.quantity
+              ) || 0;
 
-        const price =
-          Number(item.price) || 0;
+            const price =
+              Number(
+                item.price
+              ) || 0;
 
-        if (!productSales[productName]) {
-          productSales[productName] = {
-            name: productName,
-            quantity: 0,
-            revenue: 0,
-          };
-        }
+            if (
+              !productSales[
+                productName
+              ]
+            ) {
+              productSales[
+                productName
+              ] = {
+                name: productName,
+                quantity: 0,
+                revenue: 0,
+              };
+            }
 
-        productSales[productName].quantity +=
-          quantity;
+            productSales[
+              productName
+            ].quantity += quantity;
 
-        productSales[productName].revenue +=
-          quantity * price;
-      });
-    });
+            productSales[
+              productName
+            ].revenue +=
+              quantity * price;
+          }
+        );
+      }
+    );
 
     const topSellingProducts =
-      Object.values(productSales)
+      Object.values(
+        productSales
+      )
         .sort(
           (a, b) =>
-            b.quantity - a.quantity
+            b.quantity -
+            a.quantity
         )
         .slice(0, 5);
 
@@ -186,12 +285,21 @@ router.get("/", adminMiddleware, async (req, res) => {
 
     res.status(200).json({
       range,
+
       totalProducts,
+
       totalOrders,
+
       totalRevenue,
+
       activeOrders,
+
+      deliveredOrders,
+
       orderStatus,
-      monthlyRevenue,
+
+      revenueData,
+
       topSellingProducts,
     });
   } catch (error) {
@@ -203,6 +311,7 @@ router.get("/", adminMiddleware, async (req, res) => {
     res.status(500).json({
       message:
         "Failed to fetch analytics.",
+
       error: error.message,
     });
   }

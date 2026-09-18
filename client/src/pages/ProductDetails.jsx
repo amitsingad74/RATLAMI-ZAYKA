@@ -82,6 +82,12 @@ function ProductDetails() {
   }
 
   // ===============================
+  // STOCK
+  // ===============================
+
+  const stock = Number(product.stock ?? 0);
+
+  // ===============================
   // WISHLIST
   // ===============================
 
@@ -90,6 +96,18 @@ function ProductDetails() {
       removeFromWishlist(product._id);
     } else {
       addToWishlist(product);
+    }
+  };
+
+  // ===============================
+  // ADD TO CART
+  // ===============================
+
+  const handleAddToCart = () => {
+    const message = addToCart(product);
+
+    if (message) {
+      alert(message);
     }
   };
 
@@ -103,7 +121,6 @@ function ProductDetails() {
       <Link to="/products" className="back-products">
         ← Back to Products
       </Link>
-
 
       {/* ===============================
           PRODUCT DETAILS
@@ -133,7 +150,6 @@ function ProductDetails() {
 
         </div>
 
-
         {/* PRODUCT INFORMATION */}
 
         <div className="product-details-info">
@@ -156,16 +172,40 @@ function ProductDetails() {
             {product.description}
           </p>
 
+          {/* ===============================
+              STOCK STATUS
+          =============================== */}
 
-          {/* BUTTONS */}
+          <div
+            className={
+              stock === 0
+                ? "product-details-stock out-of-stock"
+                : stock <= 10
+                ? "product-details-stock low-stock"
+                : "product-details-stock in-stock"
+            }
+          >
+            {stock === 0
+              ? "❌ Out of Stock"
+              : stock <= 10
+              ? `⚠️ Only ${stock} left in stock`
+              : `📦 In Stock (${stock})`}
+          </div>
+
+          {/* ===============================
+              BUTTONS
+          =============================== */}
 
           <div className="product-details-buttons">
 
             <button
               className="product-details-cart-btn"
-              onClick={() => addToCart(product)}
+              onClick={handleAddToCart}
+              disabled={stock === 0}
             >
-              Add to Cart 🛒
+              {stock === 0
+                ? "Out of Stock"
+                : "Add to Cart 🛒"}
             </button>
 
             <button

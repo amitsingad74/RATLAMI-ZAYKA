@@ -53,15 +53,60 @@ const orderSchema = new mongoose.Schema(
       min: 0,
     },
 
+    // ===============================
+    // ORDER STATUS
+    // ===============================
+
     status: {
       type: String,
       default: "Order Placed",
     },
 
+    // ===============================
+    // PAYMENT DETAILS
+    // ===============================
+
+    payment: {
+      method: {
+        type: String,
+        default: "UPI",
+      },
+
+      status: {
+        type: String,
+        enum: [
+          "Pending",
+          "Paid",
+          "Failed",
+        ],
+        default: "Pending",
+      },
+
+      razorpayOrderId: {
+        type: String,
+        default: "",
+      },
+
+      razorpayPaymentId: {
+        type: String,
+        default: "",
+      },
+    },
+
+    // ===============================
+    // CUSTOMER DETAILS
+    // ===============================
+
     customer: {
       name: {
         type: String,
         required: true,
+      },
+
+      // ✅ EMAIL ADDED
+      email: {
+        type: String,
+        default: "",
       },
 
       phone: {

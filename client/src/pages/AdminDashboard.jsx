@@ -45,8 +45,7 @@ function AdminDashboard() {
   // RECENT ORDERS
   // =========================================
 
-  const [recentOrders, setRecentOrders] =
-    useState([]);
+  const [recentOrders, setRecentOrders] = useState([]);
 
   // =========================================
   // ANALYTICS
@@ -54,8 +53,12 @@ function AdminDashboard() {
 
   const [analytics, setAnalytics] = useState({
     orderStatus: {},
-    monthlyRevenue: {},
+    revenueData: {},
     topSellingProducts: [],
+    totalOrders: 0,
+    totalRevenue: 0,
+    activeOrders: 0,
+    deliveredOrders: 0,
   });
 
   const [analyticsRange, setAnalyticsRange] =
@@ -76,24 +79,20 @@ function AdminDashboard() {
   // LOADING + ERROR
   // =========================================
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [error, setError] =
-    useState("");
+  const [error, setError] = useState("");
 
   // =========================================
   // PRODUCT FORM
   // =========================================
 
-  const [showForm, setShowForm] =
-    useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   const [formLoading, setFormLoading] =
     useState(false);
 
-  const [formError, setFormError] =
-    useState("");
+  const [formError, setFormError] = useState("");
 
   const [editingProduct, setEditingProduct] =
     useState(null);
@@ -218,7 +217,7 @@ function AdminDashboard() {
   const fetchStats = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/admin/orders",
+        "http://localhost:5000/api/admin/stats",
         {
           method: "GET",
           headers: {
@@ -227,48 +226,33 @@ function AdminDashboard() {
         }
       );
 
-      const orders =
-        await response.json();
+      const data = await response.json();
+
+      console.log(
+        "ADMIN STATS DATA:",
+        data
+      );
 
       if (!response.ok) {
         throw new Error(
-          orders.message ||
-            "Failed to fetch orders."
+          data.message ||
+            "Failed to fetch dashboard statistics."
         );
       }
 
-      if (!Array.isArray(orders)) {
-        throw new Error(
-          "Orders API did not return an order list."
-        );
-      }
+      setStats({
+        totalProducts:
+          Number(data.totalProducts) || 0,
 
-      const totalOrders =
-        orders.length;
+        totalOrders:
+          Number(data.totalOrders) || 0,
 
-      const totalRevenue =
-        orders.reduce(
-          (sum, order) =>
-            sum +
-            (Number(order.total) || 0),
-          0
-        );
+        totalRevenue:
+          Number(data.totalRevenue) || 0,
 
-      const pendingOrders =
-        orders.filter(
-          (order) =>
-            order.status !==
-              "Delivered" &&
-            order.status !==
-              "Cancelled"
-        ).length;
-
-      setStats((previousStats) => ({
-        ...previousStats,
-        totalOrders,
-        totalRevenue,
-        pendingOrders,
-      }));
+        pendingOrders:
+          Number(data.pendingOrders) || 0,
+      });
     } catch (error) {
       console.error(
         "Admin Stats Error:",
@@ -295,8 +279,7 @@ function AdminDashboard() {
         }
       );
 
-      const data =
-        await response.json();
+      const data = await response.json();
 
       console.log(
         "ANALYTICS DATA:",
@@ -314,11 +297,23 @@ function AdminDashboard() {
         orderStatus:
           data.orderStatus || {},
 
-        monthlyRevenue:
-          data.monthlyRevenue || {},
+        revenueData:
+          data.revenueData || {},
 
         topSellingProducts:
           data.topSellingProducts || [],
+
+        totalOrders:
+          Number(data.totalOrders) || 0,
+
+        totalRevenue:
+          Number(data.totalRevenue) || 0,
+
+        activeOrders:
+          Number(data.activeOrders) || 0,
+
+        deliveredOrders:
+          Number(data.deliveredOrders) || 0,
       });
     } catch (error) {
       console.error(
@@ -350,7 +345,7 @@ function AdminDashboard() {
   }, []);
 
   // =========================================
-  // CHART DATA
+  // STATUS CHART DATA
   // =========================================
 
   const statusChartData = {
@@ -405,7 +400,7 @@ function AdminDashboard() {
 
   const revenueChartData = {
     labels: Object.keys(
-      analytics.monthlyRevenue
+      analytics.revenueData
     ),
 
     datasets: [
@@ -413,7 +408,7 @@ function AdminDashboard() {
         label: "Revenue (₹)",
 
         data: Object.values(
-          analytics.monthlyRevenue
+          analytics.revenueData
         ),
 
         borderWidth: 1,
@@ -592,9 +587,7 @@ function AdminDashboard() {
   // OPEN EDIT PRODUCT FORM
   // =========================================
 
-  const handleEditProduct = (
-    product
-  ) => {
+  const handleEditProduct = (product) => {
     setEditingProduct(product);
 
     setFormData({
@@ -635,9 +628,7 @@ function AdminDashboard() {
   // ADD PRODUCT
   // =========================================
 
-  const handleAddProduct = async (
-    e
-  ) => {
+  const handleAddProduct = async (e) => {
     e.preventDefault();
 
     setFormError("");
@@ -645,8 +636,9 @@ function AdminDashboard() {
     if (
       !formData.name.trim() ||
       !formData.category.trim() ||
-      !formData.price ||
-      !formData.stock === undefined ||
+      formData.price === "" ||
+      formData.stock === "" ||
+      formData.stock === undefined ||
       !formData.weight.trim() ||
       !formData.description.trim()
     ) {
@@ -750,6 +742,7 @@ function AdminDashboard() {
       setShowForm(false);
 
       await fetchProducts();
+      await fetchStats();
     } catch (error) {
       console.error(
         "Add Product Error:",
@@ -778,7 +771,7 @@ function AdminDashboard() {
       if (
         !formData.name.trim() ||
         !formData.category.trim() ||
-        !formData.price ||
+        formData.price === "" ||
         formData.stock === "" ||
         formData.stock === undefined ||
         !formData.weight.trim() ||
@@ -891,6 +884,7 @@ function AdminDashboard() {
         setShowForm(false);
 
         await fetchProducts();
+        await fetchStats();
       } catch (error) {
         console.error(
           "Update Product Error:",
@@ -949,6 +943,7 @@ function AdminDashboard() {
         );
 
         await fetchProducts();
+        await fetchStats();
       } catch (error) {
         console.error(
           "Delete Product Error:",
@@ -1127,11 +1122,9 @@ function AdminDashboard() {
           </div>
 
           {formError && (
-
             <div className="admin-form-error">
               {formError}
             </div>
-
           )}
 
           <form
@@ -1142,8 +1135,6 @@ function AdminDashboard() {
                 : handleAddProduct
             }
           >
-
-            {/* PRODUCT NAME */}
 
             <div className="admin-form-group">
 
@@ -1160,8 +1151,6 @@ function AdminDashboard() {
               />
 
             </div>
-
-            {/* STOCK */}
 
             <div className="admin-form-group">
 
@@ -1184,8 +1173,6 @@ function AdminDashboard() {
 
             </div>
 
-            {/* CATEGORY */}
-
             <div className="admin-form-group">
 
               <label>
@@ -1201,8 +1188,6 @@ function AdminDashboard() {
               />
 
             </div>
-
-            {/* PRICE */}
 
             <div className="admin-form-group">
 
@@ -1221,8 +1206,6 @@ function AdminDashboard() {
 
             </div>
 
-            {/* WEIGHT */}
-
             <div className="admin-form-group">
 
               <label>
@@ -1239,8 +1222,6 @@ function AdminDashboard() {
 
             </div>
 
-            {/* EMOJI */}
-
             <div className="admin-form-group">
 
               <label>
@@ -1256,8 +1237,6 @@ function AdminDashboard() {
               />
 
             </div>
-
-            {/* IMAGE */}
 
             <div className="admin-form-group">
 
@@ -1280,8 +1259,6 @@ function AdminDashboard() {
 
             </div>
 
-            {/* DESCRIPTION */}
-
             <div className="admin-form-group admin-form-full">
 
               <label>
@@ -1297,8 +1274,6 @@ function AdminDashboard() {
               />
 
             </div>
-
-            {/* ACTION BUTTONS */}
 
             <div className="admin-form-actions">
 
@@ -1455,8 +1430,7 @@ function AdminDashboard() {
 
         </div>
 
-        {recentOrders.length ===
-        0 ? (
+        {recentOrders.length === 0 ? (
 
           <div className="admin-no-recent-orders">
 
@@ -1585,6 +1559,8 @@ function AdminDashboard() {
 
       <div className="admin-analytics-section">
 
+        {/* ANALYTICS HEADER */}
+
         <div className="admin-analytics-header">
 
           <div>
@@ -1673,7 +1649,105 @@ function AdminDashboard() {
 
         </div>
 
-        {/* ANALYTICS GRID */}
+        {/* =====================================
+            ANALYTICS SUMMARY CARDS
+        ===================================== */}
+
+        <div className="admin-analytics-summary">
+
+          {/* ORDERS */}
+
+          <div className="admin-analytics-summary-card">
+
+            <div className="admin-analytics-summary-icon">
+              🛒
+            </div>
+
+            <div>
+
+              <span>
+                Orders
+              </span>
+
+              <strong>
+                {analytics.totalOrders}
+              </strong>
+
+            </div>
+
+          </div>
+
+          {/* REVENUE */}
+
+          <div className="admin-analytics-summary-card">
+
+            <div className="admin-analytics-summary-icon">
+              💰
+            </div>
+
+            <div>
+
+              <span>
+                Revenue
+              </span>
+
+              <strong>
+                ₹{analytics.totalRevenue}
+              </strong>
+
+            </div>
+
+          </div>
+
+          {/* ACTIVE */}
+
+          <div className="admin-analytics-summary-card">
+
+            <div className="admin-analytics-summary-icon">
+              🚚
+            </div>
+
+            <div>
+
+              <span>
+                Active Orders
+              </span>
+
+              <strong>
+                {analytics.activeOrders}
+              </strong>
+
+            </div>
+
+          </div>
+
+          {/* DELIVERED */}
+
+          <div className="admin-analytics-summary-card">
+
+            <div className="admin-analytics-summary-icon">
+              ✅
+            </div>
+
+            <div>
+
+              <span>
+                Delivered
+              </span>
+
+              <strong>
+                {analytics.deliveredOrders}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* =====================================
+            ANALYTICS GRID
+        ===================================== */}
 
         <div className="admin-analytics-grid">
 
@@ -1711,7 +1785,7 @@ function AdminDashboard() {
             <div className="admin-chart-container">
 
               {Object.keys(
-                analytics.monthlyRevenue
+                analytics.revenueData
               ).length === 0 ? (
 
                 <div className="admin-no-analytics">

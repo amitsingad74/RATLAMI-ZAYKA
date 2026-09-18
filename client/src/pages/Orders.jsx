@@ -392,6 +392,14 @@ function Orders() {
                 {order.status}
               </span>
 
+
+    <Link
+      to={`/orders/${order._id}`}
+      className="view-order-btn"
+    >
+      View Details
+    </Link>
+
             </div>
 
 
