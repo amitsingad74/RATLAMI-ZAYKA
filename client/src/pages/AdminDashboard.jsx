@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../config/api";
 
 import {
   Chart as ChartJS,
@@ -40,6 +41,15 @@ function AdminDashboard() {
   // =========================================
 
   const [products, setProducts] = useState([]);
+
+  // =========================================
+  // PRODUCT FILTERS + SORTING
+  // =========================================
+
+  const [productSearch, setProductSearch] = useState("");
+  const [productCategory, setProductCategory] = useState("all");
+  const [stockFilter, setStockFilter] = useState("all");
+  const [productSort, setProductSort] = useState("default");
 
   // =========================================
   // RECENT ORDERS
@@ -118,7 +128,7 @@ function AdminDashboard() {
       setError("");
 
       const response = await fetch(
-        "http://localhost:5000/api/admin/products",
+       `${API_URL}/api/admin/products`,
         {
           method: "GET",
           headers: {
@@ -175,7 +185,7 @@ function AdminDashboard() {
   const fetchRecentOrders = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/admin/orders",
+      `${API_URL}/api/admin/orders`,
         {
           method: "GET",
           headers: {
@@ -217,7 +227,7 @@ function AdminDashboard() {
   const fetchStats = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/admin/stats",
+       `${API_URL}/api/admin/stats`,
         {
           method: "GET",
           headers: {
@@ -270,7 +280,7 @@ function AdminDashboard() {
   ) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/analytics?range=${range}`,
+       `${API_URL}/api/admin/analytics?range=${range}`,
         {
           method: "GET",
           headers: {
@@ -673,7 +683,7 @@ function AdminDashboard() {
       setFormLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/admin/products",
+       `${API_URL}/api/admin/products`,
         {
           method: "POST",
 
@@ -808,7 +818,7 @@ function AdminDashboard() {
         setFormLoading(true);
 
         const response = await fetch(
-          `http://localhost:5000/api/admin/products/${editingProduct._id}`,
+         `${API_URL}/api/admin/products/${editingProduct._id}`,
           {
             method: "PUT",
 
@@ -917,7 +927,7 @@ function AdminDashboard() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/admin/products/${id}`,
+         `${API_URL}/api/admin/products/${id}`,
           {
             method: "DELETE",
 
@@ -1024,6 +1034,79 @@ function AdminDashboard() {
       </div>
     );
   }
+
+  // =========================================
+  // FILTERED + SORTED PRODUCTS
+  // =========================================
+
+  const productCategories = [
+    ...new Set(
+      products
+        .map((product) => String(product.category || "").trim())
+        .filter(Boolean)
+    ),
+  ].sort((a, b) => a.localeCompare(b));
+
+  const normalizedSearch = productSearch.trim().toLowerCase();
+
+  const filteredProducts = products
+    .filter((product) => {
+      const name = String(product.name || "").toLowerCase();
+      const category = String(product.category || "").trim().toLowerCase();
+      const description = String(product.description || "").toLowerCase();
+
+      const matchesSearch =
+        !normalizedSearch ||
+        name.includes(normalizedSearch) ||
+        category.includes(normalizedSearch) ||
+        description.includes(normalizedSearch);
+
+      const matchesCategory =
+        productCategory === "all" ||
+        category === productCategory.toLowerCase();
+
+      const stock = Number(product.stock) || 0;
+
+      const matchesStock =
+        stockFilter === "all" ||
+        (stockFilter === "out" && stock === 0) ||
+        (stockFilter === "low" && stock > 0 && stock <= 10) ||
+        (stockFilter === "in" && stock > 10);
+
+      return matchesSearch && matchesCategory && matchesStock;
+    })
+    .sort((a, b) => {
+      if (productSort === "price-low") {
+        return (Number(a.price) || 0) - (Number(b.price) || 0);
+      }
+
+      if (productSort === "price-high") {
+        return (Number(b.price) || 0) - (Number(a.price) || 0);
+      }
+
+      if (productSort === "stock-low") {
+        return (Number(a.stock) || 0) - (Number(b.stock) || 0);
+      }
+
+      if (productSort === "stock-high") {
+        return (Number(b.stock) || 0) - (Number(a.stock) || 0);
+      }
+
+      return 0;
+    });
+
+  const hasActiveProductFilters =
+    productSearch.trim() !== "" ||
+    productCategory !== "all" ||
+    stockFilter !== "all" ||
+    productSort !== "default";
+
+  const clearProductFilters = () => {
+    setProductSearch("");
+    setProductCategory("all");
+    setStockFilter("all");
+    setProductSort("default");
+  };
 
   // =========================================
   // UI
@@ -1856,145 +1939,352 @@ function AdminDashboard() {
 
         <div className="admin-section-header">
 
-          <h2>
-            Products
-          </h2>
+          <div>
+            <h2>
+              Products
+            </h2>
 
-          <span>
-            {products.length} Products
-          </span>
+            <span>
+              {filteredProducts.length} of {products.length} Products
+            </span>
+          </div>
 
-        </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              flexWrap: "wrap",
+              justifyContent: "flex-end",
+            }}
+          >
+            <div
+              style={{
+                position: "relative",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <input
+                type="text"
+                placeholder="🔍 Search products..."
+                value={productSearch}
+                onChange={(e) =>
+                  setProductSearch(e.target.value)
+                }
+                style={{
+                  width: "230px",
+                  padding: "11px 38px 11px 13px",
+                  border: "1px solid #ddd5c8",
+                  borderRadius: "10px",
+                  background: "#fff",
+                  fontSize: "14px",
+                  outline: "none",
+                }}
+              />
 
-        <div className="admin-products-grid">
+              {productSearch && (
+                <button
+                  type="button"
+                  onClick={() => setProductSearch("")}
+                  style={{
+                    position: "absolute",
+                    right: "9px",
+                    border: "none",
+                    background: "transparent",
+                    cursor: "pointer",
+                    fontSize: "15px",
+                    color: "#777",
+                  }}
+                  aria-label="Clear product search"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
 
-          {products.map(
-            (product) => (
+            <select
+              value={productCategory}
+              onChange={(e) =>
+                setProductCategory(e.target.value)
+              }
+              style={{
+                padding: "11px 12px",
+                border: "1px solid #ddd5c8",
+                borderRadius: "10px",
+                background: "#fff",
+                fontSize: "14px",
+                cursor: "pointer",
+                outline: "none",
+              }}
+              aria-label="Filter by category"
+            >
+              <option value="all">
+                All Categories
+              </option>
 
-              <div
-                className="admin-product-card"
-                key={product._id}
+              {productCategories.map((category) => (
+                <option
+                  key={category}
+                  value={category}
+                >
+                  {category}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={stockFilter}
+              onChange={(e) =>
+                setStockFilter(e.target.value)
+              }
+              style={{
+                padding: "11px 12px",
+                border: "1px solid #ddd5c8",
+                borderRadius: "10px",
+                background: "#fff",
+                fontSize: "14px",
+                cursor: "pointer",
+                outline: "none",
+              }}
+              aria-label="Filter by stock"
+            >
+              <option value="all">
+                All Stock
+              </option>
+              <option value="in">
+                In Stock (&gt; 10)
+              </option>
+              <option value="low">
+                Low Stock (1-10)
+              </option>
+              <option value="out">
+                Out of Stock
+              </option>
+            </select>
+
+            <select
+              value={productSort}
+              onChange={(e) =>
+                setProductSort(e.target.value)
+              }
+              style={{
+                padding: "11px 12px",
+                border: "1px solid #ddd5c8",
+                borderRadius: "10px",
+                background: "#fff",
+                fontSize: "14px",
+                cursor: "pointer",
+                outline: "none",
+              }}
+              aria-label="Sort products"
+            >
+              <option value="default">
+                Sort: Default
+              </option>
+              <option value="price-low">
+                Price: Low to High
+              </option>
+              <option value="price-high">
+                Price: High to Low
+              </option>
+              <option value="stock-low">
+                Stock: Low to High
+              </option>
+              <option value="stock-high">
+                Stock: High to Low
+              </option>
+            </select>
+
+            {hasActiveProductFilters && (
+              <button
+                type="button"
+                onClick={clearProductFilters}
+                style={{
+                  padding: "11px 13px",
+                  border: "1px solid #e0b34f",
+                  borderRadius: "10px",
+                  background: "#fff8e8",
+                  color: "#9a6800",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                }}
               >
-
-                {/* IMAGE */}
-
-                <div className="admin-product-image">
-
-                  {product.image ? (
-
-                    <img
-                      src={
-                        product.image
-                      }
-                      alt={
-                        product.name
-                      }
-                    />
-
-                  ) : (
-
-                    <span>
-                      {product.emoji}
-                    </span>
-
-                  )}
-
-                </div>
-
-                {/* INFO */}
-
-                <div className="admin-product-info">
-
-                  <span className="admin-product-category">
-                    {product.category}
-                  </span>
-
-                  <h3>
-                    {product.name}
-                  </h3>
-
-                  <p>
-                    {product.description}
-                  </p>
-
-                  <div className="admin-product-price">
-
-                    ₹{product.price}
-
-                    <span>
-                      {" "}
-                      /{" "}
-                      {product.weight}
-                    </span>
-
-                  </div>
-
-                  {/* STOCK */}
-
-                  <div
-                    className={
-                      Number(
-                        product.stock || 0
-                      ) === 0
-                        ? "admin-stock out-of-stock"
-                        : Number(
-                            product.stock || 0
-                          ) <= 10
-                        ? "admin-stock low-stock"
-                        : "admin-stock in-stock"
-                    }
-                  >
-                    {Number(
-                      product.stock || 0
-                    ) === 0
-                      ? "❌ Out of Stock"
-                      : Number(
-                          product.stock || 0
-                        ) <= 10
-                      ? `⚠️ Low Stock: ${Number(
-                          product.stock
-                        )}`
-                      : `📦 Stock: ${Number(
-                          product.stock
-                        )}`}
-                  </div>
-
-                  {/* ACTIONS */}
-
-                  <div className="admin-product-actions">
-
-                    <button
-                      className="admin-edit-btn"
-                      onClick={() =>
-                        handleEditProduct(
-                          product
-                        )
-                      }
-                    >
-                      ✏️ Edit
-                    </button>
-
-                    <button
-                      className="admin-delete-btn"
-                      onClick={() =>
-                        handleDeleteProduct(
-                          product._id
-                        )
-                      }
-                    >
-                      🗑️ Delete
-                    </button>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            )
-          )}
+                Clear
+              </button>
+            )}
+          </div>
 
         </div>
+
+        {filteredProducts.length === 0 ? (
+
+          <div
+            style={{
+              padding: "50px 20px",
+              textAlign: "center",
+              background: "#fff",
+              border: "1px solid #e8e2d8",
+              borderRadius: "16px",
+              marginTop: "20px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "42px",
+                marginBottom: "10px",
+              }}
+            >
+              🔍
+            </div>
+
+            <h3
+              style={{
+                margin: "0 0 8px",
+                color: "#17324d",
+              }}
+            >
+              No products found
+            </h3>
+
+            <p
+              style={{
+                margin: "0 0 18px",
+                color: "#777",
+              }}
+            >
+              Try changing your search or filters.
+            </p>
+
+            {hasActiveProductFilters && (
+              <button
+                type="button"
+                onClick={clearProductFilters}
+                className="admin-view-all-btn"
+              >
+                Clear Filters
+              </button>
+            )}
+          </div>
+
+        ) : (
+
+          <div className="admin-products-grid">
+
+            {filteredProducts.map(
+              (product) => (
+
+                <div
+                  className="admin-product-card"
+                  key={product._id}
+                >
+
+                  {/* IMAGE */}
+
+                  <div className="admin-product-image">
+
+                    {product.image ? (
+
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                      />
+
+                    ) : (
+
+                      <span>
+                        {product.emoji}
+                      </span>
+
+                    )}
+
+                  </div>
+
+                  {/* INFO */}
+
+                  <div className="admin-product-info">
+
+                    <span className="admin-product-category">
+                      {product.category}
+                    </span>
+
+                    <h3>
+                      {product.name}
+                    </h3>
+
+                    <p>
+                      {product.description}
+                    </p>
+
+                    <div className="admin-product-price">
+
+                      ₹{product.price}
+
+                      <span>
+                        {" "}
+                        /{" "}
+                        {product.weight}
+                      </span>
+
+                    </div>
+
+                    {/* STOCK */}
+
+                    <div
+                      className={
+                        Number(product.stock || 0) === 0
+                          ? "admin-stock out-of-stock"
+                          : Number(product.stock || 0) <= 10
+                          ? "admin-stock low-stock"
+                          : "admin-stock in-stock"
+                      }
+                    >
+                      {Number(product.stock || 0) === 0
+                        ? "❌ Out of Stock"
+                        : Number(product.stock || 0) <= 10
+                        ? `⚠️ Low Stock: ${Number(
+                            product.stock
+                          )}`
+                        : `📦 Stock: ${Number(
+                            product.stock
+                          )}`}
+                    </div>
+
+                    {/* ACTIONS */}
+
+                    <div className="admin-product-actions">
+
+                      <button
+                        className="admin-edit-btn"
+                        onClick={() =>
+                          handleEditProduct(product)
+                        }
+                      >
+                        ✏️ Edit
+                      </button>
+
+                      <button
+                        className="admin-delete-btn"
+                        onClick={() =>
+                          handleDeleteProduct(product._id)
+                        }
+                      >
+                        🗑️ Delete
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              )
+            )}
+
+          </div>
+
+        )}
 
       </div>
 

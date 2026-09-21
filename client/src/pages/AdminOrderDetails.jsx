@@ -3,6 +3,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+import API_URL from "../config/api";
 
 function AdminOrderDetails() {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ function AdminOrderDetails() {
       setError("");
 
       const response = await fetch(
-        `http://localhost:5000/api/admin/orders/${id}`,
+        `${API_URL}/api/admin/orders/${id}`,
         {
           method: "GET",
           headers: {
@@ -87,15 +88,11 @@ function AdminOrderDetails() {
   if (loading) {
     return (
       <div className="admin-page">
-
         <div className="admin-loading">
-
           <h2>
             Loading Order Details... 📦
           </h2>
-
         </div>
-
       </div>
     );
   }
@@ -107,9 +104,7 @@ function AdminOrderDetails() {
   if (error) {
     return (
       <div className="admin-page">
-
         <div className="admin-error">
-
           <h2>
             Something went wrong 😕
           </h2>
@@ -126,9 +121,7 @@ function AdminOrderDetails() {
           >
             ← Back to Orders
           </button>
-
         </div>
-
       </div>
     );
   }
@@ -140,9 +133,7 @@ function AdminOrderDetails() {
   if (!order) {
     return (
       <div className="admin-page">
-
         <div className="admin-error">
-
           <h2>
             Order Not Found
           </h2>
@@ -155,9 +146,7 @@ function AdminOrderDetails() {
           >
             ← Back to Orders
           </button>
-
         </div>
-
       </div>
     );
   }

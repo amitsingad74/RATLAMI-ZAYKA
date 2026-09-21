@@ -1,39 +1,103 @@
 const jwt = require("jsonwebtoken");
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = (
+  req,
+  res,
+  next
+) => {
   try {
-    // Get token from request header
-    const authHeader = req.headers.authorization;
+    // =================================================
+    // CHECK JWT SECRET
+    // =================================================
 
-    // Check if token exists
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-        message: "Access denied. No token provided.",
+    if (!process.env.JWT_SECRET) {
+      console.error(
+        "JWT_SECRET is not configured."
+      );
+
+      return res.status(500).json({
+        message:
+          "Authentication service is not configured.",
       });
     }
 
-    // Extract token
-    const token = authHeader.split(" ")[1];
+    // =================================================
+    // GET AUTHORIZATION HEADER
+    // =================================================
 
-    // Verify token
+    const authHeader =
+      req.headers.authorization;
+
+    if (
+      !authHeader ||
+      typeof authHeader !== "string" ||
+      !authHeader.startsWith("Bearer ")
+    ) {
+      return res.status(401).json({
+        message:
+          "Access denied. Authentication required.",
+      });
+    }
+
+    // =================================================
+    // EXTRACT TOKEN
+    // =================================================
+
+    const token =
+      authHeader
+        .slice(7)
+        .trim();
+
+    if (!token) {
+      return res.status(401).json({
+        message:
+          "Access denied. Invalid authentication token.",
+      });
+    }
+
+    // =================================================
+    // VERIFY TOKEN
+    // =================================================
+
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET
     );
 
-    // Save user data in request
+    // =================================================
+    // BASIC TOKEN VALIDATION
+    // =================================================
+
+    if (
+      !decoded ||
+      !decoded.id
+    ) {
+      return res.status(401).json({
+        message:
+          "Invalid authentication token.",
+      });
+    }
+
+    // =================================================
+    // SAVE USER DATA
+    // =================================================
+
     req.user = decoded;
 
-    // Continue to next function
     next();
 
   } catch (error) {
+    console.error(
+      "Authentication Error:",
+      error.message
+    );
 
     return res.status(401).json({
-      message: "Invalid or expired token.",
+      message:
+        "Invalid or expired token.",
     });
-
   }
 };
 
-module.exports = authMiddleware;
+module.exports =
+  authMiddleware;

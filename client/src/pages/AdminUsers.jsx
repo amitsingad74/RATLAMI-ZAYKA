@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../config/api";
 
 function AdminUsers() {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ function AdminUsers() {
       setError("");
 
       const response = await fetch(
-        "http://localhost:5000/api/admin/users",
+       `${API_URL}/api/admin/users`,
         {
           method: "GET",
           headers: {
@@ -134,7 +135,7 @@ function AdminUsers() {
   ) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/users/${userId}/role`,
+       `${API_URL}/api/admin/users/${userId}/role`,
         {
           method: "PUT",
 
@@ -195,7 +196,7 @@ function AdminUsers() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/users/${userId}`,
+        `${API_URL}/api/admin/users/${userId}`,
         {
           method: "DELETE",
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../config/api";
 
 function AdminOrders() {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ function AdminOrders() {
       setError("");
 
       const response = await fetch(
-        "http://localhost:5000/api/admin/orders",
+      `${API_URL}/api/admin/orders`,
         {
           method: "GET",
 
@@ -107,7 +108,7 @@ function AdminOrders() {
   ) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/orders/${orderId}/status`,
+        `${API_URL}/api/admin/orders/${orderId}/status`,
         {
           method: "PUT",
 

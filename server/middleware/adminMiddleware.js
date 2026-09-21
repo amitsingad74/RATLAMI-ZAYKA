@@ -7,15 +7,27 @@ const User = require("../models/User");
 
 const adminMiddleware = async (req, res, next) => {
   try {
+    // ===============================
+    // CHECK JWT SECRET
+    // ===============================
+
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is not configured.");
+
+      return res.status(500).json({
+        message: "Server configuration error.",
+      });
+    }
 
     // ===============================
-    // GET TOKEN
+    // GET AUTHORIZATION HEADER
     // ===============================
 
     const authHeader = req.headers.authorization;
 
     if (
       !authHeader ||
+      typeof authHeader !== "string" ||
       !authHeader.startsWith("Bearer ")
     ) {
       return res.status(401).json({
@@ -23,9 +35,17 @@ const adminMiddleware = async (req, res, next) => {
       });
     }
 
+    // ===============================
+    // GET TOKEN
+    // ===============================
 
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.substring(7).trim();
 
+    if (!token) {
+      return res.status(401).json({
+        message: "Not authorized. Please login.",
+      });
+    }
 
     // ===============================
     // VERIFY TOKEN
@@ -36,10 +56,17 @@ const adminMiddleware = async (req, res, next) => {
       process.env.JWT_SECRET
     );
 
+    if (!decoded || !decoded.id) {
+      return res.status(401).json({
+        message: "Invalid authentication token.",
+      });
+    }
 
     // ===============================
-    // FIND USER
+    // FIND CURRENT USER
     // ===============================
+    // We fetch the user from MongoDB instead of trusting
+    // the role stored inside the JWT.
 
     const user = await User.findById(decoded.id);
 
@@ -48,7 +75,6 @@ const adminMiddleware = async (req, res, next) => {
         message: "User not found.",
       });
     }
-
 
     // ===============================
     // CHECK ADMIN ROLE
@@ -60,7 +86,6 @@ const adminMiddleware = async (req, res, next) => {
       });
     }
 
-
     // ===============================
     // ATTACH USER
     // ===============================
@@ -68,9 +93,7 @@ const adminMiddleware = async (req, res, next) => {
     req.user = user;
 
     next();
-
   } catch (error) {
-
     console.error(
       "Admin Authentication Error:",
       error.message
@@ -79,9 +102,7 @@ const adminMiddleware = async (req, res, next) => {
     return res.status(401).json({
       message: "Invalid or expired token.",
     });
-
   }
 };
-
 
 module.exports = adminMiddleware;

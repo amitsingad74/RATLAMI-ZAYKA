@@ -2,15 +2,27 @@ import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
+import API_URL from "../config/api";
 
 function Products() {
   const [products, setProducts] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const [selectedCategory, setSelectedCategory] =
+    useState("All");
+
+  const [stockFilter, setStockFilter] =
+    useState("All");
+
+  const [sortOption, setSortOption] =
+    useState("Default");
+
   const [searchParams] = useSearchParams();
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const { addToCart } = useCart();
+
   const { addToWishlist, removeFromWishlist, isInWishlist } =
     useWishlist();
 
@@ -27,7 +39,7 @@ function Products() {
         setError("");
 
         const response = await fetch(
-          "http://localhost:5000/api/products"
+          `${API_URL}/api/products`
         );
 
         if (!response.ok) {
@@ -57,28 +69,118 @@ function Products() {
 
   const categories = [
     "All",
-    ...new Set(products.map((product) => product.category)),
+    ...new Set(
+      products
+        .map((product) =>
+          String(product.category || "").trim()
+        )
+        .filter(Boolean)
+    ),
   ];
 
   // ===============================
-  // FILTER PRODUCTS
+  // FILTER + SORT PRODUCTS
   // ===============================
 
-  const filteredProducts = products.filter((product) => {
-    const matchesCategory =
-      selectedCategory === "All" ||
-      product.category === selectedCategory;
+  const filteredProducts = products
+    .filter((product) => {
+      const productName = String(
+        product.name || ""
+      ).toLowerCase();
 
-    const matchesSearch =
-      product.name
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      product.category
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
+      const productCategory = String(
+        product.category || ""
+      )
+        .trim()
+        .toLowerCase();
 
-    return matchesCategory && matchesSearch;
-  });
+      const productDescription = String(
+        product.description || ""
+      ).toLowerCase();
+
+      const search = searchQuery
+        .trim()
+        .toLowerCase();
+
+      // SEARCH
+      const matchesSearch =
+        !search ||
+        productName.includes(search) ||
+        productCategory.includes(search) ||
+        productDescription.includes(search);
+
+      // CATEGORY
+      const matchesCategory =
+        selectedCategory === "All" ||
+        productCategory ===
+          selectedCategory.trim().toLowerCase();
+
+      // STOCK
+      const stock = Number(product.stock ?? 0);
+
+      const matchesStock =
+        stockFilter === "All" ||
+        (stockFilter === "In Stock" && stock > 10) ||
+        (stockFilter === "Low Stock" &&
+          stock > 0 &&
+          stock <= 10) ||
+        (stockFilter === "Out of Stock" &&
+          stock === 0);
+
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesStock
+      );
+    })
+    .sort((a, b) => {
+      // PRICE LOW → HIGH
+      if (sortOption === "Price: Low to High") {
+        return (
+          Number(a.price || 0) -
+          Number(b.price || 0)
+        );
+      }
+
+      // PRICE HIGH → LOW
+      if (sortOption === "Price: High to Low") {
+        return (
+          Number(b.price || 0) -
+          Number(a.price || 0)
+        );
+      }
+
+      // NAME A → Z
+      if (sortOption === "Name: A to Z") {
+        return String(a.name || "").localeCompare(
+          String(b.name || "")
+        );
+      }
+
+      // NAME Z → A
+      if (sortOption === "Name: Z to A") {
+        return String(b.name || "").localeCompare(
+          String(a.name || "")
+        );
+      }
+
+      return 0;
+    });
+
+  // ===============================
+  // CLEAR FILTERS
+  // ===============================
+
+  const hasActiveFilters =
+    selectedCategory !== "All" ||
+    stockFilter !== "All" ||
+    sortOption !== "Default";
+
+  const clearFilters = () => {
+    setSelectedCategory("All");
+    setStockFilter("All");
+    setSortOption("Default");
+  };
 
   // ===============================
   // WISHLIST TOGGLE
@@ -127,6 +229,7 @@ function Products() {
       <div className="products-page">
         <div className="products-error">
           <h2>Something went wrong 😕</h2>
+
           <p>{error}</p>
         </div>
       </div>
@@ -144,29 +247,133 @@ function Products() {
 
         {searchQuery && (
           <p>
-            Search results for: <strong>{searchQuery}</strong>
+            Search results for:{" "}
+            <strong>{searchQuery}</strong>
+          </p>
+        )}
+
+        {!searchQuery && (
+          <p>
+            Discover our delicious range of
+            RATLAMI Zayka products.
           </p>
         )}
       </div>
 
       {/* ===============================
-          CATEGORY FILTER
+          FILTER CONTROLS
       =============================== */}
 
-      <div className="category-filter">
-        {categories.map((category) => (
-          <button
-            key={category}
-            className={
-              selectedCategory === category
-                ? "category-btn active"
-                : "category-btn"
+      <div className="products-filter-section">
+        {/* CATEGORY */}
+
+        <div className="category-filter">
+          {categories.map((category) => (
+            <button
+              key={category}
+              className={
+                selectedCategory === category
+                  ? "category-btn active"
+                  : "category-btn"
+              }
+              onClick={() =>
+                setSelectedCategory(category)
+              }
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+
+        {/* OTHER FILTERS */}
+
+        <div className="products-sort-filter">
+          {/* STOCK */}
+
+          <select
+            value={stockFilter}
+            onChange={(e) =>
+              setStockFilter(e.target.value)
             }
-            onClick={() => setSelectedCategory(category)}
+            className="product-filter-select"
           >
-            {category}
-          </button>
-        ))}
+            <option value="All">
+              All Stock
+            </option>
+
+            <option value="In Stock">
+              In Stock
+            </option>
+
+            <option value="Low Stock">
+              Low Stock
+            </option>
+
+            <option value="Out of Stock">
+              Out of Stock
+            </option>
+          </select>
+
+          {/* SORT */}
+
+          <select
+            value={sortOption}
+            onChange={(e) =>
+              setSortOption(e.target.value)
+            }
+            className="product-filter-select"
+          >
+            <option value="Default">
+              Sort: Default
+            </option>
+
+            <option value="Price: Low to High">
+              Price: Low to High
+            </option>
+
+            <option value="Price: High to Low">
+              Price: High to Low
+            </option>
+
+            <option value="Name: A to Z">
+              Name: A to Z
+            </option>
+
+            <option value="Name: Z to A">
+              Name: Z to A
+            </option>
+          </select>
+
+          {/* CLEAR */}
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              className="clear-product-filters"
+              onClick={clearFilters}
+            >
+              Clear Filters
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* ===============================
+          PRODUCT COUNT
+      =============================== */}
+
+      <div className="products-result-info">
+        <span>
+          Showing{" "}
+          <strong>
+            {filteredProducts.length}
+          </strong>{" "}
+          of{" "}
+          <strong>
+            {products.length}
+          </strong>{" "}
+          products
+        </span>
       </div>
 
       {/* ===============================
@@ -175,16 +382,39 @@ function Products() {
 
       {filteredProducts.length === 0 ? (
         <div className="no-products">
+          <div className="no-products-icon">
+            🔍
+          </div>
+
           <h2>No products found 😕</h2>
-          <p>Try another search or category.</p>
+
+          <p>
+            Try another search or change your
+            filters.
+          </p>
+
+          {hasActiveFilters && (
+            <button
+              type="button"
+              className="clear-product-filters"
+              onClick={clearFilters}
+            >
+              Clear Filters
+            </button>
+          )}
         </div>
       ) : (
         <div className="products-grid">
           {filteredProducts.map((product) => {
-            const stock = Number(product.stock ?? 0);
+            const stock = Number(
+              product.stock ?? 0
+            );
 
             return (
-              <div className="product-card" key={product._id}>
+              <div
+                className="product-card"
+                key={product._id}
+              >
                 {/* PRODUCT IMAGE */}
 
                 <Link
@@ -239,9 +469,13 @@ function Products() {
 
                     <button
                       className="wishlist-btn"
-                      onClick={() => handleWishlist(product)}
+                      onClick={() =>
+                        handleWishlist(product)
+                      }
                     >
-                      {isInWishlist(product._id) ? "❤️" : "♡"}
+                      {isInWishlist(product._id)
+                        ? "❤️"
+                        : "♡"}
                     </button>
                   </div>
 
@@ -271,7 +505,9 @@ function Products() {
 
                   <button
                     className="add-to-cart-btn"
-                    onClick={() => handleAddToCart(product)}
+                    onClick={() =>
+                      handleAddToCart(product)
+                    }
                     disabled={stock === 0}
                   >
                     {stock === 0

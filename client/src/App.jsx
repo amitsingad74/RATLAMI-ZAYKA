@@ -1,7 +1,10 @@
 import { Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 
+import { CartProvider } from "./context/CartContext";
+
 import Navbar from "./components/Navbar";
+
 import Wishlist from "./pages/Wishlist";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
@@ -11,14 +14,20 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
+import ProductDetails from "./pages/ProductDetails";
 
 import ProtectedRoute from "./components/ProtectedRoute";
-import ProductDetails from "./pages/ProductDetails";
+
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminOrders from "./pages/AdminOrders";
 import AdminUsers from "./pages/AdminUsers";
 import AdminOrderDetails from "./pages/AdminOrderDetails";
 import OrderDetails from "./pages/OrderDetails";
+
+// =====================================================
+// FOOTER
+// =====================================================
+
 function Footer() {
   return (
     <footer className="footer">
@@ -27,37 +36,58 @@ function Footer() {
         {/* LOGO */}
         <div className="footer-logo">
           <div className="footer-brand">
-            RATLAMI<br />
-            <span>ZAYKA</span>
+            RATLAMI
+            <br />
+            <span>ZAYEKA</span>
           </div>
         </div>
 
-
         {/* LINKS */}
         <div className="footer-links">
-          <Link to="/">Home</Link>
+          <Link to="/">
+            Home
+          </Link>
+
           <span>|</span>
 
-          <Link to="/products">Products</Link>
+          <Link to="/products">
+            Products
+          </Link>
+
           <span>|</span>
 
-          <a href="#categories">Categories</a>
+          <a href="#categories">
+            Categories
+          </a>
+
           <span>|</span>
 
-          <a href="#about">About Us</a>
+          <a href="#about">
+            About Us
+          </a>
+
           <span>|</span>
 
-          <a href="#contact">Contact</a>
+          <a href="#contact">
+            Contact
+          </a>
         </div>
-
 
         {/* RIGHT SIDE */}
         <div className="footer-right">
 
           <div className="footer-social">
-            <a href="#facebook">●</a>
-            <a href="#instagram">◎</a>
-            <a href="#youtube">▶</a>
+            <a href="#facebook">
+              ●
+            </a>
+
+            <a href="#instagram">
+              ◎
+            </a>
+
+            <a href="#youtube">
+              ▶
+            </a>
           </div>
 
           <p>
@@ -71,124 +101,176 @@ function Footer() {
   );
 }
 
+// =====================================================
+// APP
+// =====================================================
 
 function App() {
   return (
-    <>
+    <CartProvider>
+
+      {/* NAVBAR HAS ACCESS TO useCart() */}
       <Navbar />
 
       <Routes>
 
-  <Route
-    path="/"
-    element={<Home />}
-  />
+        {/* =================================================
+            HOME
+        ================================================= */}
 
-  <Route
-    path="/products"
-    element={<Products />}
-  />
+        <Route
+          path="/"
+          element={<Home />}
+        />
 
-  <Route
-    path="/cart"
-    element={<Cart />}
-  />
+        {/* =================================================
+            PRODUCTS
+        ================================================= */}
 
-  <Route
-    path="/login"
-    element={<Login />}
-  />
+        <Route
+          path="/products"
+          element={<Products />}
+        />
 
-  <Route
-    path="/register"
-    element={<Register />}
-  />
+        {/* =================================================
+            PRODUCT DETAILS
+        ================================================= */}
 
+        <Route
+          path="/products/:id"
+          element={<ProductDetails />}
+        />
 
-  {/* WISHLIST */}
+        {/* =================================================
+            CART
+        ================================================= */}
 
-  <Route
-    path="/wishlist"
-    element={<Wishlist />}
-  />
+        <Route
+          path="/cart"
+          element={<Cart />}
+        />
 
+        {/* =================================================
+            LOGIN
+        ================================================= */}
 
-  {/* PROTECTED PROFILE */}
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
-  <Route
-    path="/profile"
-    element={
-      <ProtectedRoute>
-        <Profile />
-      </ProtectedRoute>
-    }
-  />
+        {/* =================================================
+            REGISTER
+        ================================================= */}
 
+        <Route
+          path="/register"
+          element={<Register />}
+        />
 
-  {/* PROTECTED ORDERS */}
+        {/* =================================================
+            WISHLIST
+        ================================================= */}
 
-  <Route
-    path="/orders"
-    element={
-      <ProtectedRoute>
-        <Orders />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/wishlist"
+          element={<Wishlist />}
+        />
 
-{/* PROTECTED ORDER DETAILS */}
+        {/* =================================================
+            PROTECTED PROFILE
+        ================================================= */}
 
-<Route
-  path="/orders/:id"
-  element={
-    <ProtectedRoute>
-      <OrderDetails />
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
 
-  {/* PROTECTED CHECKOUT */}
+        {/* =================================================
+            PROTECTED ORDERS
+        ================================================= */}
 
-  <Route
-    path="/checkout"
-    element={
-      <ProtectedRoute>
-        <Checkout />
-      </ProtectedRoute>
-    }
-  />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
 
-  <Route
-  path="/products/:id"
-  element={<ProductDetails />}
-/>
+        {/* =================================================
+            PROTECTED ORDER DETAILS
+        ================================================= */}
 
-<Route
-  path="/admin"
-  element={<AdminDashboard />}
-/>
+        <Route
+          path="/orders/:id"
+          element={
+            <ProtectedRoute>
+              <OrderDetails />
+            </ProtectedRoute>
+          }
+        />
 
-<Route
-  path="/admin/orders"
-  element={<AdminOrders />}
-/>
+        {/* =================================================
+            PROTECTED CHECKOUT
+        ================================================= */}
 
-<Route
-  path="/admin/orders/:id"
-  element={<AdminOrderDetails />}
-/>
+        <Route
+          path="/checkout"
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
 
-<Route
-  path="/admin/users"
-  element={<AdminUsers />}
-/>
+        {/* =================================================
+            ADMIN DASHBOARD
+        ================================================= */}
 
+        <Route
+          path="/admin"
+          element={<AdminDashboard />}
+        />
 
+        {/* =================================================
+            ADMIN ORDERS
+        ================================================= */}
 
-</Routes>
+        <Route
+          path="/admin/orders"
+          element={<AdminOrders />}
+        />
+
+        {/* =================================================
+            ADMIN ORDER DETAILS
+        ================================================= */}
+
+        <Route
+          path="/admin/orders/:id"
+          element={<AdminOrderDetails />}
+        />
+
+        {/* =================================================
+            ADMIN USERS
+        ================================================= */}
+
+        <Route
+          path="/admin/users"
+          element={<AdminUsers />}
+        />
+
+      </Routes>
+
       {/* FOOTER */}
       <Footer />
-    </>
+
+    </CartProvider>
   );
 }
 
