@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_URL from "../config/api";
 
 import {
   Chart as ChartJS,
@@ -40,6 +41,23 @@ function AdminDashboard() {
   // =========================================
 
   const [products, setProducts] = useState([]);
+
+  // =========================================
+  // CATEGORIES
+  // =========================================
+
+  const [categories, setCategories] = useState([]);
+  const [categoryLoading, setCategoryLoading] = useState(false);
+  const [categoryError, setCategoryError] = useState("");
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [categoryForm, setCategoryForm] = useState({
+    name: "",
+    image: "",
+    description: "",
+    displayOrder: 0,
+    active: true,
+  });
 
   // =========================================
   // PRODUCT FILTERS + SORTING
@@ -115,6 +133,7 @@ function AdminDashboard() {
     emoji: "🍬",
     image: "",
     description: "",
+    showOnHomepage: false,
   });
 
   // =========================================
@@ -127,7 +146,7 @@ function AdminDashboard() {
       setError("");
 
       const response = await fetch(
-        "http://localhost:5000/api/admin/products",
+        `${API_URL}/api/admin/products`,
         {
           method: "GET",
           headers: {
@@ -178,13 +197,184 @@ function AdminDashboard() {
   };
 
   // =========================================
+  // FETCH CATEGORIES
+  // =========================================
+
+  const fetchCategories = async () => {
+    try {
+      setCategoryLoading(true);
+      setCategoryError("");
+
+      const response = await fetch(
+        `${API_URL}/api/admin/categories`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Failed to fetch categories."
+        );
+      }
+
+      setCategories(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error("Admin Categories Error:", error);
+      setCategoryError(
+        error.message || "Unable to load categories."
+      );
+    } finally {
+      setCategoryLoading(false);
+    }
+  };
+
+  const resetCategoryForm = () => {
+    setCategoryForm({
+      name: "",
+      image: "",
+      description: "",
+      displayOrder: 0,
+      active: true,
+    });
+    setEditingCategory(null);
+    setShowCategoryForm(false);
+    setCategoryError("");
+  };
+
+  const handleCategoryChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setCategoryForm((previous) => ({
+      ...previous,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSaveCategory = async (e) => {
+    e.preventDefault();
+    setCategoryError("");
+
+    if (!categoryForm.name.trim()) {
+      setCategoryError("Category name is required.");
+      return;
+    }
+
+    if (Number(categoryForm.displayOrder) < 0) {
+      setCategoryError("Display order cannot be negative.");
+      return;
+    }
+
+    try {
+      setCategoryLoading(true);
+
+      const url = editingCategory
+        ? `${API_URL}/api/admin/categories/${editingCategory._id}`
+        : `${API_URL}/api/admin/categories`;
+
+      const response = await fetch(url, {
+        method: editingCategory ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: categoryForm.name.trim(),
+          image: categoryForm.image.trim(),
+          description: categoryForm.description.trim(),
+          displayOrder: Number(categoryForm.displayOrder) || 0,
+          active: Boolean(categoryForm.active),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Failed to save category."
+        );
+      }
+
+      alert(
+        editingCategory
+          ? "Category updated successfully! ✏️"
+          : "Category added successfully! 🎉"
+      );
+
+      resetCategoryForm();
+      await fetchCategories();
+    } catch (error) {
+      console.error("Save Category Error:", error);
+      setCategoryError(
+        error.message || "Failed to save category."
+      );
+    } finally {
+      setCategoryLoading(false);
+    }
+  };
+
+  const handleEditCategory = (category) => {
+    setEditingCategory(category);
+    setCategoryForm({
+      name: category.name || "",
+      image: category.image || "",
+      description: category.description || "",
+      displayOrder: category.displayOrder ?? 0,
+      active: category.active !== false,
+    });
+    setCategoryError("");
+    setShowCategoryForm(true);
+  };
+
+  const handleDeleteCategory = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this category?")) {
+      return;
+    }
+
+    try {
+      setCategoryLoading(true);
+      const response = await fetch(
+        `${API_URL}/api/admin/categories/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Failed to delete category."
+        );
+      }
+
+      alert("Category deleted successfully! 🗑️");
+      await fetchCategories();
+    } catch (error) {
+      console.error("Delete Category Error:", error);
+      setCategoryError(
+        error.message || "Failed to delete category."
+      );
+    } finally {
+      setCategoryLoading(false);
+    }
+  };
+
+  // =========================================
   // FETCH RECENT ORDERS
   // =========================================
 
   const fetchRecentOrders = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/admin/orders",
+        `${API_URL}/api/admin/orders`,
         {
           method: "GET",
           headers: {
@@ -226,7 +416,7 @@ function AdminDashboard() {
   const fetchStats = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/admin/stats",
+        `${API_URL}/api/admin/stats`,
         {
           method: "GET",
           headers: {
@@ -279,7 +469,7 @@ function AdminDashboard() {
   ) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/admin/analytics?range=${range}`,
+        `${API_URL}/api/admin/analytics?range=${range}`,
         {
           method: "GET",
           headers: {
@@ -348,6 +538,7 @@ function AdminDashboard() {
     }
 
     fetchProducts();
+    fetchCategories();
     fetchStats();
     fetchRecentOrders();
     fetchAnalytics("all");
@@ -586,6 +777,7 @@ function AdminDashboard() {
       emoji: "🍬",
       image: "",
       description: "",
+      showOnHomepage: false,
     });
 
     setFormError("");
@@ -622,6 +814,9 @@ function AdminDashboard() {
 
       description:
         product.description || "",
+
+      showOnHomepage:
+        Boolean(product.showOnHomepage),
     });
 
     setFormError("");
@@ -682,7 +877,7 @@ function AdminDashboard() {
       setFormLoading(true);
 
       const response = await fetch(
-        "http://localhost:5000/api/admin/products",
+        `${API_URL}/api/admin/products`,
         {
           method: "POST",
 
@@ -719,6 +914,9 @@ function AdminDashboard() {
 
             description:
               formData.description.trim(),
+
+            showOnHomepage:
+              Boolean(formData.showOnHomepage),
           }),
         }
       );
@@ -746,6 +944,7 @@ function AdminDashboard() {
         emoji: "🍬",
         image: "",
         description: "",
+        showOnHomepage: false,
       });
 
       setShowForm(false);
@@ -817,7 +1016,7 @@ function AdminDashboard() {
         setFormLoading(true);
 
         const response = await fetch(
-          `http://localhost:5000/api/admin/products/${editingProduct._id}`,
+          `${API_URL}/api/admin/products/${editingProduct._id}`,
           {
             method: "PUT",
 
@@ -854,6 +1053,9 @@ function AdminDashboard() {
 
               description:
                 formData.description.trim(),
+
+              showOnHomepage:
+                Boolean(formData.showOnHomepage),
             }),
           }
         );
@@ -926,7 +1128,7 @@ function AdminDashboard() {
 
       try {
         const response = await fetch(
-          `http://localhost:5000/api/admin/products/${id}`,
+          `${API_URL}/api/admin/products/${id}`,
           {
             method: "DELETE",
 
@@ -986,6 +1188,7 @@ function AdminDashboard() {
       emoji: "🍬",
       image: "",
       description: "",
+      showOnHomepage: false,
     });
   };
 
@@ -1355,6 +1558,23 @@ function AdminDashboard() {
                 rows="4"
               />
 
+            </div>
+
+            <div className="admin-form-group admin-form-full admin-homepage-checkbox">
+              <label>
+                <input
+                  type="checkbox"
+                  name="showOnHomepage"
+                  checked={Boolean(formData.showOnHomepage)}
+                  onChange={(e) =>
+                    setFormData((previous) => ({
+                      ...previous,
+                      showOnHomepage: e.target.checked,
+                    }))
+                  }
+                />
+                Show this product in Popular Products on homepage
+              </label>
             </div>
 
             <div className="admin-form-actions">
@@ -1931,6 +2151,156 @@ function AdminDashboard() {
       </div>
 
       {/* =====================================
+          CATEGORIES
+      ===================================== */}
+
+      <div className="admin-section admin-category-manager">
+        <div className="admin-section-header">
+          <div>
+            <h2>Categories</h2>
+            <span>{categories.length} Categories</span>
+          </div>
+
+          <button
+            className="admin-add-btn"
+            onClick={() => {
+              if (showCategoryForm) {
+                resetCategoryForm();
+              } else {
+                setEditingCategory(null);
+                setCategoryError("");
+                setShowCategoryForm(true);
+              }
+            }}
+          >
+            {showCategoryForm ? "✕ Close" : "+ Add Category"}
+          </button>
+        </div>
+
+        {showCategoryForm && (
+          <form
+            className="admin-product-form admin-category-form"
+            onSubmit={handleSaveCategory}
+          >
+            {categoryError && (
+              <div className="admin-form-error admin-form-full">
+                {categoryError}
+              </div>
+            )}
+
+            <div className="admin-form-group">
+              <label>Category Name *</label>
+              <input
+                type="text"
+                name="name"
+                value={categoryForm.name}
+                onChange={handleCategoryChange}
+                placeholder="e.g. Namkeen"
+              />
+            </div>
+
+            <div className="admin-form-group">
+              <label>Display Order</label>
+              <input
+                type="number"
+                name="displayOrder"
+                min="0"
+                value={categoryForm.displayOrder}
+                onChange={handleCategoryChange}
+              />
+            </div>
+
+            <div className="admin-form-group admin-form-full">
+              <label>Category Image Path</label>
+              <input
+                type="text"
+                name="image"
+                value={categoryForm.image}
+                onChange={handleCategoryChange}
+                placeholder="/images/namkeen.png"
+              />
+            </div>
+
+            <div className="admin-form-group admin-form-full">
+              <label>Description</label>
+              <textarea
+                name="description"
+                value={categoryForm.description}
+                onChange={handleCategoryChange}
+                placeholder="Short category description..."
+                rows="3"
+              />
+            </div>
+
+            <div className="admin-form-group admin-category-checkbox">
+              <label>
+                <input
+                  type="checkbox"
+                  name="active"
+                  checked={categoryForm.active}
+                  onChange={handleCategoryChange}
+                />
+                Show category on homepage
+              </label>
+            </div>
+
+            <div className="admin-form-actions admin-form-full">
+              <button
+                type="button"
+                className="admin-cancel-btn"
+                onClick={resetCategoryForm}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="admin-save-btn"
+                disabled={categoryLoading}
+              >
+                {categoryLoading
+                  ? "Saving Category..."
+                  : editingCategory
+                  ? "Update Category ✏️"
+                  : "Add Category 🎉"}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {categoryLoading && categories.length === 0 ? (
+          <div className="admin-no-analytics">Loading categories...</div>
+        ) : categories.length === 0 ? (
+          <div className="admin-no-analytics">No categories yet. Add your first category.</div>
+        ) : (
+          <div className="admin-category-grid">
+            {categories.map((category) => (
+              <div className="admin-category-card" key={category._id}>
+                <div className="admin-category-image">
+                  {category.image ? (
+                    <img src={category.image} alt={category.name} />
+                  ) : (
+                    <span>🍽️</span>
+                  )}
+                </div>
+                <div className="admin-category-info">
+                  <span className="admin-product-category">Order: {category.displayOrder}</span>
+                  <h3>{category.name}</h3>
+                  <p>{category.description || "No description added."}</p>
+                  <span className={category.active ? "admin-category-active" : "admin-category-inactive"}>
+                    {category.active ? "✓ Homepage Active" : "○ Hidden"}
+                  </span>
+                  <div className="admin-product-actions">
+                    <button className="admin-edit-btn" onClick={() => handleEditCategory(category)}>✏️ Edit</button>
+                    <button className="admin-delete-btn" onClick={() => handleDeleteCategory(category._id)}>🗑️ Delete</button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* =====================================
           PRODUCTS
       ===================================== */}
 
@@ -2249,6 +2619,12 @@ function AdminDashboard() {
                             product.stock
                           )}`}
                     </div>
+
+                    {product.showOnHomepage && (
+                      <div className="admin-homepage-badge">
+                        ⭐ Popular on Homepage
+                      </div>
+                    )}
 
                     {/* ACTIONS */}
 
