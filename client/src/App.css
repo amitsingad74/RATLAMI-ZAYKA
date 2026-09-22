@@ -15950,3 +15950,163 @@ input {
     background-position: center top !important;
   }
 }
+
+/* =========================================
+   ADMIN CATEGORY MANAGEMENT
+========================================= */
+
+.admin-category-manager {
+  margin-top: 35px;
+}
+
+.admin-category-form {
+  margin-bottom: 25px;
+}
+
+.admin-category-checkbox label,
+.admin-homepage-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #17324d;
+}
+
+.admin-category-checkbox input,
+.admin-homepage-checkbox input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #d4a72c;
+}
+
+.admin-category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.admin-category-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #eadfca;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(11, 38, 61, 0.06);
+}
+
+.admin-category-image {
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #faf7f0;
+  overflow: hidden;
+}
+
+.admin-category-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-category-image span {
+  font-size: 55px;
+}
+
+.admin-category-info {
+  padding: 20px;
+}
+
+.admin-category-info h3 {
+  margin: 8px 0;
+  color: #17324d;
+  font-size: 21px;
+}
+
+.admin-category-info p {
+  margin: 0 0 15px;
+  color: #777;
+  line-height: 1.6;
+  min-height: 45px;
+}
+
+.admin-category-active,
+.admin-category-inactive {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.admin-category-active {
+  background: #e8f7ed;
+  color: #247a42;
+  border: 1px solid #b9dfc5;
+}
+
+.admin-category-inactive {
+  background: #f3f3f3;
+  color: #777;
+  border: 1px solid #ddd;
+}
+
+.admin-homepage-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: 12px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: #fff7d9;
+  color: #9a6b00;
+  border: 1px solid #ead29a;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 1000px) {
+  .admin-category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .admin-category-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================
+   DYNAMIC HOMEPAGE CATEGORY IMAGES
+========================================= */
+
+.homepage-category-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.category-icon:has(.homepage-category-image) {
+  overflow: hidden;
+  padding: 0;
+}
+
+.home-section-message {
+  width: 100%;
+  text-align: center;
+  padding: 40px 20px;
+  color: #f5f0e6;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.home-section-message strong {
+  color: #d4a72c;
+}

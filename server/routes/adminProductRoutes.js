@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require("mongoose");
 
 const Product = require("../models/Product");
 const adminMiddleware = require("../middleware/adminMiddleware");
@@ -26,6 +27,10 @@ const isValidNonNegativeInteger = (value) => {
     Number.isInteger(value) &&
     value >= 0
   );
+};
+
+const isValidBoolean = (value) => {
+  return typeof value === "boolean";
 };
 
 // ===============================
@@ -76,6 +81,7 @@ router.post(
         image,
         description,
         stock,
+        showOnHomepage,
       } = req.body;
 
       // ===============================
@@ -83,8 +89,10 @@ router.post(
       // ===============================
 
       const cleanName = cleanString(name);
-      const cleanCategory = cleanString(category);
-      const cleanWeight = cleanString(weight);
+      const cleanCategory =
+        cleanString(category);
+      const cleanWeight =
+        cleanString(weight);
       const cleanDescription =
         cleanString(description);
 
@@ -113,7 +121,9 @@ router.post(
       const priceValue = Number(price);
 
       if (
-        !isValidNonNegativeNumber(priceValue)
+        !isValidNonNegativeNumber(
+          priceValue
+        )
       ) {
         return res.status(400).json({
           message:
@@ -131,11 +141,31 @@ router.post(
           : Number(stock);
 
       if (
-        !isValidNonNegativeInteger(stockValue)
+        !isValidNonNegativeInteger(
+          stockValue
+        )
       ) {
         return res.status(400).json({
           message:
             "Stock must be a valid non-negative whole number.",
+        });
+      }
+
+      // ===============================
+      // HOMEPAGE VALIDATION
+      // ===============================
+
+      const homepageValue =
+        showOnHomepage === undefined
+          ? false
+          : showOnHomepage;
+
+      if (
+        !isValidBoolean(homepageValue)
+      ) {
+        return res.status(400).json({
+          message:
+            "showOnHomepage must be true or false.",
         });
       }
 
@@ -177,25 +207,37 @@ router.post(
 
       const product = await Product.create({
         name: cleanName,
+
         category: cleanCategory,
+
         price: priceValue,
+
         weight: cleanWeight,
+
         stock: stockValue,
+
         emoji:
           typeof emoji === "string" &&
           emoji.trim()
             ? emoji.trim()
             : "🍬",
+
         image:
           typeof image === "string"
             ? image.trim()
             : "",
-        description: cleanDescription,
+
+        description:
+          cleanDescription,
+
+        showOnHomepage:
+          homepageValue,
       });
 
       return res.status(201).json({
         message:
           "Product added successfully! 🎉",
+
         product,
       });
     } catch (error) {
@@ -205,7 +247,8 @@ router.post(
       );
 
       return res.status(500).json({
-        message: "Failed to add product.",
+        message:
+          "Failed to add product.",
       });
     }
   }
@@ -226,7 +269,7 @@ router.put(
       // ===============================
 
       if (
-        !require("mongoose").Types.ObjectId.isValid(
+        !mongoose.Types.ObjectId.isValid(
           req.params.id
         )
       ) {
@@ -244,6 +287,7 @@ router.put(
         image,
         description,
         stock,
+        showOnHomepage,
       } = req.body;
 
       // ===============================
@@ -373,9 +417,6 @@ router.put(
       // ===============================
       // STOCK
       // ===============================
-      // IMPORTANT:
-      // If stock is not provided during update,
-      // existing stock remains unchanged.
 
       if (stock !== undefined) {
         if (stock === "") {
@@ -462,6 +503,28 @@ router.put(
       }
 
       // ===============================
+      // SHOW ON HOMEPAGE
+      // ===============================
+
+      if (
+        showOnHomepage !== undefined
+      ) {
+        if (
+          !isValidBoolean(
+            showOnHomepage
+          )
+        ) {
+          return res.status(400).json({
+            message:
+              "showOnHomepage must be true or false.",
+          });
+        }
+
+        updateData.showOnHomepage =
+          showOnHomepage;
+      }
+
+      // ===============================
       // UPDATE PRODUCT
       // ===============================
 
@@ -484,6 +547,7 @@ router.put(
       return res.status(200).json({
         message:
           "Product updated successfully! ✏️",
+
         product,
       });
     } catch (error) {
@@ -515,7 +579,7 @@ router.delete(
       // ===============================
 
       if (
-        !require("mongoose").Types.ObjectId.isValid(
+        !mongoose.Types.ObjectId.isValid(
           req.params.id
         )
       ) {

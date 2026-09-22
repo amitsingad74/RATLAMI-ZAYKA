@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import API_URL from "../config/api";
 
 import {
   Chart as ChartJS,
@@ -128,7 +127,7 @@ function AdminDashboard() {
       setError("");
 
       const response = await fetch(
-       `${API_URL}/api/admin/products`,
+        "http://localhost:5000/api/admin/products",
         {
           method: "GET",
           headers: {
@@ -185,7 +184,7 @@ function AdminDashboard() {
   const fetchRecentOrders = async () => {
     try {
       const response = await fetch(
-      `${API_URL}/api/admin/orders`,
+        "http://localhost:5000/api/admin/orders",
         {
           method: "GET",
           headers: {
@@ -227,7 +226,7 @@ function AdminDashboard() {
   const fetchStats = async () => {
     try {
       const response = await fetch(
-       `${API_URL}/api/admin/stats`,
+        "http://localhost:5000/api/admin/stats",
         {
           method: "GET",
           headers: {
@@ -280,7 +279,7 @@ function AdminDashboard() {
   ) => {
     try {
       const response = await fetch(
-       `${API_URL}/api/admin/analytics?range=${range}`,
+        `http://localhost:5000/api/admin/analytics?range=${range}`,
         {
           method: "GET",
           headers: {
@@ -683,7 +682,7 @@ function AdminDashboard() {
       setFormLoading(true);
 
       const response = await fetch(
-       `${API_URL}/api/admin/products`,
+        "http://localhost:5000/api/admin/products",
         {
           method: "POST",
 
@@ -818,7 +817,7 @@ function AdminDashboard() {
         setFormLoading(true);
 
         const response = await fetch(
-         `${API_URL}/api/admin/products/${editingProduct._id}`,
+          `http://localhost:5000/api/admin/products/${editingProduct._id}`,
           {
             method: "PUT",
 
@@ -927,7 +926,7 @@ function AdminDashboard() {
 
       try {
         const response = await fetch(
-         `${API_URL}/api/admin/products/${id}`,
+          `http://localhost:5000/api/admin/products/${id}`,
           {
             method: "DELETE",
 

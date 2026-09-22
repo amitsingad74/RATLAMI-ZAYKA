@@ -51,6 +51,9 @@ const adminProductRoutes =
 const adminOrderRoutes =
   require("./routes/adminOrderRoutes");
 
+  const adminCategoryRoutes = require("./routes/adminCategoryRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+
 const adminStatsRoutes =
   require("./routes/adminStatsRoutes");
 
@@ -261,6 +264,16 @@ app.use(
   paymentRoutes
 );
 
+
+app.use(
+  "/api/admin/categories",
+  adminCategoryRoutes
+);
+
+app.use(
+  "/api/categories",
+  categoryRoutes
+);
 // =====================================================
 // 404 HANDLER
 // =====================================================

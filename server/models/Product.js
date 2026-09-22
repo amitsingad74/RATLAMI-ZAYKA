@@ -50,6 +50,14 @@ const productSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+
+    // ===============================
+    // HOMEPAGE
+    // ===============================
+    showOnHomepage: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
