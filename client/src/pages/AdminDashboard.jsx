@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../config/api";
 
+const CLOUDINARY_CLOUD_NAME =
+  import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+
+const CLOUDINARY_UPLOAD_PRESET =
+  import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -35,6 +41,12 @@ function AdminDashboard() {
   );
 
   const token = localStorage.getItem("token");
+
+  const [productImageUploading, setProductImageUploading] =
+    useState(false);
+
+  const [categoryImageUploading, setCategoryImageUploading] =
+    useState(false);
 
   // =========================================
   // PRODUCTS
@@ -135,6 +147,108 @@ function AdminDashboard() {
     description: "",
     showOnHomepage: false,
   });
+
+  // =========================================
+  // CLOUDINARY IMAGE UPLOAD
+  // =========================================
+
+  const uploadImageToCloudinary = async (file) => {
+    if (!file) {
+      return "";
+    }
+
+    if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+      throw new Error(
+        "Image upload is not configured. Please contact the website administrator."
+      );
+    }
+
+    if (!file.type.startsWith("image/")) {
+      throw new Error("Please select a valid image file.");
+    }
+
+    const maxSize = 5 * 1024 * 1024;
+
+    if (file.size > maxSize) {
+      throw new Error("Image size must be 5 MB or less.");
+    }
+
+    const uploadData = new FormData();
+    uploadData.append("file", file);
+    uploadData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method: "POST",
+        body: uploadData,
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.secure_url) {
+      throw new Error(
+        data.error?.message || "Image upload failed. Please try again."
+      );
+    }
+
+    return data.secure_url;
+  };
+
+  const handleProductImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setFormError("");
+    setProductImageUploading(true);
+
+    try {
+      const imageUrl = await uploadImageToCloudinary(file);
+
+      setFormData((previous) => ({
+        ...previous,
+        image: imageUrl,
+      }));
+    } catch (error) {
+      console.error("Product Image Upload Error:", error);
+      setFormError(error.message || "Failed to upload product image.");
+    } finally {
+      setProductImageUploading(false);
+      e.target.value = "";
+    }
+  };
+
+  const handleCategoryImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setCategoryError("");
+    setCategoryImageUploading(true);
+
+    try {
+      const imageUrl = await uploadImageToCloudinary(file);
+
+      setCategoryForm((previous) => ({
+        ...previous,
+        image: imageUrl,
+      }));
+    } catch (error) {
+      console.error("Category Image Upload Error:", error);
+      setCategoryError(
+        error.message || "Failed to upload category image."
+      );
+    } finally {
+      setCategoryImageUploading(false);
+      e.target.value = "";
+    }
+  };
 
   // =========================================
   // FETCH PRODUCTS
@@ -944,7 +1058,6 @@ function AdminDashboard() {
         emoji: "🍬",
         image: "",
         description: "",
-        showOnHomepage: false,
       });
 
       setShowForm(false);
@@ -1090,6 +1203,7 @@ function AdminDashboard() {
           emoji: "🍬",
           image: "",
           description: "",
+          showOnHomepage: false,
         });
 
         setShowForm(false);
@@ -1523,23 +1637,54 @@ function AdminDashboard() {
 
             </div>
 
-            <div className="admin-form-group">
+            <div className="admin-form-group admin-image-upload-group">
 
               <label>
-                Image Path
+                Product Image
               </label>
 
-              <input
-                type="text"
-                name="image"
-                value={formData.image}
-                onChange={handleChange}
-                placeholder="/images/product.png"
-              />
+              {formData.image && (
+                <div className="admin-image-preview">
+                  <img
+                    src={formData.image}
+                    alt="Product preview"
+                  />
+                </div>
+              )}
+
+              <label className="admin-upload-btn">
+                {productImageUploading
+                  ? "Uploading Image..."
+                  : formData.image
+                  ? "Replace Image"
+                  : "Choose Image"}
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp,image/gif"
+                  onChange={handleProductImageUpload}
+                  disabled={productImageUploading}
+                  hidden
+                />
+              </label>
+
+              {formData.image && (
+                <button
+                  type="button"
+                  className="admin-remove-image-btn"
+                  onClick={() =>
+                    setFormData((previous) => ({
+                      ...previous,
+                      image: "",
+                    }))
+                  }
+                  disabled={productImageUploading}
+                >
+                  Remove Image
+                </button>
+              )}
 
               <small>
-                Example:
-                /images/ratlamiSev.png
+                JPG, PNG, WEBP or GIF. Maximum 5 MB.
               </small>
 
             </div>
@@ -1592,7 +1737,7 @@ function AdminDashboard() {
               <button
                 type="submit"
                 className="admin-save-btn"
-                disabled={formLoading}
+                disabled={formLoading || productImageUploading}
               >
                 {formLoading
                   ? editingProduct
@@ -2210,15 +2355,52 @@ function AdminDashboard() {
               />
             </div>
 
-            <div className="admin-form-group admin-form-full">
-              <label>Category Image Path</label>
-              <input
-                type="text"
-                name="image"
-                value={categoryForm.image}
-                onChange={handleCategoryChange}
-                placeholder="/images/namkeen.png"
-              />
+            <div className="admin-form-group admin-form-full admin-image-upload-group">
+              <label>Category Image</label>
+
+              {categoryForm.image && (
+                <div className="admin-image-preview admin-category-image-preview">
+                  <img
+                    src={categoryForm.image}
+                    alt="Category preview"
+                  />
+                </div>
+              )}
+
+              <label className="admin-upload-btn">
+                {categoryImageUploading
+                  ? "Uploading Image..."
+                  : categoryForm.image
+                  ? "Replace Image"
+                  : "Choose Image"}
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp,image/gif"
+                  onChange={handleCategoryImageUpload}
+                  disabled={categoryImageUploading}
+                  hidden
+                />
+              </label>
+
+              {categoryForm.image && (
+                <button
+                  type="button"
+                  className="admin-remove-image-btn"
+                  onClick={() =>
+                    setCategoryForm((previous) => ({
+                      ...previous,
+                      image: "",
+                    }))
+                  }
+                  disabled={categoryImageUploading}
+                >
+                  Remove Image
+                </button>
+              )}
+
+              <small>
+                JPG, PNG, WEBP or GIF. Maximum 5 MB.
+              </small>
             </div>
 
             <div className="admin-form-group admin-form-full">
@@ -2255,7 +2437,7 @@ function AdminDashboard() {
               <button
                 type="submit"
                 className="admin-save-btn"
-                disabled={categoryLoading}
+                disabled={categoryLoading || categoryImageUploading}
               >
                 {categoryLoading
                   ? "Saving Category..."

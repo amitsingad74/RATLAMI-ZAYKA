@@ -16110,3 +16110,84 @@ input {
 .home-section-message strong {
   color: #d4a72c;
 }
+
+/* =========================================
+   ADMIN IMAGE UPLOAD
+========================================= */
+
+.admin-image-upload-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.admin-image-preview {
+  width: 180px;
+  height: 140px;
+  overflow: hidden;
+  border: 1px solid #eadfca;
+  border-radius: 12px;
+  background: #faf7f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-category-image-preview {
+  width: 260px;
+  height: 160px;
+}
+
+.admin-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  background: #d4a72c;
+  color: #17324d;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.admin-upload-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+
+.admin-remove-image-btn {
+  border: 1px solid #e4b1b1;
+  background: #fff5f5;
+  color: #c62828;
+  padding: 9px 15px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-remove-image-btn:disabled,
+.admin-upload-btn:has(input:disabled) {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-image-upload-group small {
+  color: #777;
+  font-size: 12px;
+}
+
+@media (max-width: 650px) {
+  .admin-category-image-preview {
+    width: 100%;
+    max-width: 260px;
+  }
+}
