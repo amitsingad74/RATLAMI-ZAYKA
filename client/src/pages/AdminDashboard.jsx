@@ -1478,6 +1478,17 @@ function AdminDashboard() {
           </button>
 
           <button
+  className="admin-orders-btn"
+  onClick={() =>
+    navigate(
+      "/admin/contact-messages"
+    )
+  }
+>
+  💬 Messages
+</button>
+
+          <button
             className="admin-add-btn"
             onClick={() => {
               if (showForm) {

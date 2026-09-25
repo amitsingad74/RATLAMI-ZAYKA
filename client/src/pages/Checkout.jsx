@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import API_URL from "../config/api";
 
@@ -287,7 +287,7 @@ function Checkout() {
             // =============================================
 
             const verifyResponse = await fetch(
-            `${API_URL}/api/payment/verify`,
+              `${API_URL}/api/payment/verify`,
               {
                 method: "POST",
 
@@ -358,7 +358,7 @@ function Checkout() {
 
             try {
               orderResponse = await fetch(
-              `${API_URL}/api/orders`,
+                `${API_URL}/api/orders`,
                 {
                   method: "POST",
 
@@ -1049,6 +1049,38 @@ function Checkout() {
                 successful payment.
               </p>
             </div>
+
+
+            {/* =================================================
+                POLICY LINKS
+            ================================================= */}
+
+            <div className="checkout-policy-notice">
+
+              <p>
+                By proceeding with your payment, you
+                acknowledge that you have read and agree to
+                our{" "}
+                <Link to="/terms">
+                  Terms & Conditions
+                </Link>
+                ,{" "}
+                <Link to="/privacy-policy">
+                  Privacy Policy
+                </Link>
+                ,{" "}
+                <Link to="/refund-cancellation">
+                  Refund & Cancellation Policy
+                </Link>
+                , and{" "}
+                <Link to="/shipping-delivery">
+                  Shipping & Delivery Policy
+                </Link>
+                .
+              </p>
+
+            </div>
+
 
             <button
               type="button"

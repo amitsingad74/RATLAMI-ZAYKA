@@ -51,8 +51,11 @@ const adminProductRoutes =
 const adminOrderRoutes =
   require("./routes/adminOrderRoutes");
 
-  const adminCategoryRoutes = require("./routes/adminCategoryRoutes");
-const categoryRoutes = require("./routes/categoryRoutes");
+const adminCategoryRoutes =
+  require("./routes/adminCategoryRoutes");
+
+const categoryRoutes =
+  require("./routes/categoryRoutes");
 
 const adminStatsRoutes =
   require("./routes/adminStatsRoutes");
@@ -65,6 +68,12 @@ const adminAnalyticsRoutes =
 
 const paymentRoutes =
   require("./routes/paymentRoutes");
+
+const contactRoutes =
+  require("./routes/contactRoutes");
+
+  const adminContactRoutes =
+  require("./routes/adminContactRoutes");
 
 // =====================================================
 // CREATE EXPRESS APP
@@ -264,15 +273,37 @@ app.use(
   paymentRoutes
 );
 
+// =====================================================
+// ADMIN CATEGORY ROUTES
+// =====================================================
 
 app.use(
   "/api/admin/categories",
   adminCategoryRoutes
 );
 
+// =====================================================
+// PUBLIC CATEGORY ROUTES
+// =====================================================
+
 app.use(
   "/api/categories",
   categoryRoutes
+);
+
+// =====================================================
+// CONTACT ROUTES
+// =====================================================
+
+app.use(
+  "/api/contact",
+  contactRoutes
+);
+
+
+app.use(
+  "/api/admin/contact",
+  adminContactRoutes
 );
 // =====================================================
 // 404 HANDLER
@@ -285,6 +316,7 @@ app.use(
     });
   }
 );
+
 
 // =====================================================
 // GLOBAL ERROR HANDLER

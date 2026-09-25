@@ -15,6 +15,8 @@ import Profile from "./pages/Profile";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
 import ProductDetails from "./pages/ProductDetails";
+import ContactUs from "./pages/ContactUs";
+import OrderDetails from "./pages/OrderDetails";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -22,7 +24,13 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminOrders from "./pages/AdminOrders";
 import AdminUsers from "./pages/AdminUsers";
 import AdminOrderDetails from "./pages/AdminOrderDetails";
-import OrderDetails from "./pages/OrderDetails";
+import AdminContactMessages from "./pages/AdminContactMessages";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import RefundCancellationPolicy from "./pages/RefundCancellationPolicy";
+import ShippingDeliveryPolicy from "./pages/ShippingDeliveryPolicy";
+import AboutUs from "./pages/AboutUs";
+
 
 // =====================================================
 // FOOTER
@@ -42,8 +50,10 @@ function Footer() {
           </div>
         </div>
 
+
         {/* LINKS */}
         <div className="footer-links">
+
           <Link to="/">
             Home
           </Link>
@@ -62,21 +72,48 @@ function Footer() {
 
           <span>|</span>
 
-          <a href="#about">
+          <Link to="/about">
             About Us
-          </a>
+          </Link>
 
           <span>|</span>
 
-          <a href="#contact">
+          <Link to="/contact">
             Contact
-          </a>
+          </Link>
+
+          <span>|</span>
+
+          <Link to="/terms">
+            Terms & Conditions
+          </Link>
+
+          <span>|</span>
+
+          <Link to="/privacy-policy">
+            Privacy Policy
+          </Link>
+
+          <span>|</span>
+
+          <Link to="/refund-cancellation">
+            Refund & Cancellation
+          </Link>
+
+          <span>|</span>
+
+          <Link to="/shipping-delivery">
+            Shipping & Delivery
+          </Link>
+
         </div>
+
 
         {/* RIGHT SIDE */}
         <div className="footer-right">
 
           <div className="footer-social">
+
             <a href="#facebook">
               ●
             </a>
@@ -88,10 +125,11 @@ function Footer() {
             <a href="#youtube">
               ▶
             </a>
+
           </div>
 
           <p>
-            © 2026 RATLAMI ZAYKA. All rights reserved.
+            © 2026 RATLAMI ZAYEKA. All rights reserved.
           </p>
 
         </div>
@@ -175,6 +213,15 @@ function App() {
         <Route
           path="/wishlist"
           element={<Wishlist />}
+        />
+
+        {/* =================================================
+            CONTACT US
+        ================================================= */}
+
+        <Route
+          path="/contact"
+          element={<ContactUs />}
         />
 
         {/* =================================================
@@ -264,6 +311,55 @@ function App() {
           path="/admin/users"
           element={<AdminUsers />}
         />
+
+        {/* =================================================
+            ADMIN CONTACT MESSAGES
+        ================================================= */}
+
+        <Route
+          path="/admin/contact-messages"
+          element={<AdminContactMessages />}
+        />
+
+        <Route
+  path="/terms"
+  element={<TermsAndConditions />}
+/>
+
+<Route
+  path="/privacy-policy"
+  element={<PrivacyPolicy />}
+/>
+
+<Route
+  path="/refund-cancellation"
+  element={<RefundCancellationPolicy />}
+/>
+
+<Route
+  path="/terms"
+  element={<TermsAndConditions />}
+/>
+
+<Route
+  path="/privacy-policy"
+  element={<PrivacyPolicy />}
+/>
+
+<Route
+  path="/refund-cancellation"
+  element={<RefundCancellationPolicy />}
+/>
+
+<Route
+  path="/shipping-delivery"
+  element={<ShippingDeliveryPolicy />}
+/>
+
+<Route
+  path="/about"
+  element={<AboutUs />}
+/>
 
       </Routes>
 
