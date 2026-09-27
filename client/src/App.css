@@ -124,55 +124,58 @@ input {
 }
 
 
-/* =====================================================
-   NAVBAR SEARCH BOX
-===================================================== */
+/* =========================================================
+   MOBILE SEARCH BAR
+========================================================= */
 
-.navbar .search-box {
-  width: 230px;
-  height: 42px;
+@media (max-width: 600px) {
 
-  display: flex;
-  align-items: center;
+  .navbar .search-box {
+    display: flex !important;
 
-  border: 1px solid rgba(212, 167, 61, 0.5);
-  border-radius: 22px;
+    width: 92px !important;
+    height: 34px !important;
 
-  overflow: hidden;
+    flex: 0 0 92px !important;
 
-  background: rgba(255, 255, 255, 0.04);
-}
+    margin: 0 2px !important;
+    padding: 0 !important;
 
+    transform: none !important;
 
-.navbar .search-box input {
-  flex: 1;
-  min-width: 0;
+    border-radius: 18px !important;
 
-  border: none;
-  outline: none;
+    box-sizing: border-box !important;
 
-  background: transparent;
+    overflow: hidden !important;
+  }
 
-  padding: 10px 15px;
+  .navbar .search-box input {
+    width: 100% !important;
+    min-width: 0 !important;
 
-  color: white;
-  font-size: 13px;
-}
+    padding: 0 7px !important;
 
+    font-size: 9px !important;
 
-.navbar .search-box input::placeholder {
-  color: #a9b1bb;
-}
+    box-sizing: border-box !important;
+  }
 
+  .navbar .search-box input::placeholder {
+    font-size: 9px !important;
+  }
 
-.search-btn {
-  padding: 10px 14px;
+  .navbar .search-btn {
+    width: 27px !important;
+    min-width: 27px !important;
 
-  cursor: pointer;
-  font-size: 15px;
+    height: 34px !important;
 
-  background: transparent;
-  border: none;
+    padding: 0 !important;
+
+    font-size: 11px !important;
+  }
+
 }
 
 
@@ -27972,4 +27975,2247 @@ body,
 
 .order-item-emoji {
   font-size: 32px !important;
+}
+
+/* =========================================================
+   RATLAMI ZAYKA — FINAL MOBILE CART
+========================================================= */
+
+@media (max-width: 650px) {
+
+  /* =========================
+     NAVBAR
+  ========================= */
+
+  .navbar {
+    height: 112px !important;
+    min-height: 112px !important;
+
+    width: 100% !important;
+
+    display: block !important;
+
+    padding: 0 !important;
+
+    position: relative !important;
+
+    overflow: hidden !important;
+  }
+
+  /* LOGO */
+
+  .navbar .logo {
+    position: absolute !important;
+
+    left: 12px !important;
+    top: 0 !important;
+
+    width: 82px !important;
+    height: 62px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    z-index: 20 !important;
+  }
+
+  .navbar .logo a {
+    width: 82px !important;
+    height: 62px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .navbar .logo img {
+    width: 72px !important;
+    max-width: 72px !important;
+
+    height: auto !important;
+    max-height: 55px !important;
+
+    display: block !important;
+
+    object-fit: contain !important;
+  }
+
+
+  /* TOP RIGHT ACTIONS */
+
+  .navbar .nav-actions {
+    position: absolute !important;
+
+    right: 8px !important;
+    top: 0 !important;
+
+    height: 62px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 6px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    z-index: 30 !important;
+  }
+
+
+  /* SEARCH */
+
+  .navbar .search-box {
+    width: 92px !important;
+    height: 34px !important;
+
+    flex-shrink: 0 !important;
+
+    margin: 0 !important;
+
+    transform: none !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .navbar .search-box input {
+    width: 58px !important;
+    min-width: 0 !important;
+
+    padding: 6px 7px !important;
+
+    font-size: 10px !important;
+  }
+
+  .navbar .search-btn {
+    width: 28px !important;
+    min-width: 28px !important;
+
+    padding: 5px !important;
+
+    font-size: 12px !important;
+  }
+
+
+  /* NAV ACTION CIRCLES */
+
+  .navbar .cart-button,
+  .navbar .wishlist-button,
+  .navbar .profile-button,
+  .navbar .profile-menu-btn {
+    width: 34px !important;
+    height: 34px !important;
+
+    min-width: 34px !important;
+    min-height: 34px !important;
+
+    flex-shrink: 0 !important;
+  }
+
+
+  /* NAV LINKS */
+
+  .navbar .nav-links {
+    position: absolute !important;
+
+    left: 0 !important;
+    bottom: 0 !important;
+
+    width: 100% !important;
+    height: 50px !important;
+
+    margin: 0 !important;
+
+    padding: 0 24px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 34px !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    white-space: nowrap !important;
+
+    background: #061f32 !important;
+
+    scrollbar-width: none !important;
+
+    z-index: 10 !important;
+  }
+
+  .navbar .nav-links::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .navbar .nav-link {
+    height: 50px !important;
+
+    flex-shrink: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    font-size: 15px !important;
+
+    white-space: nowrap !important;
+  }
+
+  .navbar .nav-link.active::after {
+    bottom: 0 !important;
+  }
+
+
+  /* =========================
+     CART PAGE
+  ========================= */
+
+  .cart-page {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-height: calc(100vh - 112px) !important;
+
+    padding: 30px 12px 45px !important;
+
+    box-sizing: border-box !important;
+
+    overflow-x: hidden !important;
+  }
+
+
+  /* CART HEADER */
+
+  .cart-header {
+    width: 100% !important;
+
+    padding-top: 0 !important;
+
+    margin: 0 auto 28px !important;
+
+    text-align: center !important;
+  }
+
+  .cart-header h1 {
+    font-size: 36px !important;
+
+    line-height: 1.15 !important;
+
+    margin: 8px 0 10px !important;
+  }
+
+  .cart-header p {
+    font-size: 14px !important;
+
+    line-height: 1.45 !important;
+
+    padding: 0 15px !important;
+  }
+
+
+  /* MAIN CART CARD */
+
+  .cart-items {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    padding: 18px !important;
+
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+
+    border-radius: 16px !important;
+  }
+
+  .cart-items > h2 {
+    font-size: 27px !important;
+
+    margin-bottom: 8px !important;
+  }
+
+
+  /* =====================================================
+     PRODUCT CARD
+  ===================================================== */
+
+  .cart-item {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    display: grid !important;
+
+    /*
+       IMAGE | DETAILS
+       ----------------
+       CONTROLS | TOTAL
+       ----------------
+             REMOVE
+    */
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+
+    grid-template-rows: auto auto auto !important;
+
+    column-gap: 14px !important;
+    row-gap: 14px !important;
+
+    padding: 14px !important;
+
+    margin: 0 0 16px !important;
+
+    overflow: hidden !important;
+
+    background: #fffdf9 !important;
+
+    border: 1px solid #ead8bd !important;
+
+    border-radius: 15px !important;
+  }
+
+
+  /* PRODUCT IMAGE */
+
+  .cart-item-image {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+
+    width: 92px !important;
+    height: 92px !important;
+
+    min-width: 92px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    overflow: hidden !important;
+
+    border-radius: 10px !important;
+  }
+
+  .cart-item-image img {
+    width: 100% !important;
+    height: 100% !important;
+
+    object-fit: contain !important;
+
+    display: block !important;
+  }
+
+
+  /* PRODUCT DETAILS */
+
+  .cart-item-details {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+
+    min-width: 0 !important;
+
+    overflow: hidden !important;
+  }
+
+  .cart-item-details .cart-category {
+    font-size: 11px !important;
+
+    line-height: 1.2 !important;
+
+    letter-spacing: 1px !important;
+
+    margin-bottom: 6px !important;
+  }
+
+  .cart-item-details h3 {
+    font-size: 17px !important;
+
+    line-height: 1.2 !important;
+
+    margin-bottom: 4px !important;
+
+    overflow-wrap: break-word !important;
+  }
+
+  .cart-item-details > p {
+    font-size: 12px !important;
+
+    margin: 3px 0 !important;
+  }
+
+  .cart-price {
+    font-size: 18px !important;
+  }
+
+  .cart-stock {
+    margin-top: 7px !important;
+
+    padding: 5px 8px !important;
+
+    font-size: 11px !important;
+  }
+
+
+  /* =====================================================
+     QUANTITY
+  ===================================================== */
+
+  .cart-item .quantity-controls {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+
+    width: 120px !important;
+    min-width: 120px !important;
+
+    height: 40px !important;
+
+    margin: 0 !important;
+
+    justify-self: start !important;
+  }
+
+  .quantity-controls button {
+    width: 38px !important;
+    min-width: 38px !important;
+
+    height: 100% !important;
+
+    font-size: 18px !important;
+  }
+
+  .quantity-controls span {
+    width: 42px !important;
+    min-width: 42px !important;
+
+    font-size: 15px !important;
+  }
+
+
+  /* =====================================================
+     ITEM TOTAL
+  ===================================================== */
+
+  .cart-item-total {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+
+    align-self: center !important;
+
+    text-align: left !important;
+
+    font-size: 17px !important;
+
+    color: #44372d !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  /* =====================================================
+     REMOVE
+  ===================================================== */
+
+  .remove-item-btn {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+
+    justify-self: end !important;
+
+    width: 36px !important;
+    height: 36px !important;
+
+    margin: 0 !important;
+  }
+
+
+  /* CONTINUE SHOPPING */
+
+  .continue-shopping {
+    display: block !important;
+
+    width: 100% !important;
+
+    text-align: center !important;
+
+    margin: 20px 0 !important;
+
+    font-size: 15px !important;
+  }
+
+
+  /* CLEAR CART */
+
+  .clear-cart-btn {
+    width: 100% !important;
+
+    min-height: 48px !important;
+
+    margin-top: 10px !important;
+  }
+
+
+  /* ORDER SUMMARY */
+
+  .cart-summary {
+    position: static !important;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    box-sizing: border-box !important;
+
+    margin-top: 22px !important;
+
+    padding: 20px !important;
+  }
+
+  .cart-summary .checkout-btn {
+    width: 100% !important;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONE
+========================================================= */
+
+@media (max-width: 400px) {
+
+  .navbar .logo {
+    left: 8px !important;
+  }
+
+  .navbar .logo img {
+    width: 64px !important;
+    max-width: 64px !important;
+  }
+
+  .navbar .nav-actions {
+    right: 6px !important;
+    gap: 4px !important;
+  }
+
+  .navbar .search-box {
+    width: 82px !important;
+  }
+
+  .navbar .search-box input {
+    width: 48px !important;
+    font-size: 9px !important;
+  }
+
+  .navbar .nav-links {
+    padding-left: 20px !important;
+    gap: 28px !important;
+  }
+
+  .navbar .nav-link {
+    font-size: 14px !important;
+  }
+
+
+  /* Cart */
+
+  .cart-page {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  .cart-items {
+    padding: 14px !important;
+  }
+
+  .cart-item {
+    grid-template-columns: 82px minmax(0, 1fr) !important;
+
+    column-gap: 12px !important;
+
+    padding: 12px !important;
+  }
+
+  .cart-item-image {
+    width: 82px !important;
+    height: 82px !important;
+
+    min-width: 82px !important;
+  }
+
+  .cart-item-details h3 {
+    font-size: 16px !important;
+  }
+
+  .cart-item .quantity-controls {
+    width: 112px !important;
+    min-width: 112px !important;
+  }
+
+  .cart-item-total {
+    font-size: 16px !important;
+  }
+}
+
+/* =========================================================
+   FINAL MOBILE CART + NAVBAR OVERRIDE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  /* =========================
+     CART PRODUCT
+  ========================= */
+
+  .cart-item {
+    display: grid !important;
+
+    grid-template-columns: 105px minmax(0, 1fr) !important;
+
+    grid-template-rows: auto auto auto !important;
+
+    column-gap: 14px !important;
+    row-gap: 12px !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    padding: 14px !important;
+
+    box-sizing: border-box !important;
+
+    align-items: center !important;
+  }
+
+
+  /* IMAGE */
+
+  .cart-item > .cart-item-image {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+
+    width: 105px !important;
+    height: 105px !important;
+
+    min-width: 105px !important;
+  }
+
+
+  /* PRODUCT DETAILS */
+
+  .cart-item > .cart-item-details {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+
+    min-width: 0 !important;
+
+    width: 100% !important;
+
+    overflow: hidden !important;
+  }
+
+  .cart-item-details h3 {
+    font-size: 17px !important;
+    line-height: 1.2 !important;
+
+    overflow-wrap: break-word !important;
+  }
+
+
+  /* =========================
+     QUANTITY BLOCK
+     THIS IS THE IMPORTANT FIX
+  ========================= */
+
+  .cart-item > *:nth-child(3) {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+
+    width: 120px !important;
+    min-width: 120px !important;
+
+    justify-self: start !important;
+
+    margin: 0 !important;
+  }
+
+
+  /* QUANTITY LABEL */
+
+  .cart-item > *:nth-child(3) label {
+    display: block !important;
+
+    margin: 0 0 5px !important;
+
+    font-size: 16px !important;
+
+    line-height: 1.2 !important;
+  }
+
+
+  /* QUANTITY CONTROL */
+
+  .cart-item > *:nth-child(3) .quantity-controls {
+    width: 120px !important;
+    min-width: 120px !important;
+
+    height: 40px !important;
+
+    margin: 0 !important;
+  }
+
+
+  /* =========================
+     ITEM TOTAL
+  ========================= */
+
+  .cart-item > .cart-item-total {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+
+    justify-self: start !important;
+    align-self: end !important;
+
+    text-align: left !important;
+
+    font-size: 16px !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  /* =========================
+     REMOVE BUTTON
+  ========================= */
+
+  .cart-item > .remove-item-btn {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+
+    justify-self: end !important;
+
+    width: 36px !important;
+    height: 36px !important;
+
+    margin: 0 !important;
+  }
+
+
+  /* =========================
+     CART CARD SPACING
+  ========================= */
+
+  .cart-items {
+    padding: 18px !important;
+  }
+
+  .cart-item {
+    min-height: 260px !important;
+  }
+
+
+  /* =========================
+     NAVBAR
+  ========================= */
+
+  .navbar {
+    height: 112px !important;
+    min-height: 112px !important;
+
+    padding: 0 !important;
+
+    display: block !important;
+
+    position: relative !important;
+
+    overflow: hidden !important;
+  }
+
+
+  /* LOGO */
+
+  .navbar .logo {
+    position: absolute !important;
+
+    left: 10px !important;
+    top: 0 !important;
+
+    width: 75px !important;
+    height: 62px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    z-index: 50 !important;
+  }
+
+  .navbar .logo img {
+    width: 68px !important;
+    max-width: 68px !important;
+
+    max-height: 55px !important;
+
+    object-fit: contain !important;
+  }
+
+
+  /* ACTIONS */
+
+  .navbar .nav-actions {
+    position: absolute !important;
+
+    top: 0 !important;
+    right: 8px !important;
+
+    height: 62px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 5px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    z-index: 60 !important;
+  }
+
+
+  /* SEARCH */
+
+  .navbar .search-box {
+    width: 88px !important;
+    height: 34px !important;
+
+    flex: 0 0 88px !important;
+
+    margin: 0 !important;
+
+    transform: none !important;
+  }
+
+  .navbar .search-box input {
+    width: 50px !important;
+    min-width: 0 !important;
+
+    padding: 5px !important;
+
+    font-size: 9px !important;
+  }
+
+  .navbar .search-btn {
+    width: 27px !important;
+    min-width: 27px !important;
+
+    padding: 4px !important;
+  }
+
+
+  /* ICONS */
+
+  .navbar .cart-button,
+  .navbar .profile-button {
+    width: 34px !important;
+    height: 34px !important;
+
+    min-width: 34px !important;
+    min-height: 34px !important;
+
+    flex: 0 0 34px !important;
+  }
+
+
+  /* NAVIGATION */
+
+  .navbar .nav-links {
+    position: absolute !important;
+
+    left: 0 !important;
+    bottom: 0 !important;
+
+    width: 100% !important;
+    height: 50px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 32px !important;
+
+    padding: 0 24px !important;
+    margin: 0 !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    white-space: nowrap !important;
+
+    scrollbar-width: none !important;
+  }
+
+  .navbar .nav-links::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .navbar .nav-link {
+    flex-shrink: 0 !important;
+
+    height: 50px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    font-size: 15px !important;
+  }
+
+  .navbar .nav-link.active::after {
+    bottom: 0 !important;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 400px) {
+
+  .cart-item {
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+
+    column-gap: 12px !important;
+
+    min-height: 255px !important;
+  }
+
+  .cart-item > .cart-item-image {
+    width: 92px !important;
+    height: 92px !important;
+
+    min-width: 92px !important;
+  }
+
+  .cart-item > *:nth-child(3) {
+    width: 112px !important;
+    min-width: 112px !important;
+  }
+
+  .cart-item > *:nth-child(3) .quantity-controls {
+    width: 112px !important;
+    min-width: 112px !important;
+  }
+
+  .navbar .logo {
+    left: 7px !important;
+  }
+
+  .navbar .logo img {
+    width: 62px !important;
+    max-width: 62px !important;
+  }
+
+  .navbar .nav-actions {
+    right: 5px !important;
+  }
+
+  .navbar .search-box {
+    width: 78px !important;
+    flex-basis: 78px !important;
+  }
+
+  .navbar .nav-links {
+    gap: 27px !important;
+    padding-left: 20px !important;
+  }
+
+  .navbar .nav-link {
+    font-size: 14px !important;
+  }
+}
+
+/* =========================================================
+   FINAL CART MOBILE FIX
+   QUANTITY + TOTAL MUST NOT OVERLAP
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .cart-item {
+    display: grid !important;
+
+    grid-template-columns: 1fr auto !important;
+
+    grid-template-rows: auto auto auto auto !important;
+
+    column-gap: 10px !important;
+    row-gap: 10px !important;
+
+    width: 100% !important;
+
+    padding: 14px !important;
+
+    box-sizing: border-box !important;
+
+    align-items: start !important;
+  }
+
+
+  /* PRODUCT IMAGE */
+
+  .cart-item-image {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+
+    width: 105px !important;
+    height: 105px !important;
+
+    min-width: 105px !important;
+  }
+
+
+  /* PRODUCT DETAILS */
+
+  .cart-item-details {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+
+    min-width: 0 !important;
+
+    width: 100% !important;
+  }
+
+  .cart-item-details h3 {
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+  }
+
+
+  /* =====================================================
+     QUANTITY
+  ===================================================== */
+
+  .quantity-controls {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+
+    width: 115px !important;
+    min-width: 115px !important;
+
+    height: 40px !important;
+
+    margin: 0 !important;
+
+    justify-self: start !important;
+  }
+
+
+  /* =====================================================
+     ITEM TOTAL
+     PUT IT BELOW QUANTITY
+  ===================================================== */
+
+  .cart-item-total {
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    text-align: left !important;
+
+    font-size: 17px !important;
+
+    white-space: nowrap !important;
+
+    justify-self: start !important;
+  }
+
+
+  /* =====================================================
+     REMOVE BUTTON
+  ===================================================== */
+
+  .remove-item-btn {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+
+    width: 38px !important;
+    height: 38px !important;
+
+    margin: 0 !important;
+
+    justify-self: end !important;
+
+    align-self: center !important;
+  }
+
+
+  /* =====================================================
+     CART ITEM HEIGHT
+  ===================================================== */
+
+  .cart-item {
+    min-height: 270px !important;
+  }
+
+}
+
+/* =========================================================
+   FINAL MOBILE NAVBAR FIX
+========================================================= */
+
+@media (max-width: 600px) {
+
+  /* TOP NAVBAR */
+  .navbar {
+    width: 100% !important;
+    height: 70px !important;
+    min-height: 70px !important;
+
+    padding: 0 12px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    box-sizing: border-box !important;
+
+    overflow: visible !important;
+  }
+
+
+  /* LOGO */
+  .navbar .logo {
+    width: auto !important;
+    height: 70px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    flex-shrink: 0 !important;
+  }
+
+  .navbar .logo a {
+    width: auto !important;
+    height: 70px !important;
+
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .navbar .logo img {
+    width: 82px !important;
+    max-width: 82px !important;
+
+    height: auto !important;
+    max-height: 55px !important;
+
+    object-fit: contain !important;
+  }
+
+
+  /* HIDE SEARCH ON SMALL MOBILE */
+ .navbar .search-box {
+    display: flex !important;
+}
+
+
+  /* ACTION BUTTONS */
+  .navbar .nav-actions {
+    height: 70px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 8px !important;
+
+    flex-shrink: 0 !important;
+  }
+
+
+  .navbar .wishlist-button,
+  .navbar .wishlist-btn,
+  .navbar .cart-button,
+  .navbar .profile-button,
+  .navbar .profile-menu-btn {
+    width: 38px !important;
+    height: 38px !important;
+
+    min-width: 38px !important;
+    min-height: 38px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 50% !important;
+  }
+
+
+  .navbar .wishlist-button *,
+  .navbar .wishlist-btn *,
+  .navbar .cart-button *,
+  .navbar .profile-button *,
+  .navbar .profile-menu-btn * {
+    font-size: 16px !important;
+  }
+
+
+  /* BADGES */
+  .navbar .cart-count,
+  .navbar .wishlist-count {
+    width: 15px !important;
+    height: 15px !important;
+
+    top: -3px !important;
+    right: -3px !important;
+
+    font-size: 8px !important;
+  }
+
+
+  /* =====================================================
+     SECOND ROW NAVIGATION
+  ===================================================== */
+
+  .navbar .nav-links {
+    position: absolute !important;
+
+    top: 70px !important;
+    left: 0 !important;
+
+    width: 100% !important;
+    height: 48px !important;
+
+    margin: 0 !important;
+    padding: 0 18px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 30px !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    background: #061f32 !important;
+
+    border-top: 1px solid rgba(218,167,61,.25) !important;
+    border-bottom: 1px solid rgba(218,167,61,.55) !important;
+
+    box-sizing: border-box !important;
+
+    z-index: 999 !important;
+  }
+
+
+  .navbar .nav-links::-webkit-scrollbar {
+    display: none !important;
+  }
+
+
+  .navbar .nav-link {
+    height: 48px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    flex: 0 0 auto !important;
+
+    font-size: 14px !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  .navbar .nav-link.active::after {
+    bottom: 5px !important;
+  }
+}
+
+/* =========================================================
+   FINAL MOBILE NAVBAR
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .navbar {
+    width: 100% !important;
+    height: 70px !important;
+    min-height: 70px !important;
+
+    padding: 0 8px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    position: relative !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =========================
+     LOGO
+  ========================= */
+
+  .navbar .logo {
+    position: absolute !important;
+
+    left: 8px !important;
+    top: 0 !important;
+
+    width: 75px !important;
+    height: 70px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    z-index: 20 !important;
+  }
+
+  .navbar .logo a {
+    width: 75px !important;
+    height: 70px !important;
+
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .navbar .logo img {
+    width: 68px !important;
+    max-width: 68px !important;
+
+    height: auto !important;
+    max-height: 52px !important;
+
+    object-fit: contain !important;
+  }
+
+
+  /* =========================
+     RIGHT SIDE BUTTONS
+  ========================= */
+
+  .navbar .nav-actions {
+    position: absolute !important;
+
+    right: 8px !important;
+    top: 0 !important;
+
+    width: 112px !important;
+    height: 70px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+
+    gap: 6px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    z-index: 30 !important;
+  }
+
+
+  /* =========================
+     WISHLIST / CART / PROFILE
+  ========================= */
+
+  .navbar .wishlist-button,
+  .navbar .wishlist-btn,
+  .navbar .cart-button,
+  .navbar .profile-button,
+  .navbar .profile-menu-btn {
+
+    width: 34px !important;
+    height: 34px !important;
+
+    min-width: 34px !important;
+    min-height: 34px !important;
+
+    flex: 0 0 34px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 50% !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =========================
+     SEARCH
+     SEPARATE FROM ICONS
+  ========================= */
+
+  .navbar .search-box {
+
+    display: flex !important;
+
+    position: absolute !important;
+
+    right: 120px !important;
+    top: 18px !important;
+
+    width: 72px !important;
+    height: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    transform: none !important;
+
+    flex: none !important;
+
+    border-radius: 18px !important;
+
+    box-sizing: border-box !important;
+
+    overflow: hidden !important;
+
+    z-index: 40 !important;
+  }
+
+  .navbar .search-box input {
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    padding: 0 5px !important;
+
+    font-size: 8px !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .navbar .search-box input::placeholder {
+    font-size: 8px !important;
+  }
+
+  .navbar .search-btn {
+
+    width: 24px !important;
+    min-width: 24px !important;
+
+    height: 34px !important;
+
+    padding: 0 !important;
+
+    font-size: 10px !important;
+  }
+
+
+  /* =========================
+     SECOND NAVIGATION ROW
+  ========================= */
+
+  .navbar .nav-links {
+
+    position: absolute !important;
+
+    left: 0 !important;
+    top: 70px !important;
+
+    width: 100% !important;
+    height: 48px !important;
+
+    margin: 0 !important;
+    padding: 0 20px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 30px !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    white-space: nowrap !important;
+
+    background: #061f32 !important;
+
+    box-sizing: border-box !important;
+
+    z-index: 100 !important;
+
+    scrollbar-width: none !important;
+  }
+
+  .navbar .nav-links::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .navbar .nav-link {
+
+    height: 48px !important;
+
+    flex: 0 0 auto !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    font-size: 14px !important;
+
+    white-space: nowrap !important;
+  }
+
+  .navbar .nav-link.active::after {
+    bottom: 4px !important;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .navbar .logo img {
+    width: 62px !important;
+    max-width: 62px !important;
+  }
+
+  .navbar .nav-actions {
+    right: 5px !important;
+    width: 108px !important;
+  }
+
+  .navbar .search-box {
+    right: 114px !important;
+
+    width: 65px !important;
+  }
+
+  .navbar .search-box input {
+    font-size: 7px !important;
+  }
+
+  .navbar .nav-links {
+    gap: 26px !important;
+    padding-left: 18px !important;
+  }
+}
+
+/* =========================================================
+   RATLAMI ZAYKA — FINAL NAVBAR OVERRIDE
+   This block is intentionally LAST.
+   It overrides the older duplicate navbar rules above.
+========================================================= */
+
+/* Remove the old vertical search shift */
+.navbar .search-box {
+  transform: none !important;
+}
+
+
+/* =========================================================
+   DESKTOP NAVBAR
+========================================================= */
+
+@media (min-width: 769px) {
+
+  .navbar {
+    width: 100% !important;
+    height: 96px !important;
+    min-height: 96px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    position: relative !important;
+
+    padding: 0 20px !important;
+
+    background: #061f32 !important;
+    border-bottom: 1px solid rgba(218, 167, 61, 0.55) !important;
+
+    box-sizing: border-box !important;
+  }
+
+  /* Logo */
+  .navbar .logo {
+    position: absolute !important;
+
+    left: 20px !important;
+    top: 0 !important;
+
+    width: 230px !important;
+    height: 96px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    z-index: 20 !important;
+  }
+
+  .navbar .logo a {
+    width: 230px !important;
+    height: 96px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+
+  .navbar .logo img {
+    width: 210px !important;
+    max-width: 210px !important;
+
+    height: auto !important;
+    max-height: 92px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: block !important;
+
+    object-fit: contain !important;
+  }
+
+  /* Main links */
+  .navbar .nav-links {
+    position: absolute !important;
+
+    left: 505px !important;
+    top: 0 !important;
+
+    height: 96px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 38px !important;
+
+    white-space: nowrap !important;
+
+    z-index: 10 !important;
+  }
+
+  .navbar .nav-link {
+    height: 96px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    position: relative !important;
+
+    color: #f5f1e9 !important;
+
+    font-size: 15px !important;
+    font-weight: 500 !important;
+
+    white-space: nowrap !important;
+  }
+
+  .navbar .nav-link:hover,
+  .navbar .nav-link.active {
+    color: #f2b93f !important;
+  }
+
+  .navbar .nav-link.active::after {
+    content: "" !important;
+
+    position: absolute !important;
+
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 20px !important;
+
+    width: 100% !important;
+    height: 2px !important;
+
+    background: #dca631 !important;
+  }
+
+  /* Right actions: search + wishlist + cart + profile */
+  .navbar .nav-actions {
+    position: absolute !important;
+
+    right: 20px !important;
+    top: 0 !important;
+
+    width: auto !important;
+    height: 96px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 12px !important;
+
+    z-index: 30 !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .navbar .search-box {
+    position: relative !important;
+
+    width: 346px !important;
+    height: 48px !important;
+
+    min-width: 346px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    flex: 0 0 346px !important;
+
+    transform: none !important;
+
+    border: 1px solid rgba(220, 166, 47, 0.75) !important;
+    border-radius: 25px !important;
+
+    background: rgba(255, 255, 255, 0.025) !important;
+
+    overflow: hidden !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .navbar .search-box input {
+    flex: 1 1 auto !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+
+    height: 100% !important;
+
+    padding: 0 18px !important;
+
+    border: none !important;
+    outline: none !important;
+
+    background: transparent !important;
+
+    color: #fff !important;
+
+    font-size: 13px !important;
+  }
+
+  .navbar .search-box input::placeholder {
+    color: #b8c0c7 !important;
+    opacity: 1 !important;
+  }
+
+  .navbar .search-btn {
+    width: 48px !important;
+    min-width: 48px !important;
+
+    height: 48px !important;
+
+    flex: 0 0 48px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 0 !important;
+
+    border: none !important;
+    background: transparent !important;
+
+    color: #e4aa37 !important;
+  }
+
+  .navbar .wishlist-button,
+  .navbar .wishlist-btn,
+  .navbar .cart-button,
+  .navbar .profile-button,
+  .navbar .profile-menu-btn {
+    width: 52px !important;
+    height: 52px !important;
+
+    min-width: 52px !important;
+    min-height: 52px !important;
+
+    flex: 0 0 52px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 50% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (min-width: 601px) and (max-width: 1100px) {
+
+  .navbar {
+    height: 82px !important;
+    min-height: 82px !important;
+
+    padding: 0 12px !important;
+  }
+
+  .navbar .logo {
+    left: 12px !important;
+
+    width: 130px !important;
+    height: 82px !important;
+  }
+
+  .navbar .logo a {
+    width: 130px !important;
+    height: 82px !important;
+  }
+
+  .navbar .logo img {
+    width: 120px !important;
+    max-width: 120px !important;
+    max-height: 76px !important;
+  }
+
+  .navbar .nav-links {
+    left: 245px !important;
+    height: 82px !important;
+
+    gap: 22px !important;
+  }
+
+  .navbar .nav-link {
+    height: 82px !important;
+    font-size: 14px !important;
+  }
+
+  .navbar .nav-actions {
+    right: 12px !important;
+    height: 82px !important;
+
+    gap: 7px !important;
+  }
+
+  .navbar .search-box {
+    width: 190px !important;
+    min-width: 190px !important;
+
+    flex-basis: 190px !important;
+
+    height: 40px !important;
+  }
+
+  .navbar .search-btn {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+  }
+
+  .navbar .wishlist-button,
+  .navbar .wishlist-btn,
+  .navbar .cart-button,
+  .navbar .profile-button,
+  .navbar .profile-menu-btn {
+    width: 42px !important;
+    height: 42px !important;
+
+    min-width: 42px !important;
+    min-height: 42px !important;
+
+    flex-basis: 42px !important;
+  }
+}
+
+
+/* =========================================================
+   MOBILE NAVBAR
+   IMPORTANT:
+   SEARCH IS PART OF THE FLEX ROW.
+   It is NOT absolutely positioned.
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .navbar {
+    width: 100% !important;
+
+    height: 70px !important;
+    min-height: 70px !important;
+
+    padding: 0 7px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    position: relative !important;
+
+    box-sizing: border-box !important;
+  }
+
+  /* -------------------------
+     LOGO
+  ------------------------- */
+
+  .navbar .logo {
+    position: absolute !important;
+
+    left: 7px !important;
+    top: 0 !important;
+
+    width: 70px !important;
+    height: 70px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    z-index: 20 !important;
+  }
+
+  .navbar .logo a {
+    width: 70px !important;
+    height: 70px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+
+  .navbar .logo img {
+    width: 62px !important;
+    max-width: 62px !important;
+
+    height: auto !important;
+    max-height: 52px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: block !important;
+
+    object-fit: contain !important;
+  }
+
+
+  /* -------------------------
+     ACTION ROW
+     Total width on 400px:
+     search 82 + 3×34 + gaps ≈ 202px
+  ------------------------- */
+
+  .navbar .nav-actions {
+    position: absolute !important;
+
+    right: 7px !important;
+    top: 0 !important;
+
+    width: auto !important;
+    height: 70px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+
+    gap: 5px !important;
+
+    z-index: 30 !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* -------------------------
+     SEARCH
+     FLEX ITEM — NOT ABSOLUTE
+  ------------------------- */
+
+  .navbar .search-box {
+    position: relative !important;
+
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    bottom: auto !important;
+
+    width: 82px !important;
+    min-width: 82px !important;
+    max-width: 82px !important;
+
+    height: 34px !important;
+
+    flex: 0 0 82px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    transform: none !important;
+
+    border-radius: 18px !important;
+
+    box-sizing: border-box !important;
+
+    overflow: hidden !important;
+  }
+
+  .navbar .search-box input {
+    width: auto !important;
+    min-width: 0 !important;
+
+    height: 100% !important;
+
+    flex: 1 1 auto !important;
+
+    padding: 0 4px !important;
+
+    font-size: 8px !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .navbar .search-box input::placeholder {
+    font-size: 8px !important;
+  }
+
+  .navbar .search-btn {
+    width: 23px !important;
+    min-width: 23px !important;
+
+    height: 34px !important;
+
+    flex: 0 0 23px !important;
+
+    padding: 0 !important;
+
+    font-size: 10px !important;
+  }
+
+
+  /* -------------------------
+     WISHLIST / CART / PROFILE
+  ------------------------- */
+
+  .navbar .wishlist-button,
+  .navbar .wishlist-btn,
+  .navbar .cart-button,
+  .navbar .profile-button,
+  .navbar .profile-menu-btn {
+    width: 34px !important;
+    height: 34px !important;
+
+    min-width: 34px !important;
+    min-height: 34px !important;
+
+    flex: 0 0 34px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 50% !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .navbar .wishlist-button *,
+  .navbar .wishlist-btn *,
+  .navbar .cart-button *,
+  .navbar .profile-button *,
+  .navbar .profile-menu-btn * {
+    font-size: 15px !important;
+  }
+
+  .navbar .cart-count,
+  .navbar .wishlist-count {
+    width: 15px !important;
+    height: 15px !important;
+
+    top: -3px !important;
+    right: -3px !important;
+
+    font-size: 8px !important;
+  }
+
+
+  /* -------------------------
+     SECOND NAVIGATION ROW
+  ------------------------- */
+
+  .navbar .nav-links {
+    position: absolute !important;
+
+    left: 0 !important;
+    top: 70px !important;
+
+    width: 100% !important;
+    height: 48px !important;
+
+    margin: 0 !important;
+    padding: 0 18px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 28px !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    white-space: nowrap !important;
+
+    background: #061f32 !important;
+
+    border-top: 1px solid rgba(218,167,61,.25) !important;
+    border-bottom: 1px solid rgba(218,167,61,.55) !important;
+
+    box-sizing: border-box !important;
+
+    z-index: 100 !important;
+
+    scrollbar-width: none !important;
+  }
+
+  .navbar .nav-links::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .navbar .nav-link {
+    height: 48px !important;
+
+    flex: 0 0 auto !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    font-size: 14px !important;
+
+    white-space: nowrap !important;
+  }
+
+  .navbar .nav-link.active::after {
+    bottom: 4px !important;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .navbar .logo img {
+    width: 56px !important;
+    max-width: 56px !important;
+  }
+
+  .navbar .nav-actions {
+    right: 5px !important;
+    gap: 3px !important;
+  }
+
+  .navbar .search-box {
+    width: 68px !important;
+    min-width: 68px !important;
+    max-width: 68px !important;
+
+    flex-basis: 68px !important;
+  }
+
+  .navbar .search-box input {
+    font-size: 7px !important;
+  }
+
+  .navbar .search-btn {
+    width: 21px !important;
+    min-width: 21px !important;
+
+    flex-basis: 21px !important;
+  }
+
+  .navbar .wishlist-button,
+  .navbar .wishlist-btn,
+  .navbar .cart-button,
+  .navbar .profile-button,
+  .navbar .profile-menu-btn {
+    width: 32px !important;
+    height: 32px !important;
+
+    min-width: 32px !important;
+    min-height: 32px !important;
+
+    flex-basis: 32px !important;
+  }
+
+  .navbar .nav-links {
+    gap: 24px !important;
+    padding-left: 16px !important;
+  }
 }
