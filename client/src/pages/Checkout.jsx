@@ -745,7 +745,7 @@ function Checkout() {
             <div className="checkout-section-title">
 
               <span className="checkout-section-icon">
-                🚚
+                
               </span>
 
               <div>
@@ -916,7 +916,7 @@ function Checkout() {
             <div className="checkout-benefit">
 
               <span>
-                🚚
+                
               </span>
 
               <div>
@@ -1022,7 +1022,7 @@ function Checkout() {
               </div>
 
               <strong>
-                🚚 FREE
+                 FREE
               </strong>
 
             </div>
@@ -1095,7 +1095,7 @@ function Checkout() {
                 ? "Processing Payment..."
                 : (
                   <>
-                    🔒 &nbsp; Proceed to Payment →
+                     &nbsp; Proceed to Payment →
                   </>
                 )}
             </button>

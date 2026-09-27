@@ -1,8 +1,7 @@
 import {
   Link,
   NavLink,
-  useNavigate,
-  useLocation
+  useNavigate
 } from "react-router-dom";
 
 import { useState } from "react";
@@ -22,30 +21,25 @@ function Navbar() {
 
   // ================= WISHLIST =================
 
-  const { wishlistCount } = useWishlist();
+  const { wishlistCount } =
+    useWishlist();
 
 
   // ================= NAVIGATION =================
 
   const navigate = useNavigate();
 
-  useLocation();
-
 
   // ================= SEARCH STATE =================
 
-  const [search, setSearch] = useState("");
-
-
-  // ================= PROFILE DROPDOWN =================
-
-  const [showDropdown, setShowDropdown] =
-    useState(false);
+  const [search, setSearch] =
+    useState("");
 
 
   // ================= CHECK LOGIN =================
 
-  const token = localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token");
 
 
   // ================= SEARCH FUNCTION =================
@@ -54,7 +48,8 @@ function Navbar() {
 
     e.preventDefault();
 
-    const trimmedSearch = search.trim();
+    const trimmedSearch =
+      search.trim();
 
 
     if (trimmedSearch) {
@@ -70,37 +65,6 @@ function Navbar() {
       navigate("/products");
 
     }
-
-  };
-
-
-  // ================= LOGOUT =================
-
-  const handleLogout = () => {
-
-    // Remove JWT Token
-
-    localStorage.removeItem("token");
-
-
-    // Remove User Information
-
-    localStorage.removeItem("user");
-
-
-    // Close Dropdown
-
-    setShowDropdown(false);
-
-
-    // Success Message
-
-    alert("Logged out successfully! 👋");
-
-
-    // Redirect to Login
-
-    navigate("/login");
 
   };
 
@@ -254,9 +218,7 @@ function Navbar() {
           {cartCount > 0 && (
 
             <span className="cart-count">
-
               {cartCount}
-
             </span>
 
           )}
@@ -268,91 +230,28 @@ function Navbar() {
 
         {token ? (
 
-          <div className="profile-dropdown-container">
+          /*
+            If logged in:
+            Clicking the profile icon directly
+            opens the Profile page.
+          */
 
+          <Link
+            to="/profile"
+            className="profile-menu-btn"
+            title="My Profile"
+          >
 
-            {/* PROFILE BUTTON */}
+            👤
 
-            <button
-              className="profile-menu-btn"
-              onClick={() =>
-                setShowDropdown(!showDropdown)
-              }
-            >
-
-              👤
-
-              <span className="dropdown-arrow">
-
-                ▼
-
-              </span>
-
-            </button>
-
-
-            {/* DROPDOWN MENU */}
-
-            {showDropdown && (
-
-              <div className="profile-dropdown">
-
-
-                {/* MY PROFILE */}
-
-                <Link
-                  to="/profile"
-                  className="dropdown-item"
-                  onClick={() =>
-                    setShowDropdown(false)
-                  }
-                >
-
-                  👤 My Profile
-
-                </Link>
-
-
-                {/* MY ORDERS */}
-
-                <Link
-                  to="/orders"
-                  className="dropdown-item"
-                  onClick={() =>
-                    setShowDropdown(false)
-                  }
-                >
-
-                  📦 My Orders
-
-                </Link>
-
-
-                {/* DIVIDER */}
-
-                <div className="dropdown-divider"></div>
-
-
-                {/* LOGOUT */}
-
-                <button
-                  className="dropdown-item logout-item"
-                  onClick={handleLogout}
-                >
-
-                  🚪 Logout
-
-                </button>
-
-
-              </div>
-
-            )}
-
-
-          </div>
+          </Link>
 
         ) : (
+
+          /*
+            If not logged in:
+            Clicking the profile icon opens Login.
+          */
 
           <Link
             to="/login"

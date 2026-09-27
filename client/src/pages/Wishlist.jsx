@@ -1,16 +1,11 @@
 import { Link } from "react-router-dom";
 
-import {
-  useWishlist
-} from "../context/WishlistContext";
+import { useWishlist } from "../context/WishlistContext";
 
-import {
-  useCart
-} from "../context/CartContext";
+import { useCart } from "../context/CartContext";
 
 
 function Wishlist() {
-
 
   const {
     wishlist,
@@ -21,7 +16,6 @@ function Wishlist() {
   const {
     addToCart
   } = useCart();
-
 
 
   return (
@@ -51,11 +45,9 @@ function Wishlist() {
       </section>
 
 
-
       {/* EMPTY WISHLIST */}
 
       {wishlist.length === 0 ? (
-
 
         <div className="empty-wishlist">
 
@@ -79,37 +71,86 @@ function Wishlist() {
 
         </div>
 
-
       ) : (
-
 
         <section className="wishlist-grid">
 
 
           {wishlist.map((product) => (
 
-
             <div
               className="wishlist-card"
-              key={product.id}
+              key={product._id}
             >
 
 
               {/* PRODUCT IMAGE */}
 
-              <div className="wishlist-image">
+              <div
+                className="wishlist-image"
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  height: "260px",
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background: "#fffaf1"
+                }}
+              >
 
-                <span>
-                  {product.emoji}
-                </span>
+                {product.image ? (
+
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="wishlist-product-image"
+                    style={{
+                      width: "230px",
+                      height: "230px",
+                      maxWidth: "90%",
+                      maxHeight: "90%",
+                      objectFit: "contain",
+                      objectPosition: "center",
+                      display: "block",
+                      margin: 0,
+                      padding: 0
+                    }}
+                  />
+
+                ) : (
+
+                  <span
+                    style={{
+                      fontSize: "75px"
+                    }}
+                  >
+                    {product.emoji || "🍬"}
+                  </span>
+
+                )}
 
 
-                <div className="product-weight">
-                  {product.weight}
-                </div>
+                {/* PRODUCT WEIGHT */}
+
+                {product.weight && (
+
+                  <div
+                    className="product-weight"
+                    style={{
+                      position: "absolute",
+                      top: "15px",
+                      right: "15px",
+                      zIndex: 5
+                    }}
+                  >
+                    {product.weight}
+                  </div>
+
+                )}
 
               </div>
-
 
 
               {/* PRODUCT INFO */}
@@ -117,25 +158,32 @@ function Wishlist() {
               <div className="wishlist-info">
 
 
+                {/* CATEGORY */}
+
                 <p className="product-category">
                   {product.category}
                 </p>
 
+
+                {/* PRODUCT NAME */}
 
                 <h3>
                   {product.name}
                 </h3>
 
 
+                {/* DESCRIPTION */}
+
                 <p>
                   {product.description}
                 </p>
 
 
+                {/* PRICE */}
+
                 <h2>
                   ₹{product.price}
                 </h2>
-
 
 
                 {/* BUTTONS */}
@@ -143,30 +191,31 @@ function Wishlist() {
                 <div className="wishlist-actions">
 
 
+                  {/* ADD TO CART */}
+
                   <button
+                    type="button"
                     className="wishlist-cart-btn"
                     onClick={() =>
                       addToCart(product)
                     }
                   >
-
                     Add to Cart 🛒
-
                   </button>
 
 
+                  {/* REMOVE */}
 
                   <button
+                    type="button"
                     className="remove-wishlist-btn"
                     onClick={() =>
                       removeFromWishlist(
-                        product.id
+                        product._id
                       )
                     }
                   >
-
                     Remove ❤️
-
                   </button>
 
 
@@ -178,12 +227,10 @@ function Wishlist() {
 
             </div>
 
-
           ))}
 
 
         </section>
-
 
       )}
 

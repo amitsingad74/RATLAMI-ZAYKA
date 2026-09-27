@@ -142,7 +142,6 @@ function AdminDashboard() {
     price: "",
     stock: 0,
     weight: "",
-    emoji: "🍬",
     image: "",
     description: "",
     showOnHomepage: false,
@@ -193,7 +192,10 @@ function AdminDashboard() {
       );
     }
 
-    return data.secure_url;
+    return data.secure_url.replace(
+  "/upload/",
+  "/upload/f_auto,q_auto/"
+);
   };
 
   const handleProductImageUpload = async (e) => {
@@ -888,7 +890,6 @@ function AdminDashboard() {
       price: "",
       stock: 0,
       weight: "",
-      emoji: "🍬",
       image: "",
       description: "",
       showOnHomepage: false,
@@ -920,8 +921,7 @@ function AdminDashboard() {
       weight:
         product.weight || "",
 
-      emoji:
-        product.emoji || "🍬",
+      
 
       image:
         product.image || "",
@@ -1019,9 +1019,7 @@ function AdminDashboard() {
             weight:
               formData.weight.trim(),
 
-            emoji:
-              formData.emoji ||
-              "🍬",
+           
 
             image:
               formData.image.trim(),
@@ -1055,7 +1053,7 @@ function AdminDashboard() {
         price: "",
         stock: 0,
         weight: "",
-        emoji: "🍬",
+        
         image: "",
         description: "",
       });
@@ -1157,9 +1155,7 @@ function AdminDashboard() {
               weight:
                 formData.weight.trim(),
 
-              emoji:
-                formData.emoji ||
-                "🍬",
+              
 
               image:
                 formData.image.trim(),
@@ -1200,7 +1196,6 @@ function AdminDashboard() {
           price: "",
           stock: 0,
           weight: "",
-          emoji: "🍬",
           image: "",
           description: "",
           showOnHomepage: false,
@@ -1299,7 +1294,6 @@ function AdminDashboard() {
       price: "",
       stock: 0,
       weight: "",
-      emoji: "🍬",
       image: "",
       description: "",
       showOnHomepage: false,
@@ -1463,7 +1457,7 @@ function AdminDashboard() {
               )
             }
           >
-            📦 Orders
+             Orders
           </button>
 
           <button
@@ -1474,7 +1468,7 @@ function AdminDashboard() {
               )
             }
           >
-            👥 Users
+             Users
           </button>
 
           <button
@@ -1632,21 +1626,7 @@ function AdminDashboard() {
 
             </div>
 
-            <div className="admin-form-group">
-
-              <label>
-                Emoji
-              </label>
-
-              <input
-                type="text"
-                name="emoji"
-                value={formData.emoji}
-                onChange={handleChange}
-                placeholder="🌶️"
-              />
-
-            </div>
+           
 
             <div className="admin-form-group admin-image-upload-group">
 
@@ -1776,7 +1756,7 @@ function AdminDashboard() {
         <div className="admin-stat-card">
 
           <div className="admin-stat-icon">
-            📦
+            
           </div>
 
           <div className="admin-stat-info">
@@ -1836,7 +1816,7 @@ function AdminDashboard() {
         <div className="admin-stat-card">
 
           <div className="admin-stat-icon">
-            🚚
+            
           </div>
 
           <div className="admin-stat-info">
@@ -1870,7 +1850,7 @@ function AdminDashboard() {
             </p>
 
             <h2>
-              Recent Orders 📦
+              Recent Orders 
             </h2>
 
           </div>
@@ -1893,7 +1873,7 @@ function AdminDashboard() {
           <div className="admin-no-recent-orders">
 
             <h3>
-              No Orders Yet 📦
+              No Orders Yet 
             </h3>
 
             <p>
@@ -2162,7 +2142,7 @@ function AdminDashboard() {
           <div className="admin-analytics-summary-card">
 
             <div className="admin-analytics-summary-icon">
-              🚚
+              
             </div>
 
             <div>
@@ -2808,14 +2788,14 @@ function AdminDashboard() {
                         ? `⚠️ Low Stock: ${Number(
                             product.stock
                           )}`
-                        : `📦 Stock: ${Number(
+                        : ` Stock: ${Number(
                             product.stock
                           )}`}
                     </div>
 
                     {product.showOnHomepage && (
                       <div className="admin-homepage-badge">
-                        ⭐ Popular on Homepage
+                         Popular on Homepage
                       </div>
                     )}
 

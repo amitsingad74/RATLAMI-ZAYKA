@@ -220,7 +220,7 @@ router.post(
           typeof emoji === "string" &&
           emoji.trim()
             ? emoji.trim()
-            : "🍬",
+            : "",
 
         image:
           typeof image === "string"
@@ -453,7 +453,7 @@ router.put(
           typeof emoji === "string" &&
           emoji.trim()
             ? emoji.trim()
-            : "🍬";
+            : "";
       }
 
       // ===============================

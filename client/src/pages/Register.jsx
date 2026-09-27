@@ -224,7 +224,7 @@ function Register() {
           </p>
 
           <div className="auth-decoration">
-            🌶️ 🥨 🍬
+            
           </div>
 
         </div>

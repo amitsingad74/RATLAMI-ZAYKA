@@ -12,13 +12,20 @@ function Home() {
   const [categories, setCategories] = useState([]);
   const [popularProducts, setPopularProducts] = useState([]);
 
-  const [loadingCategories, setLoadingCategories] = useState(true);
-  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [loadingCategories, setLoadingCategories] =
+    useState(true);
 
-  const [categoryError, setCategoryError] = useState("");
-  const [productError, setProductError] = useState("");
+  const [loadingProducts, setLoadingProducts] =
+    useState(true);
 
-  const [addingProductId, setAddingProductId] = useState(null);
+  const [categoryError, setCategoryError] =
+    useState("");
+
+  const [productError, setProductError] =
+    useState("");
+
+  const [addingProductId, setAddingProductId] =
+    useState(null);
 
   // =========================================
   // FETCH HOMEPAGE DATA
@@ -42,10 +49,18 @@ function Home() {
           );
         }
 
-        setCategories(Array.isArray(data) ? data : []);
+        setCategories(
+          Array.isArray(data) ? data : []
+        );
       } catch (error) {
-        console.error("Category fetch error:", error);
-        setCategoryError("Unable to load categories.");
+        console.error(
+          "Category fetch error:",
+          error
+        );
+
+        setCategoryError(
+          "Unable to load categories."
+        );
       } finally {
         setLoadingCategories(false);
       }
@@ -64,22 +79,32 @@ function Home() {
 
         if (!response.ok) {
           throw new Error(
-            data.message || "Failed to load products."
+            data.message ||
+              "Failed to load products."
           );
         }
 
-        const products = Array.isArray(data) ? data : [];
+        const products = Array.isArray(data)
+          ? data
+          : [];
 
         // Only products selected from Admin Panel
-        const homepageProducts = products.filter(
-          (product) =>
-            product.showOnHomepage === true
-        );
+        const homepageProducts =
+          products.filter(
+            (product) =>
+              product.showOnHomepage === true
+          );
 
         setPopularProducts(homepageProducts);
       } catch (error) {
-        console.error("Product fetch error:", error);
-        setProductError("Unable to load popular products.");
+        console.error(
+          "Product fetch error:",
+          error
+        );
+
+        setProductError(
+          "Unable to load popular products."
+        );
       } finally {
         setLoadingProducts(false);
       }
@@ -103,7 +128,11 @@ function Home() {
         setAddingProductId(null);
       }, 700);
     } catch (error) {
-      console.error("Add to cart error:", error);
+      console.error(
+        "Add to cart error:",
+        error
+      );
+
       setAddingProductId(null);
     }
   };
@@ -195,7 +224,8 @@ function Home() {
           </div>
 
           <p className="hero-description">
-            Experience the authentic flavours of Ratlam.
+            Experience the authentic flavours of
+            Ratlam.
             <br />
             Premium Ratlami Sev, delicious namkeen,
             <br />
@@ -282,7 +312,8 @@ function Home() {
           </h2>
 
           <p>
-            Discover authentic flavours made with tradition and love.
+            Discover authentic flavours made with
+            tradition and love.
           </p>
         </div>
 
@@ -295,9 +326,7 @@ function Home() {
                 className="category-card"
                 key={item}
               >
-                <div className="category-icon">
-                  🍬
-                </div>
+               
 
                 <h3>
                   Loading...
@@ -313,11 +342,12 @@ function Home() {
 
         {/* CATEGORY ERROR */}
 
-        {!loadingCategories && categoryError && (
-          <div className="home-section-message">
-            {categoryError}
-          </div>
-        )}
+        {!loadingCategories &&
+          categoryError && (
+            <div className="home-section-message">
+              {categoryError}
+            </div>
+          )}
 
         {/* NO CATEGORIES */}
 
@@ -336,9 +366,10 @@ function Home() {
           categories.length > 0 && (
             <div className="category-grid">
               {categories.map((category) => {
-                const categoryImage = getCategoryImage(
-                  category.image
-                );
+                const categoryImage =
+                  getCategoryImage(
+                    category.image
+                  );
 
                 return (
                   <div
@@ -365,6 +396,8 @@ function Home() {
                       {category.description ||
                         "Discover delicious flavours from Ratlam."}
                     </p>
+
+                    {/* CATEGORY FILTER */}
 
                     <Link
                       to={`/products?category=${encodeURIComponent(
@@ -393,7 +426,8 @@ function Home() {
           </h2>
 
           <p>
-            Discover the authentic taste of Ratlam with our most loved products.
+            Discover the authentic taste of Ratlam
+            with our most loved products.
           </p>
 
           <div className="section-decoration">
@@ -438,11 +472,12 @@ function Home() {
 
         {/* PRODUCT ERROR */}
 
-        {!loadingProducts && productError && (
-          <div className="home-section-message">
-            {productError}
-          </div>
-        )}
+        {!loadingProducts &&
+          productError && (
+            <div className="home-section-message">
+              {productError}
+            </div>
+          )}
 
         {/* NO POPULAR PRODUCTS */}
 
@@ -453,7 +488,10 @@ function Home() {
               No popular products selected yet.
               <br />
               Select products using
-              <strong> Show on Homepage </strong>
+              <strong>
+                {" "}
+                Show on Homepage{" "}
+              </strong>
               from the Admin Panel.
             </div>
           )}
@@ -464,62 +502,70 @@ function Home() {
           !productError &&
           popularProducts.length > 0 && (
             <div className="product-grid">
-              {popularProducts.map((product) => (
-                <div
-                  className="product-card"
-                  key={product._id}
-                >
-                  <Link
-                    to={`/products/${product._id}`}
-                    className="product-image"
+              {popularProducts.map(
+                (product) => (
+                  <div
+                    className="product-card"
+                    key={product._id}
                   >
-                    <img
-                      src={getProductImage(product.image)}
-                      alt={product.name}
-                    />
-                  </Link>
+                    <Link
+                      to={`/products/${product._id}`}
+                      className="product-image"
+                    >
+                      <img
+                        src={getProductImage(
+                          product.image
+                        )}
+                        alt={product.name}
+                      />
+                    </Link>
 
-                  <div className="product-info">
-                    <p className="product-category">
-                      {product.category
-                        ? product.category.toUpperCase()
-                        : "RATLAMI SPECIAL"}
-                    </p>
+                    <div className="product-info">
+                      <p className="product-category">
+                        {product.category
+                          ? product.category.toUpperCase()
+                          : "RATLAMI SPECIAL"}
+                      </p>
 
-                    <h3>
-                      {product.name}
-                    </h3>
+                      <h3>
+                        {product.name}
+                      </h3>
 
-                    <p className="product-description">
-                      {product.description}
-                    </p>
+                      <p className="product-description">
+                        {product.description}
+                      </p>
 
-                    <div className="product-bottom">
-                      <span className="price">
-                        ₹{product.price}
-                      </span>
+                      <div className="product-bottom">
+                        <span className="price">
+                          ₹{product.price}
+                        </span>
 
-                      <button
-                        type="button"
-                        className="add-cart-btn"
-                        onClick={() =>
-                          handleAddToCart(product)
-                        }
-                        disabled={
-                          product.stock <= 0 ||
-                          addingProductId === product._id
-                        }
-                      >
-                        {product.stock <= 0
-                          ? "Out of Stock"
-                          : addingProductId === product._id
-                          ? "Added ✓"
-                          : "Add to Cart"}
-                      </button>
+                        <button
+                          type="button"
+                          className="add-cart-btn"
+                          onClick={() =>
+                            handleAddToCart(
+                              product
+                            )
+                          }
+                          disabled={
+                            product.stock <= 0 ||
+                            addingProductId ===
+                              product._id
+                          }
+                        >
+                          {product.stock <= 0
+                            ? "Out of Stock"
+                            : addingProductId ===
+                              product._id
+                            ? "Added ✓"
+                            : "Add to Cart"}
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           )}
 
@@ -533,7 +579,10 @@ function Home() {
 
       {/* ================= OUR STORY SECTION ================= */}
 
-      <section className="our-story">
+      <section
+        className="our-story"
+        id="about"
+      >
         <div className="our-story-content">
           {/* LEFT SIDE */}
 
@@ -552,21 +601,24 @@ function Home() {
             </div>
 
             <p className="story-description">
-              Ratlami Zayeika brings you the traditional taste of Ratlam
-              with carefully prepared namkeen, snacks and sweets.
+              Ratlami Zayeika brings you the
+              traditional taste of Ratlam with
+              carefully prepared namkeen,
+              snacks and sweets.
             </p>
 
             <p className="story-description">
-              Our products are made with love, tradition and the finest
+              Our products are made with love,
+              tradition and the finest
               ingredients.
             </p>
 
-            <button
-              type="button"
-              className="story-button"
-            >
-              Know More <span>→</span>
-            </button>
+            <Link
+  to="/about"
+  className="story-button"
+>
+  Know More <span>→</span>
+</Link>
           </div>
         </div>
       </section>

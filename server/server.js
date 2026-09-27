@@ -187,7 +187,7 @@ app.get(
   "/",
   (req, res) => {
     res.status(200).send(
-      "RATLAMI Zayka Backend is Running! 🌶️"
+      "RATLAMI Zayka Backend is Running! "
     );
   }
 );

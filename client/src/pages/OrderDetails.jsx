@@ -489,28 +489,41 @@ function OrderDetails() {
                     `${order._id}-${index}`
                   }
                 >
-                  <div className="order-item-left">
-                    <span className="order-item-emoji">
-                      {item.product?.emoji ||
-                        "🌶️"}
-                    </span>
+                 <div className="order-item-left">
 
-                    <div>
-                      <h3>
-                        {item.name}
-                      </h3>
+  <div className="order-item-image">
 
-                      <p>
-                        ₹{item.price} ×{" "}
-                        {item.quantity}
-                      </p>
+    {item.image ? (
+      <img
+        src={item.image}
+        alt={item.name}
+        className="order-product-image"
+      />
+    ) : (
+      <span className="order-item-emoji">
+        {item.product?.emoji || "🌶️"}
+      </span>
+    )}
 
-                      <p>
-                        Quantity:{" "}
-                        {item.quantity}
-                      </p>
-                    </div>
-                  </div>
+  </div>
+
+  <div>
+    <h3>
+      {item.name}
+    </h3>
+
+    <p>
+      ₹{item.price} ×{" "}
+      {item.quantity}
+    </p>
+
+    <p>
+      Quantity:{" "}
+      {item.quantity}
+    </p>
+  </div>
+
+</div>
 
                   <strong>
                     ₹

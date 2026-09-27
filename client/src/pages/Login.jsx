@@ -141,7 +141,7 @@ function Login() {
           </p>
 
           <div className="auth-decoration">
-            🌶️ 🥨 🍬
+           
           </div>
 
         </div>

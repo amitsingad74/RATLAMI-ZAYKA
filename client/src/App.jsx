@@ -1,9 +1,15 @@
 import { Routes, Route, Link } from "react-router-dom";
+
 import "./App.css";
 
 import { CartProvider } from "./context/CartContext";
 
 import Navbar from "./components/Navbar";
+
+
+// =====================================================
+// PAGES
+// =====================================================
 
 import Wishlist from "./pages/Wishlist";
 import Home from "./pages/Home";
@@ -18,13 +24,29 @@ import ProductDetails from "./pages/ProductDetails";
 import ContactUs from "./pages/ContactUs";
 import OrderDetails from "./pages/OrderDetails";
 
+
+// =====================================================
+// PROTECTED ROUTE
+// =====================================================
+
 import ProtectedRoute from "./components/ProtectedRoute";
+
+
+// =====================================================
+// ADMIN PAGES
+// =====================================================
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminOrders from "./pages/AdminOrders";
 import AdminUsers from "./pages/AdminUsers";
 import AdminOrderDetails from "./pages/AdminOrderDetails";
 import AdminContactMessages from "./pages/AdminContactMessages";
+
+
+// =====================================================
+// POLICY / INFORMATION PAGES
+// =====================================================
+
 import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import RefundCancellationPolicy from "./pages/RefundCancellationPolicy";
@@ -39,19 +61,35 @@ import AboutUs from "./pages/AboutUs";
 function Footer() {
   return (
     <footer className="footer">
+
       <div className="footer-container">
 
-        {/* LOGO */}
+
+        {/* =================================================
+            LOGO
+        ================================================= */}
+
         <div className="footer-logo">
+
           <div className="footer-brand">
+
             RATLAMI
+
             <br />
-            <span>ZAYEKA</span>
+
+            <span>
+              ZAYEKA
+            </span>
+
           </div>
+
         </div>
 
 
-        {/* LINKS */}
+        {/* =================================================
+            LINKS
+        ================================================= */}
+
         <div className="footer-links">
 
           <Link to="/">
@@ -60,11 +98,13 @@ function Footer() {
 
           <span>|</span>
 
+
           <Link to="/products">
             Products
           </Link>
 
           <span>|</span>
+
 
           <a href="#categories">
             Categories
@@ -72,11 +112,13 @@ function Footer() {
 
           <span>|</span>
 
+
           <Link to="/about">
             About Us
           </Link>
 
           <span>|</span>
+
 
           <Link to="/contact">
             Contact
@@ -84,11 +126,13 @@ function Footer() {
 
           <span>|</span>
 
+
           <Link to="/terms">
             Terms & Conditions
           </Link>
 
           <span>|</span>
+
 
           <Link to="/privacy-policy">
             Privacy Policy
@@ -96,11 +140,13 @@ function Footer() {
 
           <span>|</span>
 
+
           <Link to="/refund-cancellation">
             Refund & Cancellation
           </Link>
 
           <span>|</span>
+
 
           <Link to="/shipping-delivery">
             Shipping & Delivery
@@ -109,8 +155,14 @@ function Footer() {
         </div>
 
 
-        {/* RIGHT SIDE */}
+        {/* =================================================
+            RIGHT SIDE
+        ================================================= */}
+
         <div className="footer-right">
+
+
+          {/* SOCIAL ICONS */}
 
           <div className="footer-social">
 
@@ -128,6 +180,9 @@ function Footer() {
 
           </div>
 
+
+          {/* COPYRIGHT */}
+
           <p>
             © 2026 RATLAMI ZAYEKA. All rights reserved.
           </p>
@@ -135,22 +190,35 @@ function Footer() {
         </div>
 
       </div>
+
     </footer>
   );
 }
+
 
 // =====================================================
 // APP
 // =====================================================
 
 function App() {
+
   return (
+
     <CartProvider>
 
-      {/* NAVBAR HAS ACCESS TO useCart() */}
+      {/* =================================================
+          NAVBAR
+      ================================================= */}
+
       <Navbar />
 
+
+      {/* =================================================
+          ROUTES
+      ================================================= */}
+
       <Routes>
+
 
         {/* =================================================
             HOME
@@ -161,6 +229,7 @@ function App() {
           element={<Home />}
         />
 
+
         {/* =================================================
             PRODUCTS
         ================================================= */}
@@ -169,6 +238,7 @@ function App() {
           path="/products"
           element={<Products />}
         />
+
 
         {/* =================================================
             PRODUCT DETAILS
@@ -179,6 +249,7 @@ function App() {
           element={<ProductDetails />}
         />
 
+
         {/* =================================================
             CART
         ================================================= */}
@@ -187,6 +258,7 @@ function App() {
           path="/cart"
           element={<Cart />}
         />
+
 
         {/* =================================================
             LOGIN
@@ -197,6 +269,7 @@ function App() {
           element={<Login />}
         />
 
+
         {/* =================================================
             REGISTER
         ================================================= */}
@@ -205,6 +278,7 @@ function App() {
           path="/register"
           element={<Register />}
         />
+
 
         {/* =================================================
             WISHLIST
@@ -215,8 +289,9 @@ function App() {
           element={<Wishlist />}
         />
 
+
         {/* =================================================
-            CONTACT US
+            CONTACT
         ================================================= */}
 
         <Route
@@ -224,8 +299,10 @@ function App() {
           element={<ContactUs />}
         />
 
+
         {/* =================================================
-            PROTECTED PROFILE
+            PROFILE
+            PROTECTED
         ================================================= */}
 
         <Route
@@ -237,8 +314,10 @@ function App() {
           }
         />
 
+
         {/* =================================================
-            PROTECTED ORDERS
+            ORDERS
+            PROTECTED
         ================================================= */}
 
         <Route
@@ -250,8 +329,10 @@ function App() {
           }
         />
 
+
         {/* =================================================
-            PROTECTED ORDER DETAILS
+            ORDER DETAILS
+            PROTECTED
         ================================================= */}
 
         <Route
@@ -263,8 +344,10 @@ function App() {
           }
         />
 
+
         {/* =================================================
-            PROTECTED CHECKOUT
+            CHECKOUT
+            PROTECTED
         ================================================= */}
 
         <Route
@@ -276,6 +359,7 @@ function App() {
           }
         />
 
+
         {/* =================================================
             ADMIN DASHBOARD
         ================================================= */}
@@ -284,6 +368,7 @@ function App() {
           path="/admin"
           element={<AdminDashboard />}
         />
+
 
         {/* =================================================
             ADMIN ORDERS
@@ -294,6 +379,7 @@ function App() {
           element={<AdminOrders />}
         />
 
+
         {/* =================================================
             ADMIN ORDER DETAILS
         ================================================= */}
@@ -302,6 +388,7 @@ function App() {
           path="/admin/orders/:id"
           element={<AdminOrderDetails />}
         />
+
 
         {/* =================================================
             ADMIN USERS
@@ -312,6 +399,7 @@ function App() {
           element={<AdminUsers />}
         />
 
+
         {/* =================================================
             ADMIN CONTACT MESSAGES
         ================================================= */}
@@ -321,53 +409,68 @@ function App() {
           element={<AdminContactMessages />}
         />
 
+
+        {/* =================================================
+            TERMS & CONDITIONS
+        ================================================= */}
+
         <Route
-  path="/terms"
-  element={<TermsAndConditions />}
-/>
+          path="/terms"
+          element={<TermsAndConditions />}
+        />
 
-<Route
-  path="/privacy-policy"
-  element={<PrivacyPolicy />}
-/>
 
-<Route
-  path="/refund-cancellation"
-  element={<RefundCancellationPolicy />}
-/>
+        {/* =================================================
+            PRIVACY POLICY
+        ================================================= */}
 
-<Route
-  path="/terms"
-  element={<TermsAndConditions />}
-/>
+        <Route
+          path="/privacy-policy"
+          element={<PrivacyPolicy />}
+        />
 
-<Route
-  path="/privacy-policy"
-  element={<PrivacyPolicy />}
-/>
 
-<Route
-  path="/refund-cancellation"
-  element={<RefundCancellationPolicy />}
-/>
+        {/* =================================================
+            REFUND & CANCELLATION
+        ================================================= */}
 
-<Route
-  path="/shipping-delivery"
-  element={<ShippingDeliveryPolicy />}
-/>
+        <Route
+          path="/refund-cancellation"
+          element={<RefundCancellationPolicy />}
+        />
 
-<Route
-  path="/about"
-  element={<AboutUs />}
-/>
+
+        {/* =================================================
+            SHIPPING & DELIVERY
+        ================================================= */}
+
+        <Route
+          path="/shipping-delivery"
+          element={<ShippingDeliveryPolicy />}
+        />
+
+
+        {/* =================================================
+            ABOUT US
+        ================================================= */}
+
+        <Route
+          path="/about"
+          element={<AboutUs />}
+        />
 
       </Routes>
 
-      {/* FOOTER */}
+
+      {/* =================================================
+          FOOTER
+      ================================================= */}
+
       <Footer />
 
     </CartProvider>
   );
 }
+
 
 export default App;

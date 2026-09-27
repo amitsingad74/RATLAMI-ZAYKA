@@ -70,7 +70,7 @@ function ProductDetails() {
       <div className="product-details-page">
         <div className="products-loading">
           <div className="product-details-loading-icon">
-            🌶️
+            
           </div>
 
           <h2>
@@ -248,7 +248,7 @@ function ProductDetails() {
 
           <div className="product-details-trust">
             <span>
-              ⭐ Authentic Ratlami Taste
+               Authentic Ratlami Taste
             </span>
 
             <span>
@@ -306,7 +306,7 @@ function ProductDetails() {
               ? "❌ Currently Out of Stock"
               : isLowStock
               ? `⚠️ Hurry! Only ${stock} left in stock`
-              : `📦 ${stock} units available`}
+              : `${stock} units available`}
           </div>
 
           {/* =================================================
@@ -364,7 +364,7 @@ function ProductDetails() {
 
             <div className="product-benefit">
               <span className="product-benefit-icon">
-                🚚
+                
               </span>
 
               <div>
@@ -380,7 +380,7 @@ function ProductDetails() {
 
             <div className="product-benefit">
               <span className="product-benefit-icon">
-                🌶️
+                
               </span>
 
               <div>

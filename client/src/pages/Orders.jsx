@@ -164,7 +164,7 @@ function Orders() {
       <div className="orders-page">
         <div className="empty-orders">
           <h1>
-            Loading Orders... 📦
+            Loading Orders... 
           </h1>
 
           <p>
@@ -210,7 +210,7 @@ function Orders() {
     return (
       <div className="orders-page">
         <div className="empty-orders">
-          <h1>📦 No Orders Yet</h1>
+          <h1> No Orders Yet</h1>
 
           <p>
             You haven't placed any orders yet.
@@ -278,7 +278,7 @@ function Orders() {
                 </h2>
 
                 <p>
-                  📅{" "}
+                  {" "}
                   {new Date(
                     order.createdAt
                   ).toLocaleString()}
@@ -304,23 +304,43 @@ function Orders() {
                       `${order._id}-${index}`
                     }
                   >
+
                     <div className="order-item-left">
-                      <span className="order-item-emoji">
-                        {item.product?.emoji ||
-                          "🌶️"}
-                      </span>
 
-                      <div>
-                        <h3>
-                          {item.name}
-                        </h3>
+  <div className="order-item-image">
 
-                        <p>
-                          Quantity:{" "}
-                          {item.quantity}
-                        </p>
-                      </div>
-                    </div>
+    {item.image ? (
+
+      <img
+        src={item.image}
+        alt={item.name}
+        className="order-product-image"
+      />
+
+    ) : (
+
+      <span className="order-item-emoji">
+        {item.product?.emoji || "🌶️"}
+      </span>
+
+    )}
+
+  </div>
+
+
+  <div>
+
+    <h3>
+      {item.name}
+    </h3>
+
+    <p>
+      ₹{item.price} × {item.quantity}
+    </p>
+
+  </div>
+
+</div>
 
                     <strong>
                       ₹
