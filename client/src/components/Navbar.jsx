@@ -14,35 +14,29 @@ import logo from "../assets/logo.png";
 
 function Navbar() {
 
-  // ================= CART =================
-
   const { cartCount } = useCart();
-
-
-  // ================= WISHLIST =================
 
   const { wishlistCount } =
     useWishlist();
 
-
-  // ================= NAVIGATION =================
-
   const navigate = useNavigate();
-
-
-  // ================= SEARCH STATE =================
 
   const [search, setSearch] =
     useState("");
 
+  const [mobileMenuOpen, setMobileMenuOpen] =
+    useState(false);
 
-  // ================= CHECK LOGIN =================
+  const [mobileSearchOpen, setMobileSearchOpen] =
+    useState(false);
 
   const token =
     localStorage.getItem("token");
 
 
-  // ================= SEARCH FUNCTION =================
+  /* =====================================================
+     SEARCH
+     ===================================================== */
 
   const handleSearch = (e) => {
 
@@ -51,228 +45,433 @@ function Navbar() {
     const trimmedSearch =
       search.trim();
 
-
-    if (trimmedSearch) {
-
-      navigate(
-        `/products?search=${encodeURIComponent(
-          trimmedSearch
-        )}`
-      );
-
-    } else {
-
-      navigate("/products");
-
+    if (!trimmedSearch) {
+      return;
     }
+
+    setMobileSearchOpen(false);
+
+    navigate(
+      `/products?search=${encodeURIComponent(
+        trimmedSearch
+      )}`
+    );
+
+  };
+
+
+  /* =====================================================
+     MOBILE SEARCH TOGGLE
+     ===================================================== */
+
+  const toggleMobileSearch = () => {
+
+    setMobileSearchOpen(
+      (previous) => !previous
+    );
+
+    setMobileMenuOpen(false);
+
+  };
+
+
+  /* =====================================================
+     MOBILE MENU
+     ===================================================== */
+
+  const closeMobileMenu = () => {
+
+    setMobileMenuOpen(false);
 
   };
 
 
   return (
-
-    <nav className="navbar">
-
-
-      {/* ================= LOGO ================= */}
-
-      <div className="logo">
-
-        <Link to="/">
-
-          <img
-            src={logo}
-            alt="Ratlami Zayka"
-          />
-
-        </Link>
-
-      </div>
+    <>
+      <nav className="rz-navbar">
 
 
-      {/* ================= NAVIGATION LINKS ================= */}
+        {/* =================================================
+            MOBILE MENU BUTTON
+            ================================================= */}
 
-      <div className="nav-links">
+        <button
+          type="button"
+          className="rz-mobile-menu-btn"
 
+          onClick={() => {
 
-        {/* HOME */}
+            setMobileMenuOpen(
+              (previous) => !previous
+            );
 
-        <NavLink
-          to="/"
-          className={({ isActive }) =>
-            isActive
-              ? "nav-link active"
-              : "nav-link"
+            setMobileSearchOpen(false);
+
+          }}
+
+          aria-label={
+            mobileMenuOpen
+              ? "Close menu"
+              : "Open menu"
           }
         >
-          Home
-        </NavLink>
+          {mobileMenuOpen
+            ? "✕"
+            : "☰"}
+        </button>
 
 
-        {/* PRODUCTS */}
+        {/* =================================================
+            LOGO
+            ================================================= */}
 
-        <NavLink
-          to="/products"
-          className={({ isActive }) =>
-            isActive
-              ? "nav-link active"
-              : "nav-link"
-          }
-        >
-          Products
-        </NavLink>
+        <div className="rz-logo">
 
+          <Link
+            to="/"
+            onClick={() => {
+              closeMobileMenu();
+              setMobileSearchOpen(false);
+            }}
+          >
 
-        {/* CATEGORIES */}
+            <img
+              src={logo}
+              alt="Ratlami Zayka"
+            />
 
-        <a
-          href="/#categories"
-          className="nav-link"
-        >
-          Categories
-        </a>
+          </Link>
 
-
-        {/* ABOUT US */}
-
-        <a
-          href="/#about"
-          className="nav-link"
-        >
-          About Us
-        </a>
+        </div>
 
 
-      </div>
+        {/* =================================================
+            DESKTOP NAV LINKS
+            ================================================= */}
 
+        <div className="rz-nav-links">
 
-      {/* ================= NAVBAR ACTIONS ================= */}
-
-      <div className="nav-actions">
-
-
-        {/* ================= SEARCH ================= */}
-
-        <form
-          className="search-box"
-          onSubmit={handleSearch}
-        >
-
-          <input
-            type="text"
-            placeholder="Search for sweets, namkeen..."
-            value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive
+                ? "rz-nav-link active"
+                : "rz-nav-link"
             }
-          />
+          >
+            Home
+          </NavLink>
 
+
+          <NavLink
+            to="/products"
+            className={({ isActive }) =>
+              isActive
+                ? "rz-nav-link active"
+                : "rz-nav-link"
+            }
+          >
+            Products
+          </NavLink>
+
+
+          <a
+            href="/#categories"
+            className="rz-nav-link"
+          >
+            Categories
+          </a>
+
+
+          <a
+            href="/#about"
+            className="rz-nav-link"
+          >
+            About Us
+          </a>
+
+        </div>
+
+
+        {/* =================================================
+            ACTIONS
+            ================================================= */}
+
+        <div className="rz-nav-actions">
+
+
+          {/* ===============================================
+              DESKTOP SEARCH
+              =============================================== */}
+
+          <form
+            className="rz-search-box rz-desktop-search"
+
+            onSubmit={handleSearch}
+          >
+
+            <input
+              type="text"
+              placeholder="Search for sweets, namkeen..."
+              value={search}
+
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+            />
+
+            <button
+              type="submit"
+              className="rz-search-btn"
+              aria-label="Search"
+            >
+              🔍
+            </button>
+
+          </form>
+
+
+          {/* ===============================================
+              MOBILE SEARCH BUTTON
+              =============================================== */}
 
           <button
-            type="submit"
-            className="search-btn"
+            type="button"
+            className="rz-mobile-search-btn"
+
+            onClick={
+              toggleMobileSearch
+            }
+
+            aria-label="Search"
           >
             🔍
           </button>
 
-        </form>
 
-
-        {/* ================= WISHLIST ================= */}
-
-        <Link
-          to="/wishlist"
-          className="wishlist-navbar"
-          title="Wishlist"
-        >
-
-          <span className="wishlist-icon">
-            ❤️
-          </span>
-
-
-          {wishlistCount > 0 && (
-
-            <span className="wishlist-count">
-              {wishlistCount}
-            </span>
-
-          )}
-
-        </Link>
-
-
-        {/* ================= CART ================= */}
-
-        <Link
-          to="/cart"
-          className="cart-button"
-          title="Cart"
-        >
-
-          <span className="cart-icon">
-            🛒
-          </span>
-
-
-          {cartCount > 0 && (
-
-            <span className="cart-count">
-              {cartCount}
-            </span>
-
-          )}
-
-        </Link>
-
-
-        {/* ================= PROFILE ================= */}
-
-        {token ? (
-
-          /*
-            If logged in:
-            Clicking the profile icon directly
-            opens the Profile page.
-          */
+          {/* ===============================================
+              WISHLIST
+              =============================================== */}
 
           <Link
-            to="/profile"
-            className="profile-menu-btn"
-            title="My Profile"
+            to="/wishlist"
+            className="rz-wishlist"
+            title="Wishlist"
           >
 
-            👤
+            <span>
+              ❤️
+            </span>
+
+            {wishlistCount > 0 && (
+
+              <span className="rz-count rz-wishlist-count">
+                {wishlistCount}
+              </span>
+
+            )}
 
           </Link>
 
-        ) : (
 
-          /*
-            If not logged in:
-            Clicking the profile icon opens Login.
-          */
+          {/* ===============================================
+              CART
+              =============================================== */}
 
           <Link
-            to="/login"
-            className="profile-button"
-            title="Login"
+            to="/cart"
+            className="rz-cart"
+            title="Cart"
           >
 
-            👤
+            <span>
+              🛒
+            </span>
+
+            {cartCount > 0 && (
+
+              <span className="rz-count rz-cart-count">
+                {cartCount}
+              </span>
+
+            )}
 
           </Link>
 
-        )}
+
+          {/* ===============================================
+              PROFILE
+              =============================================== */}
+
+          {token ? (
+
+            <Link
+              to="/profile"
+              className="rz-profile"
+              title="My Profile"
+            >
+              👤
+            </Link>
+
+          ) : (
+
+            <Link
+              to="/login"
+              className="rz-profile"
+              title="Login"
+            >
+              👤
+            </Link>
+
+          )}
+
+        </div>
+
+      </nav>
 
 
-      </div>
+      {/* ===================================================
+          MOBILE SEARCH PANEL
+          =================================================== */}
+
+      {mobileSearchOpen && (
+
+        <div className="rz-mobile-search-panel">
+
+          <form
+            onSubmit={handleSearch}
+          >
+
+            <input
+              type="text"
+              placeholder="Search for sweets, namkeen..."
+
+              value={search}
+
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+
+              autoFocus
+            />
+
+            <button
+              type="submit"
+              aria-label="Search"
+            >
+              🔍
+            </button>
+
+          </form>
+
+        </div>
+
+      )}
 
 
-    </nav>
+      {/* ===================================================
+          MOBILE MENU
+          =================================================== */}
 
+      {mobileMenuOpen && (
+
+        <div className="rz-mobile-menu">
+
+          <NavLink
+            to="/"
+
+            className={({ isActive }) =>
+              isActive
+                ? "rz-mobile-menu-link active"
+                : "rz-mobile-menu-link"
+            }
+
+            onClick={
+              closeMobileMenu
+            }
+          >
+
+            <span>
+              Home
+            </span>
+
+            <span>
+              ›
+            </span>
+
+          </NavLink>
+
+
+          <NavLink
+            to="/products"
+
+            className={({ isActive }) =>
+              isActive
+                ? "rz-mobile-menu-link active"
+                : "rz-mobile-menu-link"
+            }
+
+            onClick={
+              closeMobileMenu
+            }
+          >
+
+            <span>
+              Products
+            </span>
+
+            <span>
+              ›
+            </span>
+
+          </NavLink>
+
+
+          <a
+            href="/#categories"
+            className="rz-mobile-menu-link"
+
+            onClick={
+              closeMobileMenu
+            }
+          >
+
+            <span>
+              Categories
+            </span>
+
+            <span>
+              ›
+            </span>
+
+          </a>
+
+
+          <a
+            href="/#about"
+            className="rz-mobile-menu-link"
+
+            onClick={
+              closeMobileMenu
+            }
+          >
+
+            <span>
+              About Us
+            </span>
+
+            <span>
+              ›
+            </span>
+
+          </a>
+
+        </div>
+
+      )}
+
+    </>
   );
-
 }
 
 

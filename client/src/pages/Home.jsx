@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-
-import ratlamiSev from "../assets/ratlami-sev.png";
-import heroBg from "../assets/hero.png";
 import API_URL from "../config/api";
 
 function Home() {
@@ -184,23 +181,33 @@ function Home() {
       <section
         className="hero"
         id="home"
-        style={{
-          backgroundImage: `
-            linear-gradient(
-              90deg,
-              rgba(3, 22, 43, 0.98) 0%,
-              rgba(3, 22, 43, 0.96) 42%,
-              rgba(3, 22, 43, 0.45) 100%
-            ),
-            url(${heroBg})
-          `,
-        }}
       >
-        {/* Background Overlay */}
+        {/* HERO VIDEO */}
 
-        <div className="hero-overlay"></div>
+        <div className="hero-video-wrapper">
+          <video
+            className="hero-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+          >
+            <source
+              src="/videos/ratlami-hero.mp4"
+              type="video/mp4"
+            />
 
-        {/* LEFT SIDE */}
+            Your browser does not support
+            the video tag.
+          </video>
+        </div>
+
+        {/* VIDEO OVERLAY */}
+
+        <div className="hero-video-overlay"></div>
+
+        {/* HERO CONTENT */}
 
         <div className="hero-left">
           <p className="hero-tag">
@@ -257,43 +264,6 @@ function Home() {
             With Love ♡
           </p>
         </div>
-
-        {/* RIGHT SIDE */}
-
-        <div className="hero-right">
-          {/* Ratlami Sev Image */}
-
-          <img
-            src={ratlamiSev}
-            alt="Authentic Ratlami Sev"
-            className="hero-sev-image"
-          />
-
-          {/* Original Tag */}
-
-          <div className="original-tag">
-            <span>
-              Original
-            </span>
-
-            <strong>
-              Ratlami Sev
-            </strong>
-
-            <small>
-              Same Real Taste
-            </small>
-          </div>
-
-          {/* Spicy Badge */}
-
-          <div className="spicy-badge">
-            <p>SPICY</p>
-            <p>CRUNCHY</p>
-            <p>AUTHENTIC</p>
-            <span>⌣</span>
-          </div>
-        </div>
       </section>
 
       {/* ================= CATEGORY SECTION ================= */}
@@ -326,8 +296,6 @@ function Home() {
                 className="category-card"
                 key={item}
               >
-               
-
                 <h3>
                   Loading...
                 </h3>
@@ -384,7 +352,7 @@ function Home() {
                           className="homepage-category-image"
                         />
                       ) : (
-                        "🍬"
+                        ""
                       )}
                     </div>
 
@@ -557,9 +525,9 @@ function Home() {
                           {product.stock <= 0
                             ? "Out of Stock"
                             : addingProductId ===
-                              product._id
-                            ? "Added ✓"
-                            : "Add to Cart"}
+                                product._id
+                              ? "Added ✓"
+                              : "Add to Cart"}
                         </button>
                       </div>
                     </div>
@@ -614,11 +582,11 @@ function Home() {
             </p>
 
             <Link
-  to="/about"
-  className="story-button"
->
-  Know More <span>→</span>
-</Link>
+              to="/about"
+              className="story-button"
+            >
+              Know More <span>→</span>
+            </Link>
           </div>
         </div>
       </section>
