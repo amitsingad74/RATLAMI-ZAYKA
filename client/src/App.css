@@ -17053,87 +17053,6 @@ input {
 }
 
 /* =====================================================
-   OUR STORY - MOBILE
-===================================================== */
-
-@media (max-width: 768px) {
-
-  .our-story {
-    min-height: auto;
-    width: 100%;
-    background-size: cover;
-    background-position: center center;
-    display: flex;
-    align-items: center;
-    overflow: visible;
-  }
-
-  .our-story-content {
-    width: 100%;
-    max-width: 100%;
-    padding: 50px 7%;
-  }
-
-  .our-story-text {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .story-tag {
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    margin-bottom: 12px;
-  }
-
-  .our-story-text h2 {
-    font-size: 32px;
-    line-height: 1.2;
-    margin-bottom: 15px;
-  }
-
-  .story-divider {
-    width: 100%;
-    max-width: 280px;
-    margin: 18px 0 20px;
-  }
-
-  .story-description {
-    font-size: 15px;
-    line-height: 1.7;
-    margin: 8px 0;
-  }
-
-  .story-button {
-    margin-top: 22px;
-    padding: 13px 24px;
-    font-size: 15px;
-  }
-
-}
-
-@media (max-width: 480px) {
-
-  .our-story-content {
-    padding: 45px 6%;
-  }
-
-  .our-story-text h2 {
-    font-size: 28px;
-  }
-
-  .story-description {
-    font-size: 14px;
-    line-height: 1.65;
-  }
-
-  .story-button {
-    width: 100%;
-    max-width: 240px;
-  }
-
-}
-
-/* =====================================================
    MOBILE HERO - COMPACT SHOPPING APP LAYOUT
 ===================================================== */
 
@@ -18964,31 +18883,6 @@ h4 {
 .add-cart-btn:hover {
   background: #d99b2b !important;
   color: #fff !important;
-}
-
-/* -------------------------
-   STORY / COMMON CREAM SECTIONS
-------------------------- */
-
-.our-story {
-  min-height: 300px !important;
-  border: 0 !important;
-}
-
-.our-story-content {
-  padding: 45px 7% !important;
-}
-
-.our-story-text {
-  width: 48% !important;
-}
-
-.our-story-text h2 {
-  font-size: 34px !important;
-}
-
-.story-description {
-  font-size: 14px !important;
 }
 
 /* -------------------------
@@ -24509,75 +24403,6 @@ body,
 
   .discount-number {
     font-size: 48px !important;
-  }
-
-
-  /* =======================================================
-     OUR STORY
-  ======================================================= */
-
-  .our-story-content {
-
-    width: 100% !important;
-
-    display: flex !important;
-
-    flex-direction: column !important;
-
-    gap: 35px !important;
-  }
-
-
-  .story-image,
-  .story-content,
-  .our-story-text {
-
-    width: 100% !important;
-
-    max-width: 100% !important;
-  }
-
-
-  .story-circle {
-
-    width: 240px !important;
-    height: 240px !important;
-
-    margin: 0 auto !important;
-  }
-
-
-  .story-circle h3 {
-
-    font-size: 27px !important;
-  }
-
-
-  .story-content h2,
-  .our-story-text h2 {
-
-    font-size: 34px !important;
-
-    line-height: 1.15 !important;
-  }
-
-
-  .story-description {
-
-    font-size: 14px !important;
-
-    line-height: 1.7 !important;
-  }
-
-
-  .story-button {
-
-    width: 210px !important;
-
-    display: inline-flex !important;
-
-    align-items: center !important;
-    justify-content: center !important;
   }
 
 
@@ -37350,4 +37175,1634 @@ body {
          margin-top: 90px !important;
     }
 
+}
+
+/* ONLY FIX NAVBAR → VIDEO GAP */
+
+.hero {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.hero-video-wrapper {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* View All Products button - mobile fix */
+.view-all-products {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 210px !important;
+  height: 54px !important;
+
+  margin: 12px auto 24px !important;
+  padding: 0 !important;
+
+  box-sizing: border-box !important;
+
+  border: 1px solid #d99a22 !important;
+  border-radius: 12px !important;
+
+  background: transparent !important;
+
+  color: #e9ad36 !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+
+  line-height: 1 !important;
+  text-align: center !important;
+}
+
+.view-all-products:hover {
+  background: #f4b83f !important;
+  color: #17283b !important;
+}
+
+/* =========================================
+   MOBILE POPULAR PRODUCTS
+   3 PRODUCTS VISIBLE
+   HIDE SLIDE ARROWS
+   ========================================= */
+
+@media (max-width: 767px) {
+
+  /* Show 3 products in one row */
+  .products .product-grid {
+    display: grid !important;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+
+    gap: 8px !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+    overflow: hidden !important;
+  }
+
+  /* Keep cards inside the 3 columns */
+  .products .product-grid .product-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+
+    margin: 0 !important;
+
+    border-radius: 10px !important;
+
+    transform: none !important;
+  }
+
+  /* Don't let product content overflow */
+  .products .product-grid .product-info {
+    min-width: 0 !important;
+    padding: 10px !important;
+  }
+
+  .products .product-grid .product-card h3 {
+    font-size: 14px !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .products .product-grid .product-description {
+    font-size: 10px !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Smaller product image so 3 cards fit nicely */
+  .products .product-grid .product-image {
+    width: 100% !important;
+    height: 150px !important;
+  }
+
+  .products .product-grid .product-image img {
+    width: 100% !important;
+    height: 100% !important;
+
+    object-fit: contain !important;
+
+    padding: 5px !important;
+  }
+
+  /* Smaller price/button area */
+  .products .product-grid .product-bottom {
+    gap: 4px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .products .product-grid .price {
+    font-size: 14px !important;
+  }
+
+  .products .product-grid .add-cart-btn {
+    font-size: 9px !important;
+
+    padding: 6px 7px !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  /* =====================================
+     HIDE CAROUSEL ARROWS ON MOBILE
+     ===================================== */
+
+  .products .product-arrow,
+  .products .product-arrows,
+  .products .carousel-arrow,
+  .products .carousel-btn,
+  .products .slider-arrow,
+  .products .slider-btn,
+  .products .left-arrow,
+  .products .right-arrow,
+  .products .prev,
+  .products .next {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+/* =========================================================
+   MOBILE POPULAR PRODUCTS
+   3 CARDS VISIBLE + FINGER SWIPE
+========================================================= */
+
+@media (max-width: 767px) {
+
+  /* -----------------------------------------
+     HIDE ARROWS
+  ----------------------------------------- */
+
+  .rz-popular-arrow {
+    display: none !important;
+  }
+
+
+  /* -----------------------------------------
+     CAROUSEL VIEWPORT
+     User can swipe with finger
+  ----------------------------------------- */
+
+  .rz-popular-carousel {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+
+    -webkit-overflow-scrolling: touch !important;
+
+    scroll-behavior: smooth !important;
+
+    scrollbar-width: none !important;
+
+    touch-action: pan-x !important;
+
+    padding: 0 !important;
+  }
+
+  .rz-popular-carousel::-webkit-scrollbar {
+    display: none !important;
+  }
+
+
+  /* -----------------------------------------
+     HORIZONTAL TRACK
+     DO NOT USE GRID
+  ----------------------------------------- */
+
+  .rz-popular-track {
+    display: flex !important;
+
+    flex-direction: row !important;
+
+    flex-wrap: nowrap !important;
+
+    gap: 8px !important;
+
+    width: max-content !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    transform: none !important;
+  }
+
+
+  /* -----------------------------------------
+     EXACTLY 3 CARDS VISIBLE
+  ----------------------------------------- */
+
+  .rz-popular-card {
+    flex: 0 0
+      calc(
+        (100vw - 58px) / 3
+      ) !important;
+
+    width: calc(
+      (100vw - 58px) / 3
+    ) !important;
+
+    min-width: calc(
+      (100vw - 58px) / 3
+    ) !important;
+
+    max-width: calc(
+      (100vw - 58px) / 3
+    ) !important;
+
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+
+    border-radius: 10px !important;
+
+    overflow: hidden !important;
+  }
+
+
+  /* -----------------------------------------
+     PRODUCT IMAGE
+  ----------------------------------------- */
+
+  .rz-popular-image {
+    display: block !important;
+
+    width: 100% !important;
+
+    height: 145px !important;
+
+    overflow: hidden !important;
+  }
+
+  .rz-popular-image img {
+    display: block !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    object-fit: contain !important;
+
+    padding: 4px !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* -----------------------------------------
+     PRODUCT INFO
+  ----------------------------------------- */
+
+  .rz-popular-info {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    padding: 9px 7px !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  .rz-popular-category {
+    font-size: 8px !important;
+
+    line-height: 1.2 !important;
+
+    margin: 0 0 5px !important;
+
+    white-space: nowrap !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+  }
+
+
+  .rz-popular-info h3 {
+    font-size: 13px !important;
+
+    line-height: 1.2 !important;
+
+    margin: 0 0 5px !important;
+
+    white-space: nowrap !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+  }
+
+
+  .rz-popular-description {
+    font-size: 9px !important;
+
+    line-height: 1.3 !important;
+
+    margin: 0 0 8px !important;
+
+    white-space: nowrap !important;
+
+    overflow: hidden !important;
+
+    text-overflow: ellipsis !important;
+  }
+
+
+  /* -----------------------------------------
+     PRICE + CART
+  ----------------------------------------- */
+
+  .rz-popular-bottom {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    align-items: stretch !important;
+
+    gap: 5px !important;
+  }
+
+  .rz-popular-price {
+    font-size: 13px !important;
+
+    line-height: 1 !important;
+  }
+
+  .rz-popular-cart {
+    width: 100% !important;
+
+    min-width: 0 !important;
+
+    padding: 6px 3px !important;
+
+    font-size: 8px !important;
+
+    white-space: nowrap !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* -----------------------------------------
+     CAROUSEL WRAPPER
+  ----------------------------------------- */
+
+  .rz-popular-carousel-wrapper {
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    overflow: hidden !important;
+
+    padding: 0 !important;
+
+    margin: 0 !important;
+  }
+}
+/* =========================================================
+   ABOUT / OUR STORY
+   MOBILE FINAL
+========================================================= */
+
+@media (max-width: 767px) {
+
+  .our-story {
+    position: relative !important;
+
+    width: 100% !important;
+    height: 535px !important;
+    min-height: 535px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: block !important;
+    overflow: hidden !important;
+
+    background-color: #f8f1e5 !important;
+
+    background-image: url("/images/our-story-bg.png") !important;
+    background-repeat: no-repeat !important;
+
+    /*
+      Make the original artwork larger than
+      the mobile section so the sides are cropped.
+    */
+    background-size: 115% 100% !important;
+
+    /*
+      Keep the LEFT side of the original artwork.
+      This removes much of the large writing on the right.
+    */
+    background-position: left center !important;
+
+    border-top: 1px solid #17283b !important;
+    border-bottom: 1px solid #17283b !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* Remove any old duplicate image layer */
+
+  .our-story::before,
+  .our-story::after {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+  }
+
+
+  /* =====================================================
+     CONTENT
+  ===================================================== */
+
+  .our-story-content {
+    position: relative !important;
+
+    z-index: 10 !important;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    max-width: none !important;
+
+    margin: 0 !important;
+
+    padding: 36px 22px !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =====================================================
+     TEXT
+  ===================================================== */
+
+  .our-story-text {
+    position: relative !important;
+
+    z-index: 20 !important;
+
+    width: 68% !important;
+    max-width: 290px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =====================================================
+     ABOUT LABEL
+  ===================================================== */
+
+  .our-story-text .story-tag {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+
+    color: #8b6425 !important;
+
+    font-size: 10px !important;
+    line-height: 1.4 !important;
+
+    font-weight: 700 !important;
+
+    letter-spacing: 1px !important;
+
+    white-space: nowrap !important;
+  }
+
+
+  /* =====================================================
+     HEADING
+  ===================================================== */
+
+  .our-story-text h2 {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 14px !important;
+    padding: 0 !important;
+
+    color: #17283b !important;
+
+    font-family:
+      Georgia,
+      "Times New Roman",
+      serif !important;
+
+    font-size: 27px !important;
+
+    line-height: 1.1 !important;
+
+    font-weight: 700 !important;
+  }
+
+
+  /* =====================================================
+     DIVIDER
+  ===================================================== */
+
+  .our-story-text .story-divider {
+    display: block !important;
+
+    position: relative !important;
+
+    width: 100% !important;
+
+    max-width: 235px !important;
+
+    height: 2px !important;
+
+    margin: 12px 0 18px !important;
+
+    background: #6f7b80 !important;
+  }
+
+
+  .our-story-text .story-divider span {
+    position: absolute !important;
+
+    left: 50% !important;
+    top: 50% !important;
+
+    width: 9px !important;
+    height: 9px !important;
+
+    transform:
+      translate(-50%, -50%)
+      rotate(45deg) !important;
+
+    background: #f8f1e5 !important;
+
+    border: 2px solid #8b6425 !important;
+  }
+
+
+  /* =====================================================
+     DESCRIPTION
+  ===================================================== */
+
+  .our-story-text .story-description {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+
+    color: #263747 !important;
+
+    font-size: 12.5px !important;
+
+    line-height: 1.5 !important;
+
+    font-weight: 500 !important;
+
+    visibility: visible !important;
+
+    opacity: 1 !important;
+  }
+
+
+  /* =====================================================
+     KNOW MORE BUTTON
+  ===================================================== */
+
+  .our-story-text .story-button {
+    display: inline-flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: relative !important;
+
+    z-index: 30 !important;
+
+    width: 180px !important;
+
+    height: 46px !important;
+
+    margin-top: 12px !important;
+
+    padding: 0 15px !important;
+
+    box-sizing: border-box !important;
+
+    border: none !important;
+
+    border-radius: 10px !important;
+
+    background:
+      linear-gradient(
+        135deg,
+        #f8c85c,
+        #e9a92f
+      ) !important;
+
+    color: #17283b !important;
+
+    font-size: 13px !important;
+
+    font-weight: 700 !important;
+
+    visibility: visible !important;
+
+    opacity: 1 !important;
+
+    box-shadow:
+      0 5px 15px
+      rgba(180,120,20,.22) !important;
+  }
+
+
+  .our-story-text .story-button span {
+    display: inline-block !important;
+
+    margin-left: 9px !important;
+
+    font-size: 18px !important;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .our-story {
+    height: 520px !important;
+    min-height: 520px !important;
+
+    /*
+      Slightly more crop on small screens.
+    */
+    background-size: 118% 100% !important;
+
+    background-position: left center !important;
+  }
+
+  .our-story-content {
+    padding: 32px 20px !important;
+  }
+
+  .our-story-text {
+    width: 68% !important;
+    max-width: 275px !important;
+  }
+
+  .our-story-text h2 {
+    font-size: 25px !important;
+
+    line-height: 1.1 !important;
+  }
+
+  .our-story-text .story-description {
+    font-size: 12px !important;
+  }
+
+  .our-story-text .story-button {
+    width: 170px !important;
+
+    height: 45px !important;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL PHONE
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .our-story {
+    height: 510px !important;
+    min-height: 510px !important;
+
+    /*
+      More crop for very narrow screens.
+    */
+    background-size: 120% 100% !important;
+
+    background-position: left center !important;
+  }
+
+  .our-story-content {
+    padding: 30px 18px !important;
+  }
+
+  .our-story-text {
+    width: 69% !important;
+
+    max-width: 260px !important;
+  }
+
+  .our-story-text h2 {
+    font-size: 23px !important;
+
+    line-height: 1.1 !important;
+  }
+
+  .our-story-text .story-description {
+    font-size: 11.5px !important;
+  }
+
+  .our-story-text .story-button {
+    width: 160px !important;
+
+    height: 43px !important;
+
+    font-size: 12px !important;
+  }
+}
+
+/* =========================================================
+   FINAL MOBILE NAVBAR
+   ☰  🔍  RATLAMI ZAYEIKA  🛒  👤
+========================================================= */
+
+@media (max-width: 767px) {
+
+  /* NAVBAR */
+
+  .rz-navbar {
+    width: 100% !important;
+    height: 72px !important;
+    min-height: 72px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    padding: 0 8px !important;
+    gap: 6px !important;
+
+    position: relative !important;
+
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+
+
+  /* HAMBURGER */
+
+  .rz-mobile-menu-btn {
+    order: 0 !important;
+
+    flex: 0 0 38px !important;
+
+    width: 38px !important;
+    height: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: static !important;
+
+    z-index: 20 !important;
+  }
+
+
+  /* HIDE DESKTOP LINKS */
+
+  .rz-nav-links {
+    display: none !important;
+  }
+
+
+  /* ACTION CONTAINER */
+
+  .rz-nav-actions {
+    display: contents !important;
+  }
+
+
+  /* SEARCH */
+
+  .rz-search-box {
+    order: 1 !important;
+
+    flex: 0 0 38px !important;
+
+    width: 38px !important;
+    height: 38px !important;
+
+    min-width: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: static !important;
+
+    border: 1px solid #d9a528 !important;
+    border-radius: 50% !important;
+
+    background: transparent !important;
+
+    transform: none !important;
+
+    overflow: hidden !important;
+  }
+
+
+  .rz-search-box input {
+    display: none !important;
+  }
+
+
+  .rz-search-btn {
+    width: 100% !important;
+    height: 100% !important;
+
+    min-width: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: none !important;
+
+    background: transparent !important;
+
+    font-size: 17px !important;
+  }
+
+
+  /* LOGO */
+
+  .rz-logo {
+    order: 2 !important;
+
+    flex: 1 1 auto !important;
+
+    width: auto !important;
+    height: 72px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: static !important;
+
+    transform: none !important;
+  }
+
+
+  .rz-logo a {
+    width: auto !important;
+    height: 72px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+
+  .rz-logo img {
+    display: block !important;
+
+    width: 110px !important;
+    max-width: 110px !important;
+
+    height: auto !important;
+    max-height: 65px !important;
+
+    object-fit: contain !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+
+  /* HIDE WISHLIST */
+
+  .rz-wishlist {
+    display: none !important;
+  }
+
+
+  /* CART */
+
+  .rz-cart {
+    order: 3 !important;
+
+    flex: 0 0 38px !important;
+
+    width: 38px !important;
+    height: 38px !important;
+
+    min-width: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: relative !important;
+
+    border-radius: 50% !important;
+  }
+
+
+  /* PROFILE */
+
+  .rz-profile {
+    order: 4 !important;
+
+    flex: 0 0 38px !important;
+
+    width: 38px !important;
+    height: 38px !important;
+
+    min-width: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: relative !important;
+
+    border-radius: 50% !important;
+  }
+
+
+  /* CART BADGE */
+
+  .rz-cart .rz-count,
+  .rz-cart-count {
+    position: absolute !important;
+
+    top: -4px !important;
+    right: -2px !important;
+
+    min-width: 18px !important;
+    height: 18px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    font-size: 10px !important;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .rz-navbar {
+    height: 70px !important;
+    min-height: 70px !important;
+
+    padding: 0 6px !important;
+    gap: 5px !important;
+  }
+
+
+  .rz-mobile-menu-btn {
+    flex-basis: 35px !important;
+
+    width: 35px !important;
+    height: 35px !important;
+  }
+
+
+  .rz-search-box,
+  .rz-cart,
+  .rz-profile {
+    flex-basis: 35px !important;
+
+    width: 35px !important;
+    height: 35px !important;
+
+    min-width: 35px !important;
+  }
+
+
+  .rz-logo {
+    height: 70px !important;
+  }
+
+
+  .rz-logo a {
+    height: 70px !important;
+  }
+
+
+  .rz-logo img {
+    width: 100px !important;
+    max-width: 100px !important;
+    max-height: 62px !important;
+  }
+}
+
+/* =========================================================
+   FINAL MOBILE SEARCH FIX
+   ONLY ONE SEARCH CIRCLE
+========================================================= */
+
+@media (max-width: 767px) {
+
+  .rz-search-box {
+    order: 1 !important;
+
+    flex: 0 0 38px !important;
+
+    width: 38px !important;
+    height: 38px !important;
+
+    min-width: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: static !important;
+
+    /* Remove outer circle */
+    border: none !important;
+    border-radius: 0 !important;
+
+    background: transparent !important;
+
+    overflow: visible !important;
+
+    transform: none !important;
+  }
+
+  .rz-search-box input {
+    display: none !important;
+  }
+
+  /* Only this becomes the circle */
+
+  .rz-search-btn {
+    width: 38px !important;
+    height: 38px !important;
+
+    min-width: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: 1px solid #d9a528 !important;
+    border-radius: 50% !important;
+
+    background: #071f32 !important;
+
+    font-size: 17px !important;
+
+    box-sizing: border-box !important;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .rz-search-box {
+    width: 35px !important;
+    height: 35px !important;
+
+    flex-basis: 35px !important;
+    min-width: 35px !important;
+  }
+
+  .rz-search-btn {
+    width: 35px !important;
+    height: 35px !important;
+
+    min-width: 35px !important;
+  }
+}
+
+/* =========================================================
+   MOBILE NAVBAR - REMOVE DUPLICATE SEARCH
+========================================================= */
+
+@media (max-width: 767px) {
+
+  /* Keep the real search button */
+  .rz-search-box {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: none !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .rz-search-box .rz-search-btn {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: 1px solid #d9a528 !important;
+    border-radius: 50% !important;
+
+    background: #071f32 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* Hide any SECOND search element */
+  .rz-navbar > .search-box,
+  .rz-navbar > .search-btn,
+  .rz-navbar > .search-button,
+  .rz-navbar > form.search-box + *,
+  .rz-navbar .duplicate-search {
+    display: none !important;
+  }
+
+
+  /* Make sure old navbar search styling cannot create another circle */
+  .navbar .search-box {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .navbar .search-btn {
+    border-radius: 0 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .rz-search-box {
+    width: 35px !important;
+    height: 35px !important;
+    min-width: 35px !important;
+  }
+
+  .rz-search-box .rz-search-btn {
+    width: 35px !important;
+    height: 35px !important;
+    min-width: 35px !important;
+  }
+}
+
+/* =========================================================
+   FINAL MOBILE NAVBAR
+   ☰  🔍  RATLAMI ZAYEIKA  🛒  👤
+========================================================= */
+
+@media (max-width: 767px) {
+
+  /* -----------------------------------------
+     NAVBAR
+  ----------------------------------------- */
+
+  .rz-navbar {
+    width: 100% !important;
+    height: 72px !important;
+    min-height: 72px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    padding: 0 8px !important;
+    gap: 6px !important;
+
+    box-sizing: border-box !important;
+
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+
+  /* -----------------------------------------
+     HAMBURGER
+  ----------------------------------------- */
+
+  .rz-mobile-menu-btn {
+    order: 0 !important;
+
+    flex: 0 0 38px !important;
+
+    width: 38px !important;
+    height: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: static !important;
+  }
+
+
+  /* -----------------------------------------
+     DESKTOP NAV LINKS
+  ----------------------------------------- */
+
+  .rz-nav-links {
+    display: none !important;
+  }
+
+
+  /* -----------------------------------------
+     ACTIONS
+  ----------------------------------------- */
+
+  .rz-nav-actions {
+    display: contents !important;
+  }
+
+
+  /* -----------------------------------------
+     IMPORTANT:
+     HIDE DESKTOP SEARCH
+  ----------------------------------------- */
+
+  .rz-desktop-search {
+    display: none !important;
+  }
+
+
+  /* -----------------------------------------
+     MOBILE SEARCH
+  ----------------------------------------- */
+
+  .rz-mobile-search-btn {
+    order: 1 !important;
+
+    flex: 0 0 38px !important;
+
+    width: 38px !important;
+    height: 38px !important;
+
+    min-width: 38px !important;
+    min-height: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: 1px solid #d9a528 !important;
+
+    border-radius: 50% !important;
+
+    background: #071f32 !important;
+
+    color: #ffffff !important;
+
+    font-size: 17px !important;
+
+    box-sizing: border-box !important;
+
+    position: static !important;
+  }
+
+
+  /* -----------------------------------------
+     LOGO
+  ----------------------------------------- */
+
+  .rz-logo {
+    order: 2 !important;
+
+    flex: 1 1 auto !important;
+
+    width: auto !important;
+    height: 72px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: static !important;
+
+    transform: none !important;
+  }
+
+
+  .rz-logo a {
+    width: auto !important;
+    height: 72px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+
+  .rz-logo img {
+    display: block !important;
+
+    width: 110px !important;
+    max-width: 110px !important;
+
+    height: auto !important;
+
+    max-height: 65px !important;
+
+    object-fit: contain !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+
+  /* -----------------------------------------
+     HIDE WISHLIST
+  ----------------------------------------- */
+
+  .rz-wishlist {
+    display: none !important;
+  }
+
+
+  /* -----------------------------------------
+     CART
+  ----------------------------------------- */
+
+  .rz-cart {
+    order: 3 !important;
+
+    flex: 0 0 38px !important;
+
+    width: 38px !important;
+    height: 38px !important;
+
+    min-width: 38px !important;
+    min-height: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: relative !important;
+
+    border-radius: 50% !important;
+  }
+
+
+  /* -----------------------------------------
+     PROFILE
+  ----------------------------------------- */
+
+  .rz-profile {
+    order: 4 !important;
+
+    flex: 0 0 38px !important;
+
+    width: 38px !important;
+    height: 38px !important;
+
+    min-width: 38px !important;
+    min-height: 38px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    position: relative !important;
+
+    border-radius: 50% !important;
+  }
+
+
+  /* -----------------------------------------
+     CART BADGE
+  ----------------------------------------- */
+
+  .rz-cart .rz-count,
+  .rz-cart-count {
+    position: absolute !important;
+
+    top: -4px !important;
+    right: -2px !important;
+
+    min-width: 18px !important;
+    height: 18px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    font-size: 10px !important;
+  }
+
+
+  /* -----------------------------------------
+     HIDE DESKTOP SEARCH STYLES COMPLETELY
+  ----------------------------------------- */
+
+  .rz-desktop-search input,
+  .rz-desktop-search .rz-search-btn {
+    display: none !important;
+  }
+}
+
+
+/* =========================================================
+   SMALL PHONES
+========================================================= */
+
+@media (max-width: 390px) {
+
+  .rz-navbar {
+    height: 70px !important;
+    min-height: 70px !important;
+
+    padding: 0 6px !important;
+    gap: 5px !important;
+  }
+
+
+  .rz-mobile-menu-btn {
+    flex-basis: 35px !important;
+
+    width: 35px !important;
+    height: 35px !important;
+  }
+
+
+  .rz-mobile-search-btn {
+    flex-basis: 35px !important;
+
+    width: 35px !important;
+    height: 35px !important;
+
+    min-width: 35px !important;
+    min-height: 35px !important;
+
+    font-size: 16px !important;
+  }
+
+
+  .rz-logo {
+    height: 70px !important;
+  }
+
+
+  .rz-logo a {
+    height: 70px !important;
+  }
+
+
+  .rz-logo img {
+    width: 100px !important;
+
+    max-width: 100px !important;
+
+    max-height: 62px !important;
+  }
+
+
+  .rz-cart,
+  .rz-profile {
+    flex-basis: 35px !important;
+
+    width: 35px !important;
+    height: 35px !important;
+
+    min-width: 35px !important;
+    min-height: 35px !important;
+  }
+}
+
+/* =========================================================
+   DESKTOP NAVBAR — DO NOT COVER PAGE CONTENT
+========================================================= */
+
+@media (min-width: 768px) {
+
+  .rz-navbar {
+    position: sticky !important;
+
+    top: 0 !important;
+    left: auto !important;
+    right: auto !important;
+
+    width: 100% !important;
+
+    z-index: 9999 !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /*
+     Make sure no old fixed positioning
+     remains on the navbar.
+  */
+
+  .rz-navbar {
+    transform: none !important;
+  }
+
+
+  /*
+     Prevent old navbar wrappers from
+     covering the first section.
+  */
+
+  body {
+    padding-top: 0 !important;
+  }
 }
